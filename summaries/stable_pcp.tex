@@ -1,0 +1,87 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+% adjust the margins using the geometry package
+\usepackage[left=0.75in, right=0.75in, top=1in, bottom=0.75in]{geometry}
+% Begin paragraphs with an empty line rather than an indent
+\usepackage[parfill]{parskip}    
+
+% This contains a bunch of macros
+\input{../common/defs}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\textbf{Summary of} Z. Zhou, X. Li, J. Wright, E. Candès, and Y. Ma. Stable principal component pursuit. In Information Theory Proceedings (ISIT), 2010 IEEE International Symposium on, pages 1518-1522, june 2010.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Overview}
+
+The paper studies the problem of recovering a low-rank matrix (the principal components) from a high- dimensional data matrix despite both small entry-wise noise and gross sparse errors. It proves that the solution to a convex program (a relaxation of classic Robust PCA) gives an estimate of the low-rank matrix that is simultaneously stable to small entry- wise noise and robust to gross sparse errors. The result shows that the proposed convex program recovers the low-rank matrix even though a positive fraction of its entries are arbitrarily corrupted, with an error bound proportional to the noise level. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Main result}
+
+The paper consider a matrix $M\in\mathbb{R}^{n_1\times n_2}$ of the from $M = L_0+S_0+Z_0$, where~$L_0$ is (non-sparse) low rank, $S_0$ is sparse (modeling gross errors) and $Z_0$ is ``small'' (modeling a small noisy perturbation). The assumption on~$Z_0$ is simply that $||Z_0||_F \leq \delta$ for some small known~$\delta$. Hence at least for the theory part of the paper the authors do not assume anything about the distribution of the noise other than it is bounded (however they will gloss over this in their algorithm). 
+
+The convex program to be solved is a slight modification of the standard Robust PCA problem and given by
+\begin{align}
+\begin{split}
+\min_{L,S} \; &||L||_* + \lambda ||S||_1 \\
+\text{s.t.} \quad &||M-L-S||_F \leq \delta
+\end{split}
+\label{mainresult:optproblem}
+\end{align}
+where $\lambda = 1/\sqrt{n_1}$. Under a standard incoherence assumption on~$L_0$ (which essentially means that $L_0$ should not be sparse) and a uniformity assumption on the sparsity pattern of~$S_0$ (which means that the support of~$S_0$ should not be too concentrated) the main result states that, with high probability in the support of~$S_0$, for any~$Z_0$ with $||Z_0||_F \leq \delta$, the solution $(\hat{L},\hat{S})$ to~\eqref{mainresult:optproblem} satisfies
+\begin{align*}
+||\hat{L}-L_0||_F^2 + ||\hat{S}-S_0||_F^2 \leq C n_1n_2\delta^2
+\end{align*}
+where~$C$ is a numerical constant. The above claim essentially states that the recovered low-rank matrix~$\hat{L}$ is stable with respect to non-sparse but small noise acting on all entries of the matrix.
+
+In order to experimentally verify the predicted performance to their formulation, the author provide a comparison with an oracle. This oracle is assumed to provide information about the support of~$S_0$ and the row and column spaces of~$L_0$, which allows the computation of the MMSE estimator which otherwise would be computationally intractable (strictly speaking it of course is not really the MMSE, since it uses additional information from the oracle). Simulation results that show that the RMS error of the solution obtained through~\eqref{mainresult:optproblem} in the non-breakdown regime (that is, for the support of~$S_0$ sufficiently small) is only about twice as large as that of the oracle-based MMSE. This suggests that the proposed algorithm works quite well in practice. 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Relations to existing work}
+
+The result of the paper can be seen from two different view points. On the one hand, it can be interpreted from the point of view of standard PCA. In this case, the result states that standard PCA, which can in fact be shown to be statistically optimal w.r.t. i.i.d Gaussian perturbations, can also be made robust with respect to sparse gross corruptions. On the other hand, the result can be interpreted from the point of view of Robust PCA. In this case, it essentially states that the classic Robust PCA solution can itself be made robust with respect to some small but non-sparse noise acting on all entries of the matrix. 
+
+Conceptually, the work presented in the paper is similar to the development of results for ``imperfect'' scenarios in compressive sensing where the measurements are noisy and the signal is not exact sparse. In this body of literature, $l_1$-norm minimization techniques are adapted to recover a vector $x_0 \in \mathbb{R}^n$ from contaminated observations $y=Ax_0+z$, where $A \in \mathbb{R}^{m\times n}$ with $m \ll n$ and z is the noise term. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Algorithm}
+
+For the case of a noise matrix~$Z_0$ whose entries are i.i.d. $\Ncal(0,\sigma^2)$, the paper suggests to use an Accelerated Proximal Gradient (APG) algorithm (see algorithms section for details) for solving~\eqref{mainresult:optproblem}. Note that for~$\delta =0$ the problem reduces to the standard Robust PCA problem with an equality constraint on the matrices. For this case the APG algorithm proposed in~\cite{Lin:2009kx} solves an approximation of the form
+\begin{align*}
+\min_{L,S} \; &||L||_* + \lambda ||S||_1 + \frac{1}{2\mu} ||M-L-S||_F
+\end{align*}
+For the Stable PCP problem where~$\delta>0$ the authors advocate using the same algorithm with fixed but carefully chosen parameter~$\mu$ (similar to~\cite{Candes:2010fk}). In particular, they point out\footnote{this based on the strong Bai Yin Theorem~\cite{Bai:1988fk}, which implies that for an $n\times n$ real matrix with entries $\xi_{ij} \sim \Ncal(0,1)$ the it holds that $\limsup_{n\rightarrow \infty} \norm{Z_0}{2}{}/\sqrt{n} = 2$ almost surely}
+ that for $Z_0 \in\Rbf^{n\times n}$ with~$(Z_0)_{ij} \sim \Ncal(0,\sigma^2)$ i.i.d. it holds that $n^{-1/2}\norm{Z_0}{2}{} \rightarrow \sqrt{2}\sigma$ almost surely as $n\rightarrow\infty$. They then choose the parameter~$\mu$ such that if $M=Z_0$, i.e. if $L_0=S_0=0$, the minimizer of the above problem is likely to be $\hat{L}=\hat{S}=0$. The claim is that this is the case for~$\mu = \sqrt{2n}\sigma$.
+  
+It is worth noting that the assumption of a Gaussian noise matrix~$Z_0$ is reasonable but not always satisfied. If it is not, then it is not clear if using the APG algorithm to solve the associated approximate problem is a good idea and different algorithms may be needed. The problem~\eqref{mainresult:optproblem} can be expressed as an SDP and can therefore in principle be solved using general purpose interior point solvers. However, the same scalability issues as in the standard Robust PCA problem will limit prohibit to use these methods for high-dimensional data. The paper~\cite{Aybat:2011vn} focuses on efficient first-order algorithms for solving~\eqref{mainresult:optproblem}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusion and Outlook}
+
+The paper addresses a problem of potentially very high practical relevance. While it is reasonable to assume that in many applications the low-rank component~$L_0$ will only be corrupted by a comparatively small number of gross errors (caused by rare and isolated events), the assumption of perfect measurements for the rest of the data outside the support of~$S_0$ that is made in classic Robust PCA will generally not hold for example due to sensor noise. This paper asserts that if the non-sparse noise component~$Z_0$ is sparse, then with high probability the recovered components are ``close'' to the actual ones. 
+
+For simplicity, the paper models the non-sparse noise simply as an additive perturbation that is bounded in the Frobenius norm. In cases where one has additional information available about this noise, for example its distribution or some bounds on the absolute value of each entry, it might be possible to derive better bounds on the resulting errors. One possible extension could therefore be to look at exploiting structure in the noise. 
+
+One thing the paper claims is that ``at a cost not so much higher than the classical PCA, [the] result is expected to have significant impact on many practical problems''. As mentioned above I do agree that the result has a significant impact on many practical problems. However, the claim concerning the computational complexity is very optimistic. The fastest solver for the special case $\delta =0$ (classic Robust PCA) currently seems to be a alternating directions augmented Lagrangian method. This method requires an SVD at each iteration, and for problems involving large-scale data the number of iterations can be very large. The standard PCP algorithm on the other hand is based on a single SVD, hence it can be computed much faster. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{abbrv}
+\bibliography{../common/RobustPCA}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}  
+
