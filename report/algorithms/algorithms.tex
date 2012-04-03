@@ -1,0 +1,593 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% EE227A - algorithms.tex
+% Created by: Maximilian Balandat
+% Last edited: Apr 02 2012
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\documentclass{article}
+
+% The following packages are standard
+\usepackage{amsmath}
+\usepackage{amssymb}
+% adjust the margins using the geometry package
+\usepackage[left=0.75in, right=0.75in, top=1in, bottom=0.75in]{geometry}
+% Begin paragraphs with an empty line rather than an indent
+\usepackage[parfill]{parskip}    
+\usepackage[noend,noline,ruled,nofillcomment]{algorithm2e} % support for typesetting altorighms
+\usepackage{amsthm}
+% add a bunch of theorem styles
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}[section]
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+
+% Input some of my LaTeX macros - Max
+\input{../common/defs.tex}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Overview}
+\label{Algorithms:Overview:Sec}
+
+This section discusses some of the algorithms that have recently been proposed in the literature to solve the Robust PCA problem
+%
+\begin{align}
+\begin{split}
+p^* = \min_{L,S} \; &\norm{L}{*}{} + \lambda \norm{S}{1}{} \\
+\text{s.t.} \quad &M = L+S
+\end{split}
+\label{Algorithms:Overview:RecallRPCA}
+\end{align}
+
+There are various methods that can be used to solve~\eqref{Algorithms:Overview:RecallRPCA}. A straightforward way described in section~\ref{Algorithms:MainAlgs:IPM:Subsec} is to use general purpose interior point solvers~\cite{Sturm:1999uq,Toh:1999kx} to solve an SDP formulation of the dual of~\eqref{Algorithms:Overview:RecallRPCA}, an approach that works well for low-dimensional data~$M$ but unfortunately does not scale well. Another approach is to use iterative thresholding techniques as described in section~\ref{Algorithms:MainAlgs:ITM:Subsec}, which result in a very simple algorithm that can be applied also to high-dimensional data. Unfortunately the convergence of this algorithm is extremely slow. More sophisticated approaches include an accelerated proximal gradient algorithm (section~\ref{Algorithms:MainAlgs:PGM:Subsec}) and a gradient ascent algorithm applied to the dual problem of~\eqref{Algorithms:Overview:RecallRPCA} (section~\ref{Algorithms:MainAlgs:GAD:Subsec}). The current state of the art seems to be a adaptation of the Augmented Lagrangian Method to the non-smooth problem~\eqref{Algorithms:Overview:RecallRPCA}, an approach that is discussed in section~\ref{Algorithms:MainAlgs:AugLag:Subsec}.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Main algorithms for Robust PCA}
+\label{Algorithms:MainAlgs:Sec}
+
+%This section reviews a number of different approaches to solving the Robust PCA problem. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Interior Point Methods}
+\label{Algorithms:MainAlgs:IPM:Subsec}
+
+As will be shown in the following section, the dual problem of~\eqref{Algorithms:Overview:RecallRPCA} can be cast as a Semidefinite Programming (SDP) problem for which a number of efficient polynomial-time interior-point solvers have been developed. In principle, one can then just apply these general purpose off-the-shelf solvers to the dual SDP. This approach will work well for small and medium sized problems, but unfortunately it does not scale with the size of the data matrix~$M$. The following section first develops the dual of the Robust PCA problem, section~\ref{Algorithms:MainAlgs:IPM:Complexity:Subsubsec} then discusses the limitations of using interior point methods on the resulting SDP. 
+
+
+%%%%%%%%%%%%%%%%%
+\subsubsection{Formulation of the Dual problem of Robust PCA as an SDP}
+\label{Algorithms:MainAlgs:IPM:SDPform:Subsubsec}
+
+Let us use the equality constraint to eliminate the variable~$L$ from~\eqref{Algorithms:Overview:RecallRPCA}. Using the facts that $\norm{X}{*}{} = \max_{\norm{Y}{2}{}\leq 1} \trace Y^T\!X$ and $\norm{X}{1}{} = \max_{\norm{Z}{\infty}{}\leq 1} \trace Z^T\!X$  the problem can be written as
+%
+\begin{align}
+\begin{split}
+p^* = \min_S \;\max_{Y,Z} \;\; &\trace Y^T(M-S) + \lambda \trace Z^TS \\
+\text{s.t.} \quad & \norm{Y}{2}{}\leq 1 \\
+&\norm{Z}{\infty}{}\leq 1
+\end{split}
+\label{Algorithms:MainAlgs:IPM:SDPform:NoNorms}
+\end{align}
+%
+The dual function is 
+\begin{align}
+\begin{split}
+g(Y,Z) &= \min_S \;\; \trace Y^T\!M + \trace (\lambda Z-Y)^T\!S \\
+&= \begin{cases}
+\trace Y^T\!M  & \text{ if } \; \lambda Z = Y \\
+-\infty & \text{ otherwise }
+\end{cases} 
+\end{split}
+\label{Algorithms:MainAlgs:IPM:SDPform:DualFunct}
+\end{align}
+%
+We obtain the dual problem 
+\begin{align}
+\begin{split}
+p^* \geq d^* = \max_{Y,Z} \;\; &\trace Y^T\!M \\
+\text{s.t.} \quad & \lambda Z = Y \\
+&\norm{Y}{2}{}\leq 1 \\
+&\norm{Z}{\infty}{}\leq 1
+\end{split}
+\label{Algorithms:MainAlgs:IPM:SDPform:DualProb}
+\end{align}
+%
+which after eliminating the variable~$Z$ and using homogeneity of the norm becomes
+\begin{align}
+\begin{split}
+d^* = \max_{Y} \;\; &\trace Y^T\!M \\
+\text{s.t.} \quad & \norm{Y}{2}{}\leq 1 \\
+&\norm{Y}{\infty}{}\leq \lambda
+\end{split}
+\label{Algorithms:MainAlgs:IPM:SDPform:DualSimpler}
+\end{align}
+
+Noting that $\norm{Y}{2}{}\leq 1 \; \Longleftrightarrow \; I-X^T(I)^{-1}X \succeq 0$ and using a Schur Complement lemma, the dual problem can be transformed into the following SDP:
+\begin{align}
+\begin{split}
+d^* = \max_{Y} \;\; &\trace M^T\!Y \\ 
+\text{s.t.} \quad &\begin{bmatrix} I & Y^T \\ Y & I \end{bmatrix} \succeq 0 \\
+&\trace \Delta_{ij}^TY \leq \lambda, \quad i = 1,\dotsc, m, \; j=1,\dotsc,n \\
+&\trace \Delta_{ij}^TY \geq -\lambda, \quad i = 1,\dotsc, m, \; j=1,\dotsc,n
+\end{split}
+\label{Algorithms:MainAlgs:IPM:SDPform:DualSDP}
+\end{align}
+%
+Here $\Delta_{ij} \in \Rbf^{m\times n}$ is such that $\Delta_{ij}(k,l) = \delta_{ik}\delta_{jl}$. Note that both primal and dual problem are (trivially) strictly feasible. In fact, the primal is unconstrained and an obvious strictly feasible dual variable is~$Y=0$. Hence strong duality holds ($p^* = d^*$) and both primal and dual problem are attained. 
+
+\textbf{How to recover primal solution??}
+
+
+%%%%%%%%%%%%%%%%%
+\subsubsection{Using Interior Point Methods for Solving the Dual}
+\label{Algorithms:MainAlgs:IPM:Complexity:Subsubsec}
+
+Problem~\eqref{Algorithms:MainAlgs:IPM:SDPform:DualSimpler} is an SDP and can therefore in principle be solved using off-the-shelf solver packages like~\cite{Sturm:1999uq} and~\cite{Toh:1999kx}. These solvers are based on interior point methods which have been shown to offer superior convergence rates~\cite{Boyd:2004aa} but unfortunately do not scale particularly well with the size of the matrix~$M$. The reason for this is because generally the computation of the step direction relies on second-order information of the (augmented) objective function, the computation of which is infeasible when the number of variables is very high. Specifically, the complexity of computing the Newton step direction is~$O(m^6)$ (CHECK THIS, PROVIDE REFERENCE). For applications that involve large-scale data matrices (with~$m$ in the thousands or even millions), the use interior point methods therefore quickly becomes infeasible. In order to overcome this scalability issue, a variety of first-order methods exploiting the particular structure of the Robust PCA problem have been proposed. Some of these methods are described will be described in the following.
+
+%A bottleneck in higher dimensions is in particular the complexity of computing the Newton step direction, which is~$O(m^6)$ (CHECK THIS, PROVIDE REFERENCE). For applications that involve large-scale data matrices (with~$m$ in the thousands or even millions), the use interior point methods therefore quickly becomes infeasible.
+%
+%%The SDP formulation~\eqref{Algorithms:MainAlgs:IPM:SDPform:DualSDP} of the dual problem involves only the matrix variable~$Y\in\Rbf^{m\times n}$, hence the problem involves~$mn$ scalar variables. There are~$2mn$ scalar constraints (due to the constraint on the~$\infty$-norm) and a positive semidefiniteness constraint on a square matrix of dimension $m+n$ (due to the constraint on the operator norm). 
+%
+%The reason why interior point solvers do not scale well with the matrix size is because generally the computation of the step direction relies on second-order information of the objective function, the computation of which is infeasible when the number of variables is very high. In order to overcome this scalability issue, a variety of first-order methods exploiting the particular structure of the Robust PCA problem have been proposed. Some of these methods are described will be described in the following.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Iterative Thresholding Method}
+\label{Algorithms:MainAlgs:ITM:Subsec}
+
+Among the first techniques used to solve~\eqref{Algorithms:Overview:RecallRPCA} for high-dimensional data was an adaptation \cite{Wright:2009fk}\footnote{note that the iterative thresholding algorithm seems to never have appeared in the published version of~\cite{Wright:2009fk}, which instead contains the accelerated proximal gradient method described in section~\ref{Algorithms:MainAlgs:PGM:Subsec}} of an iterative thresholding method originally proposed for the matrix completion problem in~\cite{Cai:2010uq}. For this method the authors of consider a relaxation of the original problem~\eqref{Algorithms:Overview:RecallRPCA} of the form 
+%
+\begin{align}
+\begin{split}
+\min_{L,S} \;\; &\norm{L}{*}{} + \lambda \norm{S}{1}{} + \frac{1}{2\tau} \norm{L}{F}{2} + \frac{1}{2\tau} \norm{S}{F}{2} \\
+\text{s.t.} \quad &M=L+S
+\end{split}
+\label{Algorithms:MainAlgs:ITM:Relax}
+\end{align}
+%
+where $\tau \gg 1$ is a scalar parameter. Generalizing the result from~\cite{Cai:2010uq} (which considers the matrix completion problem, i.e. $S=0$), the authors of~\cite{Wright:2009fk} argue that for large values of~$\tau$ the solution of~\eqref{Algorithms:MainAlgs:ITM:Relax} will be very close to that of~\eqref{Algorithms:Overview:RecallRPCA} (but interestingly enough they do not prove it!). One can now use iterative thresholding techniques to solve~\eqref{Algorithms:MainAlgs:ITM:Relax}. Although the resulting algorithm has little relevance in practice because of its very slow convergence, we will see later on that its main ideas are the basis for a number of other similar algorithms discussed in the following. Therefore we briefly describe the iterative thresholding algorithm here.\\ 
+
+The Lagrangian of the problem~\eqref{Algorithms:MainAlgs:ITM:Relax} is given by
+%
+\begin{align}
+\Lcal(L,S,Y) = \norm{L}{*}{} + \lambda \norm{S}{1}{} + \frac{1}{2\tau} \norm{L}{F}{2} + \frac{1}{2\tau} \norm{S}{F}{2} + \frac{1}{\tau} \langle Y, M-L-S \rangle
+\label{Algorithms:MainAlgs:ITM:Lagr}
+\end{align}
+%
+The idea of the iterative thresholding algorithm is, as the name suggests, to update the variables $L,S$ and $Y$ iteratively. Specifically, the Lagrangian $\Lcal(L,S,Y)$ is minimized w.r.t $L$ and $S$ for some fixed dual variable~$Y$, and the violation of the constraint is then used to update~$Y$ using the gradient step~$Y^+ = Y + t (M-L-S)$, where~$0<t<1$ is the step size.\\
+
+Note that for fixed~$Y$ we have
+%
+\begin{align}
+\begin{split}
+(\Lhat,\Shat) :&= \argmin_{L,S} \; \Lcal(L,S,Y) \\
+&= \argmin_{L,S} \; \norm{L}{*}{} + \lambda \norm{S}{1}{} + \frac{1}{2\tau} \norm{L}{F}{2} + \frac{1}{2\tau} \norm{S}{F}{2} + \frac{1}{\tau} \langle Y, M-L-S \rangle \\
+&= \argmin_{L,S} \; \norm{L}{*}{} + \lambda \norm{S}{1}{} + \frac{1}{2\tau} \norm{L-Y}{F}{2} + \frac{1}{2\tau} \norm{S-Y}{F}{2}
+\end{split}
+\label{Algorithms:MainAlgs:ITM:ArgminLagr}
+\end{align}
+%
+Let~$Y = U\Sigma V^T$ be the SVD of~$Y$. Using optimality conditions based on the subgradient it can be shown~\cite{Cai:2010uq,Wright:2009fk} that the minimizers~$\Lhat$ and~$\Shat$ of~\eqref{Algorithms:MainAlgs:ITM:ArgminLagr} are given, respectively, by 
+%
+\begin{align}
+\Lhat &= U \Scal_\tau[\Sigma] V^T
+\label{Algorithms:MainAlgs:ITM:ArgminLhat} \\
+\Shat &= \Scal_{\tau\lambda}[Y]
+\label{Algorithms:MainAlgs:ITM:ArgminShat}
+\end{align}
+%
+where~$\Scal_\varepsilon[X]$ is the generalization to the matrix case of the well known soft-thresholding operator (e.g. from the proximal mapping of the~$l_1$-norm in the vector case):
+%
+\begin{align}
+\left(\Scal_\varepsilon[X]\right)_{ij} := \begin{cases} x_{ij}-\varepsilon & \text{ if} \;\; x_{ij}>\varepsilon \\ x_{ij}+\varepsilon & \text{ if} \;\; x_{ij}<-\varepsilon \\ 0 & \text{ otherwise} \end{cases}
+\label{Algorithms:MainAlgs:ITM:Shrink}
+\end{align}
+%
+The overall iterative thresholding algorithm for Robust PCA is given in Algorithm~\ref{Algorithms:MainAlgs:ITM:Algorithm}. 
+%
+\begin{algorithm}
+\caption{Iterative Thresholding Algorithm}
+\KwIn{Observation matrix~$M$, parameters~$\lambda,\tau$}
+initialization: $k=0$, $Y_0 = 0$\;
+\While{not converged}{
+$k=k+1$\;
+$(U,\Sigma,V) = \text{svd}(Y_{k-1})$\;
+$L_k = U \Scal_\tau[\Sigma] V^T$\;
+$S_k = \Scal_{\lambda\tau}[Y_{k-1}]$\;
+$Y_k = Y_{k-1} + t_k (M-L_k-S_k)$\;
+}
+\KwOut{$L=L_k$, $S=S_k$}
+\label{Algorithms:MainAlgs:ITM:Algorithm}
+\end{algorithm}
+
+Algorithm~\ref{Algorithms:MainAlgs:ITM:Algorithm} is extremely simple to implement, as each iteration only requires the computation of an SVD of the current dual variable~$Y_k$ and a few elementary matrix operations. Note that, in fact, since the shrinking operator sets all singular values less than the threshold parameter to zero one really only needs to compute the singular values that lie above this threshold. However, while this iterative thresholding scheme is very simple and has been proved to converge, its convergence unfortunately is extremely slow. The authors of~\cite{Wright:2009fk} found that it typically requires about~$10^4$ iterations to converge for problems of reasonable size. Furthermore it is hard to find good general schemes to optimize the choice of the step size~$t_k$~\cite{Lin:2010fk}. Therefore the practical applicability of this approach is limited.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Accelerated Proximal Gradient Method}
+\label{Algorithms:MainAlgs:PGM:Subsec}
+
+An accelerated proximal gradient (APG) method for solving~\eqref{Algorithms:Overview:RecallRPCA} was proposed in~\cite{Lin:2009kx}. The method is essentially an application of the FISTA algorithm~\cite{Beck:2009kx} to a relaxation of the original RPCA problem in combination with a continuation technique. This FISTA algorithm algorithm is reminiscent of Nesterov's ``optimal'' first-oder method for smooth objective functions~\cite{Nesterov:1983uq}, whose~$O(1/k^2)$ convergence result was extended to non-smooth objectives in~\cite{Nesterov:2007kx}. Besides being theoretically appealing, the APG method is also in practice much faster than the iterative thresholding algorithm discussed in section~\ref{Algorithms:MainAlgs:ITM:Subsec}.\\
+
+The following sections describe the APG algorithm. As in~\cite{Lin:2009kx} we first give a general formulation and then show how it can be applied to the Robust PCA problem, using ideas from section~\ref{Algorithms:MainAlgs:ITM:Subsec}.
+
+
+%%%%%%%%%%%%%%%%%
+\subsubsection{A General Form of the Accelerated Proximal Gradient Method}
+\label{Algorithms:MainAlgs:PGM:General:Subsubsec}
+
+Proximal gradient algorithms in general can be used to solve unconstrained problems of the form 
+%
+\begin{align}
+\min_{x} \;\; &f(x) := g(x) + h(x)
+\label{Algorithms:MainAlgs:PGM:General:GenPGA}
+\end{align}
+%
+where~$g$ is convex and differentiable and~$h$ is closed\footnote{that is, its epigraph is closed}, convex but need not be differentiable. The proximal mapping of a convex function~$h$ is defined as
+%
+\begin{align}
+\proximal{h}{x} := \argmin_u \left( h(u) + \frac{1}{2}\norm{u-x}{2}{2} \right)
+\label{Algorithms:MainAlgs:PGM:General:proxmapping}
+\end{align}
+%
+Here $\norm{\cdot}{2}{}$ denotes the inner product norm\footnote{Note that the derivation holds for real inner product spaces, not just~$\Rbf^n$. We are particularly interested in the case~$\Rbf^{m\times n}$}. Note that since~$h$ is convex and the norm is strictly convex, the optimizer in~\eqref{Algorithms:MainAlgs:PGM:General:proxmapping} is unique. The step of each iteration of the classic (non-accelerated) proximal gradient algorithm is
+%
+\begin{align}
+x^+ = \proximal{\delta h}{x-\delta \nabla g(x)}
+\label{Algorithms:MainAlgs:PGM:General:proxAlg}
+\end{align}
+%
+where~$x^+$ denotes the next iterate, based on the current iterate~$x$, and~$\delta$ is the step size (which can be fixed or determined via backtracking line search). Since the proximal mapping~\eqref{Algorithms:MainAlgs:PGM:General:proxAlg} needs to be computed at each iteration (possibly multiple times because of the line search), the algorithm is most effective when this can be done cheaply. Depending on the function~$h$, the proximal gradient algorithm can be seen as a generalization of different gradient-based algorithms. In particular, for~$h(x) \equiv 0$ the standard gradient algorithm is recovered and for~$h(x) = I_C(x)$, where $I_C$ denotes the indicator function for the convex set~$C$, the projected gradient algorithm is recovered. 
+
+Note that~\eqref{Algorithms:MainAlgs:PGM:General:proxAlg} can be written as
+%
+\begin{align}
+\begin{split}
+x^+ &= \argmin_u \left( h(u) + \frac{1}{2\delta}\norm{u-x+\delta\nabla g(x)}{2}{2} \right) = \argmin_u \left( h(u) +\frac{1}{2\delta} \norm{u-G(x)}{2}{2} \right) \\
+&= \argmin_u \left( h(u) +g(x) + \langle \nabla g(x),u-x\rangle + \frac{1}{2\delta}\norm{u-x}{2}{2} \right)
+\end{split}
+\label{Algorithms:MainAlgs:PGM:General:proxAlgRewritten}
+\end{align}
+%
+where $G(x) := x-\delta\grad g(x)$. Therefore, each step~\eqref{Algorithms:MainAlgs:PGM:General:proxAlg} can be interpreted as minimizing the function~$h(u)$ plus a quadratic local model of~$g(u)$ around the current iterate~$x$. This classic form of the proximal gradient algorithm is well known in the literature and, under Lipschitz continuity of the gradient of~$g$ and some technical conditions on the step size~$t$, has been shown to have a convergence rate no worse than~$O(1/k)$ (PUT REFERENCE). In particular, a popular choice for~$\delta$ is the fixed step size $\delta = 1/L$, where~$L$ is a Lipschitz constant of the gradient of~$g$, that is we have $\norm{\grad g(x) -\grad g(y)}{2}{} \leq L \norm{x-y}{2}{}$ for all~$x,y$. Note that in practice for a general problem the value of~$L$ might be unknown. This is not a big concern for the type of problem arising in Robust PCA, hence we will assume this choice of~$\delta=1/L$ in the following.
+
+It turns out that the choice for the point around which the quadratic local model of~$g(u)$ is constructed has an important effect on the convergence rate, and that less obvious choices than just the previous iterate~$x$ are actually better (in the sense that they yield higher convergence rates). Specifically, consider a generalized version of~\eqref{Algorithms:MainAlgs:PGM:General:proxAlgRewritten}, where the approximation of~$g$ is constructed around some~$y$ that may depend on all prior iterates~$x_0,\dotsc,x_k$:
+%
+\begin{align}
+x^+ &= \argmin_u \left( h(u) +\frac{L}{2} \norm{u-G(y)}{2}{2} \right)
+\label{Algorithms:MainAlgs:PGM:General:proxAlgGeneralized}
+\end{align}
+%
+Nesterov in~\cite{Nesterov:1983uq} showed that in the smooth case the standard gradient algorithm (i.e. when~$h(x) \equiv 0$) can be accelerated by choosing $y_k = x_k + \frac{t_{k-1}-1}{t_k}(x_k-x_{k-1})$, leading to a theoretical convergence rate of~$O(1/k^2)$. This algorithm is optimal in the sense that its convergence rate achieves (in terms of order) the theoretical complexity bound that all first order algorithms are subject to. The seminal work~\cite{Nesterov:1983uq} has been extended to the non-smooth case in~\cite{Beck:2009kx,Nesterov:2007kx}, yielding the generic accelerated proximal gradient method given in Algorithm~\ref{Algorithms:MainAlgs:PGM:General:Algorithm}.
+%
+\begin{algorithm}
+\caption{Accelerated Proximal Gradient Algorithm}
+initialization: $k=0$, $t_0=t_{-1} = 1$\;
+\While{not converged}{
+$y_k = x_k + \frac{t_{k-1}-1}{t_k} (x_k-x_{k-1})$\;
+$G_k = y_k - \frac{1}{L} \grad g(y_k) $\;
+$x_{k+1} = \argmin_x \left( h(x) +\frac{L}{2} \norm{x-G(y_k)}{2}{2} \right) $\;
+$t_{k+1} = (1+\sqrt{4t_k^2+1})/2$\;
+$k=k+1$\;
+}
+\label{Algorithms:MainAlgs:PGM:General:Algorithm}
+\end{algorithm}
+
+
+
+%%%%%%%%%%%%%%%%%
+\subsubsection{Accelerated Proximal Gradient Algorithm Applied to Robust PCA}
+\label{Algorithms:MainAlgs:PGM:APGRPCA:Subsubsec}
+
+Using some the ideas from the iterative thresholding method in section~\ref{Algorithms:MainAlgs:ITM:Subsec}, it is possible to construct an accelerated proximal gradient algorithm for a relaxation of the original problem~\eqref{Algorithms:Overview:RecallRPCA}. In particular, it is easy to see that in the common case~$h(x) = \norm{x}{1}{}$ the update for~$x$ in Algorithm~\ref{Algorithms:MainAlgs:PGM:General:Algorithm} is simply given by $x_{k+1} = \Scal_{1/L}[G(y_k)]$, where~$\Scal_\varepsilon$ is the soft-thresholding operator defined in~\eqref{Algorithms:MainAlgs:ITM:Shrink}.
+
+The authors of~\cite{Lin:2009kx} consider a relaxation of~\eqref{Algorithms:Overview:RecallRPCA} of the form
+%
+\begin{align}
+\min_{L,S} \;\; &\mu \norm{L}{*}{} + \mu \lambda \norm{S}{1}{} + \frac{1}{2} \norm{M-L-S}{F}{2} 
+\label{Algorithms:MainAlgs:PGM:APGRPCA:Relax}
+\end{align}
+%
+It can be shown that for~$\mu \rightarrow 0$, any solution of~\eqref{Algorithms:MainAlgs:PGM:APGRPCA:Relax} approaches the solution set of~\eqref{Algorithms:Overview:RecallRPCA}. In practice, rather than fixing~$\mu$ to some small value, one can achieve superior convergence of the algorithm by using a continuation technique on~$\mu$, that is, by solving~\eqref{Algorithms:MainAlgs:PGM:APGRPCA:Relax} by repeatedly decreasing the value of~$\mu$ in the steps of the accelerated proximal gradient algorithm. This can be interpreted as a particular homotopy method. 
+
+It is easy to see (by separability of the Frobenius norm) that the minimizers of~\eqref{Algorithms:MainAlgs:PGM:APGRPCA:Relax} are also the minimizers of 
+%
+\begin{align}
+\min_{L,S} \;\; &\mu \norm{L}{*}{} + \frac{1}{2} \norm{M-L}{F}{2} + \mu \lambda \norm{S}{1}{} + \frac{1}{2} \norm{M-S}{F}{2} 
+\label{Algorithms:MainAlgs:PGM:APGRPCA:RelaxSplit}
+\end{align}
+%
+The problem is therefore completely separable and clearly the sum of two problems of the form~\eqref{Algorithms:MainAlgs:PGM:General:GenPGA}. Using the results from section~\ref{Algorithms:MainAlgs:ITM:Subsec} it is straightforward to construct a version of Algorithm~\ref{Algorithms:MainAlgs:PGM:General:Algorithm} for the Robust PCA problem. The only change is the use of a continuation technique for the parameter~$\mu$. In~\cite{Lin:2009kx}, the authors propose to start from some large value~$\mu_0$ and then choose~$\mu_{k+1} = \max(\eta \mu_k,\bar{\mu})$, where $0<\eta<1$ and $\bar{\mu}$ is a lower limit on~$\mu_k$. This continuation technique has been observed to improve convergence. The Accelerated Proximal Gradient Algorithm applied to the Robust PCA problem is given in Algorithm~\ref{Algorithms:MainAlgs:PGM:APGRPCA:Algorithm}.
+%
+\begin{algorithm}
+\caption{Accelerated Proximal Gradient Algorithm for Robust PCA}
+\KwIn{Observation matrix~$M$, parameter~$\lambda$}
+initialization: $k=0$, $L_0=L_{-1}=0$, $S_0=S_{-1}= 0$, $t_0=t_{-1} = 1$, $\bar{\mu} = \delta \mu_0$\;
+\While{not converged}{
+$Y_k^L = L_k + \frac{t_{k-1}-1}{t_k} (L_k-L_{k-1})$, $\; Y_k^S = S_k + \frac{t_{k-1}-1}{t_k} (S_k-S_{k-1})$\;
+$G_k^L = Y_k^L -\frac{1}{2} (Y_k^L+Y_k^S-M)$\;
+$(U,\Sigma,V) = \text{svd}(G_{k}^L)$, $L_{k+1} = U \Scal_{\mu_k/2}[\Sigma] V^T$\;
+$G_k^S = Y_k^S -\frac{1}{2} (Y_k^L+Y_k^S-M)$\;
+$S_{k+1} = \Scal_{\lambda\mu_k/2}[G_{k}^S]$\;
+$t_{k+1} = (1+\sqrt{4t_k^2+1})/2$\;
+$\mu_{k+1} = \max(\eta \mu_k,\bar{\mu})$\;
+$k=k+1$\;
+}
+\KwOut{$L=L_k$, $S=S_k$}
+\label{Algorithms:MainAlgs:PGM:APGRPCA:Algorithm}
+\end{algorithm}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Gradient Ascent on the Dual}
+\label{Algorithms:MainAlgs:GAD:Subsec}
+
+In section~\ref{Algorithms:MainAlgs:IPM:Complexity:Subsubsec} we discussed why solving the Robust PCA dual problem~\eqref{Algorithms:MainAlgs:IPM:SDPform:DualSimpler} via interior point techniques quickly becomes infeasible with growing size of the data matrix~$M$. Another way of solving the dual given in~\cite{Lin:2009kx} is based on a steepest ascent algorithm. Note that the dual problem~\eqref{Algorithms:MainAlgs:IPM:SDPform:DualSimpler} derived in section~\ref{Algorithms:MainAlgs:IPM:SDPform:Subsubsec} can be written as 
+%
+\begin{align}
+d^* = \max_{Y} \; &\trace M^T\!Y \quad \text{subject to}\quad J(Y) \leq 1
+\label{Algorithms:MainAlgs:GAD:Dual}
+\end{align}
+%
+where $J(Y) := \max\left(\norm{Y}{2}{}, \lambda^{-1}\norm{Y}{\infty}{}\right)$. Denote by $F := \{Y \mid J(Y)\leq1 \}$ the feasible set. The maximum operator in the function~$J$ implies that~$F=\{Y \mid \norm{Y}{2}{}\leq1\}\, \cap\, \{Y \mid \lambda^{-1}\norm{Y}{\infty}{}\leq1\}$, hence~$F$ is clearly convex, being the intersection of two convex sets. Further, the function~$J(Y)$ is positive and homogenous in~$Y$, hence the maximum over a linear of the objective function is achieved on the boundary~$\partial F$ of the feasible set, that is, the optimum is achieved when~$J(Y)=1$. 
+
+Top solve~\eqref{Algorithms:MainAlgs:GAD:Dual}, the authors in~\cite{Lin:2009kx} propose to use a projected gradient algorithm. The gradient of the objective function~$\trace M^T\!Y$ is simply~$M$. The projection onto the constraint set is more involved but can be treated using standard methods from convex optimization. In particular, the algorithm at each iteration~$k$ involves projecting the gradient~$M$ onto the tangent cone~$T_F(Y_k)$ of the feasible set~$F$ at the point~$Y_k$. If~$W_k$ is the steepest ascent direction obtained from this projection, the iterate can be updated using the (projected) gradient step
+%
+\begin{align}
+Y_{k+1} = \frac{Y_k+t_kW_k}{J(Y_k+t_kW_k)}
+\label{Algorithms:MainAlgs:GAD:GradStep}
+\end{align}
+%
+where~$t_k$ is the step size that can be determined by a simple line search of the form
+%
+\begin{align}
+t_k = \argmax_{t\geq0} \left\langle M, \frac{Y_k+t W_k}{J(Y_k + t W_k)} \right\rangle
+\label{Algorithms:MainAlgs:GAD:LineSearch}
+\end{align}
+%
+Note that the division by~$J(Y_k+t_kW_k)$ ensures that the next iterate~$Y_{k+1}$ lies on~$\partial F$. It is shown in~\cite{Lin:2009kx} that if the maximizing step size~$t_k$ is equal to zero at some point~$Y_k$, then~$Y_k$ is the optimal solution to the dual problem~\eqref{Algorithms:MainAlgs:GAD:Dual}.
+
+
+In order to perform the projection on the tangent cone~$T_F$ of~$F$ at the point~$Y_k$, the authors of~\cite{Lin:2009kx} make use the following two facts:
+\begin{enumerate}
+\item For any convex subset~$K \subseteq V$ of a real vector space~$V$ the normal cone~$N_K(x)$ at the point~$x\in K$ is the polar cone to the tangent cone~$T_K(x)$.
+\item If two cones $C_1$ and~$C_2$ in~$V$ are are polar cones to each other and $\Pcal_{C_1}$ and $\Pcal_{C_2}$ are the projection operators onto $C_1$ and~$C_2$, respectively, then $\Pcal_{C_1}(X)+ \Pcal_{C_1}(X) = X $ for any point $X\in V$. 
+\end{enumerate}
+
+From these facts, it follows immediately that~$\Pcal_{T_F(Y_k)}(M)$, the projection of~$M$ onto the dual cone of~$F$ at~$Y_k$, can be computed as $\Pcal_{T_F(Y_k)}(M) = M - M_k$, where $M_k := \Pcal_{N_F(Y_k)}(M)$. It can be shown that the normal cone is characterized by the subgradient of the function~$J$ via $N(Y_k) = \{\alpha X \mid \alpha \geq0, X\in \partial J(Y_k) \}$. Note that~$J$ is in fact the pointwise maximum over two functions, hence from strong subgradient calculus it follows that
+%
+\begin{align}
+\partial J(Y_k) = \begin{cases}  
+\partial \norm{Y_k}{2}{} &\text{ if }\;\; \norm{Y_k}{2}{} > \lambda^{-1}\norm{Y_k}{\infty}{} \\
+\lambda^{-1} \partial \norm{Y_k}{\infty}{} &\text{ if }\;\;  \norm{Y_k}{2}{} < \lambda^{-1}\norm{Y_k}{\infty}{} \\
+\Convh\!\left\{\partial \norm{Y_k}{2}{} \,,\, \lambda^{-1}\partial \norm{Y_k}{\infty}{}\right\} &\text{ if }\;\; \norm{Y_k}{2}{} = \lambda^{-1}\norm{Y_k}{\infty}{} \\
+\end{cases}
+\label{Algorithms:MainAlgs:GAD:SubDifferential}
+\end{align}
+%
+where~$\norm{\cdot}{\infty}{}$ is the maximum absolute value of the matrix entries (not the induced $\infty$-norm). 
+
+The first two cases are rather simple and the associated projections $\Pcal_{2}(\cdot)$ and $\Pcal_{\infty}(\cdot)$ onto the normal cones generated by the sub gradients of~$\norm{\cdot}{2}{}$ and~$\norm{\cdot}{\infty}{}$ at~$Y_k$, respectively,  are efficiently computable~\cite{Lin:2009kx}. In particular, at each step the projection $\Pcal_{2}(\cdot)$ requires the computation of the largest singular value\footnote{Note that the largest singular value of~$Y_k$ needs to be computed anyway at each step in order to distinguish the three cases in~\eqref{Algorithms:MainAlgs:GAD:SubDifferential}} (and associated singular vectors) of the matrix~$Y_k$, and the projection $\Pcal_{\infty}(\cdot)$ requires only a simple element-wise comparison of the matrices~$M$ and~$Y_k$. The projection in the third case, i.e. when $N(Y_k) = N_2(Y_k) + N_\infty(Y_k)$, is more involved and can be performed using an alternating projections algorithm. It can be shown~\cite{Lin:2009kx} that by initializing $S_0 = 0$ and $j=0$, and then repeatedly setting $L_{j+1} = \Pcal_{2}(M-S_j)$, $S_{j+1} = \Pcal_{\infty}(M-L_{j+1})$ will yield the projection~$M_k = \Pcal_{N(Y_k)}(M)$ in the sense that $\lim_{j\rightarrow \infty} L_j+S_j = M_k$. The projected gradient ascent algorithm for the dual problem is given in Algortihm~\eqref{Algorithms:MainAlgs:GAD:Algorithm}.
+
+%
+\begin{algorithm}
+\caption{Projected Gradient Ascent for the Dual Problem}
+\KwIn{Observation matrix~$M$, parameter~$\lambda$}
+initialization: $k=0$, $Y_0 = \sign(M)/J(M)$\;
+\While{not converged}{
+Compute the projection~$M_k$ of~$M$ onto $N_F(Y_k)$:\\
+\If{$\norm{Y_k}{2}{}>\lambda^{-1}\norm{Y_k}{\infty}{}$}{$M_k = \Pcal_{2}(M)$, $L=M$, $S=0$}
+\ElseIf{$\norm{Y_k}{2}{}<\lambda^{-1}\norm{Y_k}{\infty}{}$}{$M_k = \Pcal_{\infty}(M)$, $L=0$, $S=M$}
+\Else{$L=0$, $S=0$\;
+\While{not converged}{$L = \Pcal_{2}(M-S)$, $S = \Pcal_{\infty}(M-L)$}$M_k = L+S$}
+Perform a line search as in~\eqref{Algorithms:MainAlgs:GAD:LineSearch} to determine step size~$t_k$\;
+$Y_{k+1} = \frac{Y_k+t_k(M-M_k)}{J(Y_k+t_k(M-M_k))}$\;
+$k=k+1$\;
+}
+\KwOut{$L$, $S$}
+\label{Algorithms:MainAlgs:GAD:Algorithm}
+\end{algorithm}
+
+Using the properties of dual norms, it is not hard to show~\cite{Lin:2009kx} that the primal solution~$(\Lhat,\Shat)$ can easily be recovered from the dual optimal~$\Yhat$. Specifically, it can be shown that if $\norm{Y_k}{2}{} <1$ or $\lambda^{-1}\norm{Y_k}{\infty}{}<1$ the solution is degenerate and given by $\Lhat = 0,\Shat =M$ (in case $\norm{Y_k}{2}{} <1$) or $\Lhat = M,\Shat =0$ (in case $\lambda^{-1} \norm{Y_k}{\infty}{} <1$), respectively. If $\norm{Y_k}{2}{} = \lambda^{-1} \norm{Y_k}{\infty}{} =1$, then $(\Lhat,\Shat)$ is any pair of points that achieves convergence of the alternating projections method described above. 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Augmented Lagrangian Method}
+\label{Algorithms:MainAlgs:AugLag:Subsec}
+
+
+%%%%%%%%%%%%%%%%%
+\subsubsection{The General Case}
+\label{Algorithms:MainAlgs:AugLag:General:Subsubsec}
+
+The classic Augmented Lagrangian Method (ALM), described in~\cite{Bertsekas:1996fk}, is a method for solving equality-constrained convex optimization problems. Consider a generic equality-constrained optimization problem of the form
+%
+\begin{align}
+p^* = \min_{x\in\Hcal} \;&f_o(x) \quad \text{s.t.} \quad f_c(x) =0
+\label{Algorithms:MainAlgs:AugLag:General:GenericProb}
+\end{align}
+%
+where $\Hcal$ and $\Hcal'$ are Hilbert spaces and $f_o:\Hcal \mapsto \Rbf$ and $f_c:\Hcal \mapsto \Hcal'$ are both convex functions. The conventional Lagrangian of the problem is $\Lcal(x,\lambda) = f_o(x) + \langle \lambda, f_c(x) \rangle$, with~$\lambda\in\Hcal'$ being the dual variable. The augmented Lagrangian method, as its name suggests, uses an augmented Lagrangian of the form 
+%
+\begin{align}
+\Lcal(x,\lambda,\mu) = f_o(x) + \langle \lambda, f_c(x) \rangle + \frac{\mu}{2} \norm{f_c(x)}{}{2}
+\label{Algorithms:MainAlgs:AugLag:General:GenAugLagr}
+\end{align}
+%
+where $\norm{\cdot}{}{}$ is the inner product norm. Here $\lambda$ can now be interpreted as an estimate of a dual variable. The general algorithm is quite simple and given in Algorithm~\ref{Algorithms:MainAlgs:AugLag:General:GenericAlg}.
+%
+\begin{algorithm}
+\caption{Generic Augmented Lagrangian Method}
+\While{not converged}{
+$x_{k+1} = \argmin_x \Lcal(x,\lambda_k,\mu_k)$\;
+$\lambda_{k+1} = \lambda_k + \mu_k f_c(x_{k+1})$\;
+update $\mu_k$ to $\mu_{k+1}$\;
+$k=k+1$\;
+}
+\KwOut{$X=X_k$}
+\label{Algorithms:MainAlgs:AugLag:General:GenericAlg}
+\end{algorithm}
+
+
+%%%%%%%%%%%%%%%%%
+\subsubsection{Alternating Directions ALM for Robust PCA}
+\label{Algorithms:MainAlgs:AugLag:RPCA:Subsubsec}
+
+For the Robust PCA problem~\eqref{Algorithms:Overview:RecallRPCA} the augmented Lagrangian is (associating~$x = (L,S)$)
+%
+\begin{align}
+\Lcal(L,S,Y,\mu) = \norm{L}{*}{} + \lambda \norm{S}{1}{} + \langle Y, M-L-S \rangle + \frac{\mu}{2} \norm{M-L-S}{F}{2}
+\label{Algorithms:MainAlgs:AugLag:RPCA:AugLagr}
+\end{align}
+%
+Note that one of the usual assumptions made when using an augmented Lagrangian method is that the objective function~$f_o$ is differentiable. This is clearly not the case for the Robust PCA problem. However, in~\cite{Lin:2010fk} the authors show that the same convergence properties as for the differentiable case can be retained also for the Robust PCA problem. The main step in Algorithm~\ref{Algorithms:MainAlgs:AugLag:General:GenericAlg} is solving the problem~$x_{k+1} = \argmin_x \Lcal(x,\lambda_k,\mu_k)$, which in the case of the Robust PCA problem reads
+%
+\begin{align}
+(L_{k+1},S_{k+1}) = \argmin_{L,S} \; \norm{L}{*}{} + \lambda \norm{S}{1}{} + \langle Y_k, M-L-S \rangle + \frac{\mu_k}{2} \norm{M-L-S}{F}{2}
+\label{Algorithms:MainAlgs:AugLag:RPCA:SubStep}
+\end{align}
+%
+and can be solved using an alternating directions approach based on the ideas in section~\ref{Algorithms:MainAlgs:ITM:Subsec}. Specifically, consider~\eqref{Algorithms:MainAlgs:AugLag:RPCA:SubStep} for~$S$ fixed. The resulting ``directional'' subproblem can be formulated as
+%
+\begin{align}
+\begin{split}
+L_{k+1} &= \argmin_{L} \; \norm{L}{*}{} + \lambda \norm{S}{1}{} + \langle Y_k, M-L-S \rangle + \frac{\mu_k}{2} \norm{M-L-S}{F}{2} \\
+&= \argmin_{L} \; \norm{L}{*}{} + \langle Y_k, M-L-S \rangle + \frac{1}{2\mu_k^{-1}} \norm{M-L-S}{F}{2} \\
+&= \argmin_{L} \; \norm{L}{*}{} + \frac{1}{2\mu_k^{-1}} \norm{L-(M-S+\mu_k^{-1}Y_k)}{F}{2} 
+\end{split}
+\label{Algorithms:MainAlgs:AugLag:RPCA:Sfixed}
+\end{align}
+%
+Suppose $U\Sigma V^T = M-S+\mu_k^{-1}Y_k$ is the SVD of $M-S+\mu_k^{-1}Y_k$. Using the same arguments as in section~\ref{Algorithms:MainAlgs:ITM:Subsec}, the minimizer in~\eqref{Algorithms:MainAlgs:AugLag:RPCA:Sfixed} is given by $L_{k+1} = U \Scal_{\mu_k^{-1}}[\Sigma] V^T$, where~$\Scal_\varepsilon$ is the soft-thresholding operator defined in~\eqref{Algorithms:MainAlgs:ITM:Shrink}. 
+
+Conversely, suppose that~$L$ in~\eqref{Algorithms:MainAlgs:AugLag:RPCA:SubStep} is fixed. The other ``directional'' subproblem is
+%
+\begin{align}
+\begin{split}
+S_{k+1} &= \argmin_{S} \; \norm{L}{*}{} + \lambda \norm{S}{1}{} + \langle Y_k, M-L-S \rangle + \frac{\mu_k}{2} \norm{M-L-S}{F}{2} \\
+&= \argmin_{L} \; \lambda \norm{S}{1}{} + \langle Y_k, M-L-S \rangle + \frac{1}{2\mu_k^{-1}} \norm{M-L-S}{F}{2} \\
+&= \argmin_{L} \; \lambda \norm{S}{1}{} + \frac{1}{2\mu_k^{-1}} \norm{S-(M-L+\mu_k^{-1}Y_k)}{F}{2} 
+\end{split}
+\label{Algorithms:MainAlgs:AugLag:RPCA:Lfixed}
+\end{align}
+%
+Again using the results from section~\ref{Algorithms:MainAlgs:ITM:Subsec} we find that $S_{k+1} = \Scal_{\lambda\mu_k^{-1}}[M-L+\mu_k^{-1}Y_k]$. 
+
+The alternating directions method for solving~\eqref{Algorithms:MainAlgs:AugLag:RPCA:SubStep} is based on solving~\eqref{Algorithms:MainAlgs:AugLag:RPCA:Sfixed} and~\eqref{Algorithms:MainAlgs:AugLag:RPCA:Lfixed} iteratively, alternating between using a fixed~$S$ to update~$L$ and using the newly computed~$L$ to update~$S$ until convergence. Note that one can use prior iterates~$L_k$ and~$S_k$ for hot-starting the alternative directions based solution of~\eqref{Algorithms:MainAlgs:AugLag:RPCA:SubStep} in order to significantly reduce the necessary number of directional steps within each iteration. These are all the ingredients needed for the alternating directions ALM method, which is given is Algorithm~\ref{Algorithms:MainAlgs:AugLag:RPCA:Algorithm}.
+
+\begin{algorithm}
+\caption{Alternating Directions Augmented Lagrangian Method}
+\KwIn{Observation matrix~$M$, parameter~$\lambda$}
+initialization: $k=0$, $\mu_0>0$, $\Yhat_0 = \sign(M)/J(\sign(M))$\;
+\While{not converged}{
+$j=0$, $L_{k+1}^0 = \Lhat_k$, $S_{k+1}^0 = \Shat_k$\;
+\While{not converged}{
+$(U,\Sigma,V) = \text{svd}(M-S_{k+1}^j +\mu_k^{-1}\Yhat_{k})$\;
+$L_{k+1}^{j+1} = U \Scal_{\mu_k^{-1}}[\Sigma] V^T$\;
+$S_{k+1}^{j+1} = \Scal_{\lambda\mu_k^{-1}}[M-L_{k+1}^{j+1} +\mu_k^{-1}\Yhat_{k}]$\;
+$ j = j+1$\;
+}
+$\Yhat_{k+1} = \Yhat_{k} + \mu_k (M-\Lhat_{k+1}-\Shat_{k+1})$\;
+Update~$\mu_k$ to $\mu_{k+1}$\;
+$k=k+1$\;
+}
+\KwOut{$L=\Lhat_k$, $S=\Shat_k$}
+\label{Algorithms:MainAlgs:AugLag:RPCA:Algorithm}
+\end{algorithm}
+
+The following theorem gives the main convergence result for Algorithm~\ref{Algorithms:MainAlgs:AugLag:RPCA:Algorithm}.\\
+
+\begin{theorem}[\cite{Lin:2010fk}]
+For Algorithm~\ref{Algorithms:MainAlgs:AugLag:RPCA:Algorithm}, any accumulation point $(\Lhat,\Shat)$ of $(\Lhat_k,\Shat_k)$ is an optimal solution to the Robust PCA problem~\eqref{Algorithms:Overview:RecallRPCA} with convergence rate of at least~$O(\mu_{k-1}^{-1})$ in the sense that
+\begin{align*}
+\left| ||\Lhat_k||_* + \lambda ||\Shat_k||_1 - f^* \right| = O(\mu_{k-1}^{-1})
+\end{align*}
+where~$f^*$ is the optimal value of the Robust PCA problem.
+\end{theorem}
+
+
+
+%%%%%%%%%%%%%%%%%
+\subsubsection{Alternating Directions ALM for Robust PCA}
+\label{Algorithms:MainAlgs:AugLag:Inexact:Subsubsec}
+
+The authors in~\cite{Lin:2010fk} point out that it is not really necessary to solve~\eqref{Algorithms:MainAlgs:AugLag:RPCA:SubStep} exactly at each iteration~$k$ by running the alternating directions sub algorithm until convergence. It turns out that, under some technical conditions on the sequence~$\{\mu_k\}$, one can also prove convergence of the overall algorithm when performing only a single step in either direction at each iteration~$k$.  This results in Algorithm~\ref{Algorithms:MainAlgs:AugLag:Inexact:Algorithm} which in~\cite{Lin:2010fk} is referred to as the ``Inexact Augmented Lagrangian Method'' (IALM).
+
+\begin{algorithm}
+\caption{Inexact Augmented Lagrangian Method}
+\KwIn{Observation matrix~$M$, parameter~$\lambda$}
+initialization: $k=0$, $\mu_0>0$, $Y_0 = M/J(M)$\;
+\While{not converged}{
+$(U,\Sigma,V) = \text{svd}(M-S_{k} +\mu_k^{-1}Y_{k})$\;
+$L_{k+1} = U \Scal_{\mu_k^{-1}}[\Sigma] V^T$\;
+$S_{k+1} = \Scal_{\lambda\mu_k^{-1}}[M-L_{k+1} +\mu_k^{-1}Y_{k}]$\;
+$\Yhat_{k+1} = Y_{k} + \mu_k (M-L_{k+1}-S_{k+1})$\;
+Update~$\mu_k$ to $\mu_{k+1}$\;
+$k=k+1$\;
+}
+\KwOut{$L=\Lhat_k$, $S=\Shat_k$}
+\label{Algorithms:MainAlgs:AugLag:Inexact:Algorithm}
+\end{algorithm}
+
+While it is possible to show convergence of Algorithm~\ref{Algorithms:MainAlgs:AugLag:Inexact:Algorithm}, the authors do not provide a bound on the rate of convergence as they do for the ``exact ALM'' (Algorithm~\ref{Algorithms:MainAlgs:AugLag:RPCA:Algorithm}). However, empirical results suggest that the IALM algorithm is generally significantly faster that the EALM algorithm with only slightly lower accuracy. 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Discussion of Algorithms}
+\label{Algorithms:Discussion:Sec}
+
+The previous section discussed a number of algorithms for Robust PCA. The naive application of general-purpose interior point solvers to the dual problem works well for small and medium size problems but does not scale with the size of the data matrix~$M$. The simple iterative thresholding algorithm can handle very large problem sizes but its convergence is extremely slow. Both the APG and the dual gradient ascent algorithm are better suited for large problems. An extension of the APG algorithm that uses a prediction strategy for the dimension of the principal singular space whose singular values are larger than the threshold allows to only compute a partial SVD in each step of the algorithm. With this extension the the APG algorithm turns out to be faster than the dual gradient ascent algorithm. 
+
+The current state of the art in terms of complexity, accuracy and convergence seem to be the ALM methods discussed in section~\ref{Algorithms:MainAlgs:AugLag:Subsec}. Though the authors of~\cite{Lin:2010fk} do not give a complexity analysis for the inexact ALM algorithm, empirical results suggest that for practical problems the inexact ALM is considerably faster than its exact counterpart. 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{The Importance of the SVD}
+\label{Algorithms:Discussion:SVD:Subsec}
+
+
+Most of the presented algorithms (in fact, all of them except for the direct use of interior point solvers on the dual) involve repeated computations of the Singular Value Decomposition (or at least a partial SVD) of matrices of considerable size. This is not very surprising, as the nuclear norm in the objective function is the sum of the singular values of the matrix argument. This repeated computation of the SVD is in fact the bottleneck of most current algorithms for Robust PCA. Hence it seems that, at least for the algorithms discussed above, being able to perform SVD on large matrices are the key to developing fast algorithms that can be used in applications with large-scale data.\\
+
+When the matrix under consideration is sparse, the SVD can be carried out much faster using specialized methods~\cite{Berry:2005uq}. Unfortunately, while the iterates of the matrix~$S_k$ (in case of a primal algorithm) are indeed sparse, the matrices for which the SVD needs to be computed are not.
+
+One possibility to speed up the algorithms that involve thresholding of singular values is to use a partial SVD to compute only those singular values that lie above the specified threshold. For the APG algorithm~\cite{Lin:2010fk} use the software PROPACK~\cite{Larsen:1998uq} that allows the computation of such a partial SVD. However, PROPACK requires the dimension of the principal singular space whose singular values are larger than the threshold, which is of course unknown a priori. Since it turns out that the rank of the the iterates~$L_k$ in the APG algorithm is monotonically increasing~\cite{Lin:2010fk}, is is not hard to do a reasonable prediction. Doing so then allows computing a partial SVD at each step rather than a full SVD, which can speed up the algorithm. It would be interesting to see if a similar situation arises in the ALM methods, where singular value thresholding is applied to matrices of the form $M-S_{k} +\mu_k^{-1}Y_{k}$.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Possible Directions fo Parallelization}
+\label{Algorithms:Discussion:Parallel:Subsec}
+
+With the advent of highly parallelized computing architectures in modern CPUs and GPUs, a number of projects have been devoted to the development and implementation of algorithms that exploit this massive computing power. Examples for these are MAGMA~\cite{Smith:2010tg} and CULA~\cite{Humphrey:2010kl}, which are adapting classic high-performance linear algebra packages such as LAPACK and BLAS to the highly parallelized architecture of modern GPUs. 
+
+Some of the steps in the algorithms are inherently parallelizable, for example the entry-wise soft-thresholding of a matrix. Other steps require more work to be able to 
+
+\cite{Boyd:2011hc}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{abbrv}
+\bibliography{../../common/RobustPCA}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}  
+
