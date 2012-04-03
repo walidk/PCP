@@ -218,11 +218,11 @@ Proximal gradient algorithms in general can be used to solve unconstrained probl
 where~$g$ is convex and differentiable and~$h$ is closed\footnote{that is, its epigraph is closed}, convex but need not be differentiable. The proximal mapping of a convex function~$h$ is defined as
 %
 \begin{align}
-\proximal{h}{x} := \argmin_u \left( h(u) + \frac{1}{2}\norm{u-x}{2}{2} \right)
+\proximal{h}{x} := \argmin_u \left( h(u) + \frac{1}{2}\norm{u-x}{}{2} \right)
 \label{Algorithms:MainAlgs:PGM:General:proxmapping}
 \end{align}
 %
-Here $\norm{\cdot}{2}{}$ denotes the inner product norm\footnote{Note that the derivation holds for real inner product spaces, not just~$\Rbf^n$. We are particularly interested in the case~$\Rbf^{m\times n}$}. Note that since~$h$ is convex and the norm is strictly convex, the optimizer in~\eqref{Algorithms:MainAlgs:PGM:General:proxmapping} is unique. The step of each iteration of the classic (non-accelerated) proximal gradient algorithm is
+Here $\norm{\cdot}{}{}$ denotes the inner product norm\footnote{Note that the derivation holds for real inner product spaces, not just~$\Rbf^n$. We are particularly interested in the case~$\Rbf^{m\times n}$}. Note that since~$h$ is convex and the norm is strictly convex, the optimizer in~\eqref{Algorithms:MainAlgs:PGM:General:proxmapping} is unique. The step of each iteration of the classic (non-accelerated) proximal gradient algorithm is
 %
 \begin{align}
 x^+ = \proximal{\delta h}{x-\delta \nabla g(x)}
@@ -235,31 +235,31 @@ Note that~\eqref{Algorithms:MainAlgs:PGM:General:proxAlg} can be written as
 %
 \begin{align}
 \begin{split}
-x^+ &= \argmin_u \left( h(u) + \frac{1}{2\delta}\norm{u-x+\delta\nabla g(x)}{2}{2} \right) = \argmin_u \left( h(u) +\frac{1}{2\delta} \norm{u-G(x)}{2}{2} \right) \\
-&= \argmin_u \left( h(u) +g(x) + \langle \nabla g(x),u-x\rangle + \frac{1}{2\delta}\norm{u-x}{2}{2} \right)
+x^+ &= \argmin_u \left( h(u) + \frac{1}{2\delta}\norm{u-x+\delta\nabla g(x)}{}{2} \right) = \argmin_u \left( h(u) +\frac{1}{2\delta} \norm{u-G(x)}{}{2} \right) \\
+&= \argmin_u \left( h(u) +g(x) + \langle \nabla g(x),u-x\rangle + \frac{1}{2\delta}\norm{u-x}{}{2} \right)
 \end{split}
 \label{Algorithms:MainAlgs:PGM:General:proxAlgRewritten}
 \end{align}
 %
-where $G(x) := x-\delta\grad g(x)$. Therefore, each step~\eqref{Algorithms:MainAlgs:PGM:General:proxAlg} can be interpreted as minimizing the function~$h(u)$ plus a quadratic local model of~$g(u)$ around the current iterate~$x$. This classic form of the proximal gradient algorithm is well known in the literature and, under Lipschitz continuity of the gradient of~$g$ and some technical conditions on the step size~$t$, has been shown to have a convergence rate no worse than~$O(1/k)$ (PUT REFERENCE). In particular, a popular choice for~$\delta$ is the fixed step size $\delta = 1/L$, where~$L$ is a Lipschitz constant of the gradient of~$g$, that is we have $\norm{\grad g(x) -\grad g(y)}{2}{} \leq L \norm{x-y}{2}{}$ for all~$x,y$. Note that in practice for a general problem the value of~$L$ might be unknown. This is not a big concern for the type of problem arising in Robust PCA, hence we will assume this choice of~$\delta=1/L$ in the following.
+where $G(x) := x-\delta\grad g(x)$. Therefore, each step~\eqref{Algorithms:MainAlgs:PGM:General:proxAlg} can be interpreted as minimizing the function~$h(u)$ plus a quadratic local model of~$g(u)$ around the current iterate~$x$. This classic form of the proximal gradient algorithm is well known in the literature and, under Lipschitz continuity of the gradient of~$g$ and some technical conditions on the step size~$t$, has been shown to have a convergence rate no worse than~$O(1/k)$ (PUT REFERENCE). In particular, a popular choice for~$\delta$ is the fixed step size $\delta = 1/L_g$, where~$L_g$ is a Lipschitz constant of the gradient of~$g$, that is we have $\norm{\grad g(x) -\grad g(y)}{}{} \leq L_g \norm{x-y}{}{}$ for all~$x,y$. Note that in practice for a general problem the value of~$L_g$ might be unknown. This is not a big concern for the type of problem arising in Robust PCA, hence we will assume this choice of~$\delta=1/L_g$ in the following.
 
 It turns out that the choice for the point around which the quadratic local model of~$g(u)$ is constructed has an important effect on the convergence rate, and that less obvious choices than just the previous iterate~$x$ are actually better (in the sense that they yield higher convergence rates). Specifically, consider a generalized version of~\eqref{Algorithms:MainAlgs:PGM:General:proxAlgRewritten}, where the approximation of~$g$ is constructed around some~$y$ that may depend on all prior iterates~$x_0,\dotsc,x_k$:
 %
 \begin{align}
-x^+ &= \argmin_u \left( h(u) +\frac{L}{2} \norm{u-G(y)}{2}{2} \right)
+x^+ &= \argmin_u \left( h(u) +\frac{L_g}{2} \norm{u-G(y)}{}{2} \right)
 \label{Algorithms:MainAlgs:PGM:General:proxAlgGeneralized}
 \end{align}
 %
-Nesterov in~\cite{Nesterov:1983uq} showed that in the smooth case the standard gradient algorithm (i.e. when~$h(x) \equiv 0$) can be accelerated by choosing $y_k = x_k + \frac{t_{k-1}-1}{t_k}(x_k-x_{k-1})$, leading to a theoretical convergence rate of~$O(1/k^2)$. This algorithm is optimal in the sense that its convergence rate achieves (in terms of order) the theoretical complexity bound that all first order algorithms are subject to. The seminal work~\cite{Nesterov:1983uq} has been extended to the non-smooth case in~\cite{Beck:2009kx,Nesterov:2007kx}, yielding the generic accelerated proximal gradient method given in Algorithm~\ref{Algorithms:MainAlgs:PGM:General:Algorithm}.
+Nesterov in~\cite{Nesterov:1983uq} showed that in the smooth case the standard gradient algorithm (i.e.~$h(x) \equiv 0$) can be accelerated by choosing $y_k = x_k + \frac{t_{k-1}-1}{t_k}(x_k-x_{k-1})$, leading to a theoretical convergence rate of~$O(1/k^2)$. This algorithm is optimal in the sense that its convergence rate achieves (in terms of order) the theoretical complexity bound that all first order algorithms are subject to. The seminal work~\cite{Nesterov:1983uq} has been extended to the non-smooth case in~\cite{Beck:2009kx,Nesterov:2007kx}, yielding the generic accelerated proximal gradient method given in Algorithm~\ref{Algorithms:MainAlgs:PGM:General:Algorithm}.
 %
 \begin{algorithm}
 \caption{Accelerated Proximal Gradient Algorithm}
 initialization: $k=0$, $t_0=t_{-1} = 1$\;
 \While{not converged}{
 $y_k = x_k + \frac{t_{k-1}-1}{t_k} (x_k-x_{k-1})$\;
-$G_k = y_k - \frac{1}{L} \grad g(y_k) $\;
-$x_{k+1} = \argmin_x \left( h(x) +\frac{L}{2} \norm{x-G(y_k)}{2}{2} \right) $\;
-$t_{k+1} = (1+\sqrt{4t_k^2+1})/2$\;
+$G_k = y_k - \frac{1}{L_g} \grad g(y_k) $\;
+$x_{k+1} = \argmin_x \left( h(x) +\frac{L_g}{2} \norm{x-G(y_k)}{}{2} \right) $\;
+$t_{k+1} = \frac{1+\sqrt{4t_k^2+1}}{2}$\;
 $k=k+1$\;
 }
 \label{Algorithms:MainAlgs:PGM:General:Algorithm}
@@ -271,25 +271,35 @@ $k=k+1$\;
 \subsubsection{Accelerated Proximal Gradient Algorithm Applied to Robust PCA}
 \label{Algorithms:MainAlgs:PGM:APGRPCA:Subsubsec}
 
-Using some the ideas from the iterative thresholding method in section~\ref{Algorithms:MainAlgs:ITM:Subsec}, it is possible to construct an accelerated proximal gradient algorithm for a relaxation of the original problem~\eqref{Algorithms:Overview:RecallRPCA}. In particular, it is easy to see that in the common case~$h(x) = \norm{x}{1}{}$ the update for~$x$ in Algorithm~\ref{Algorithms:MainAlgs:PGM:General:Algorithm} is simply given by $x_{k+1} = \Scal_{1/L}[G(y_k)]$, where~$\Scal_\varepsilon$ is the soft-thresholding operator defined in~\eqref{Algorithms:MainAlgs:ITM:Shrink}.
+Using some the ideas from the iterative thresholding method in section~\ref{Algorithms:MainAlgs:ITM:Subsec}, it is possible to construct an accelerated proximal gradient algorithm for a relaxation of the original problem~\eqref{Algorithms:Overview:RecallRPCA}. In particular, it is easy to see that in the common case~$h(x) = \norm{x}{1}{}$ the update for~$x$ in Algorithm~\ref{Algorithms:MainAlgs:PGM:General:Algorithm} is simply given by $x_{k+1} = \Scal_{1/L_g}[G(y_k)]$, where~$\Scal_\varepsilon$ is the soft-thresholding operator defined in~\eqref{Algorithms:MainAlgs:ITM:Shrink}. Similar ideas can be used to develop an APG algorithm for the Robust PCA problem. 
 
 The authors of~\cite{Lin:2009kx} consider a relaxation of~\eqref{Algorithms:Overview:RecallRPCA} of the form
 %
 \begin{align}
-\min_{L,S} \;\; &\mu \norm{L}{*}{} + \mu \lambda \norm{S}{1}{} + \frac{1}{2} \norm{M-L-S}{F}{2} 
+\min_{L,S} \;\; &\mu \norm{L}{*}{} + \mu \lambda \norm{S}{1}{} + \frac{1}{2} \norm{L+S-M}{F}{2} 
 \label{Algorithms:MainAlgs:PGM:APGRPCA:Relax}
 \end{align}
 %
 It can be shown that for~$\mu \rightarrow 0$, any solution of~\eqref{Algorithms:MainAlgs:PGM:APGRPCA:Relax} approaches the solution set of~\eqref{Algorithms:Overview:RecallRPCA}. In practice, rather than fixing~$\mu$ to some small value, one can achieve superior convergence of the algorithm by using a continuation technique on~$\mu$, that is, by solving~\eqref{Algorithms:MainAlgs:PGM:APGRPCA:Relax} by repeatedly decreasing the value of~$\mu$ in the steps of the accelerated proximal gradient algorithm. This can be interpreted as a particular homotopy method. 
 
-It is easy to see (by separability of the Frobenius norm) that the minimizers of~\eqref{Algorithms:MainAlgs:PGM:APGRPCA:Relax} are also the minimizers of 
+With $X=(L,S)$ we identify $h(X) = \mu \norm{L}{*}{} + \mu \lambda \norm{S}{1}{}$ and $g(X) = \frac{1}{2} \norm{L+S-M}{F}{2}$ in~\eqref{Algorithms:MainAlgs:PGM:APGRPCA:Relax}. The gradient of~$g$ is $\nabla g(X) = (\nabla_{\!L} g(X),\nabla_{\!S} g(X))$, where $\nabla_{\!L} g(X) = \nabla_{\!S} g(X) = L+S-M$. Thus
+\begin{align*}
+\norm{\grad g(X_1) -\grad g(X_2)}{}{} &= \norm{\begin{bmatrix} L_1+S_1-M \\ L_1+S_1-M  \end{bmatrix} - \begin{bmatrix} L_2+S_2-M \\ L_2+S_2-M  \end{bmatrix}}{}{} = \norm{\begin{bmatrix} L_1-L_2 + S_1-S_2 \\ L_1-L_2 + S_1-S_2  \end{bmatrix}}{}{} \\
+&\leq \norm{\begin{bmatrix} L_1-L_2\\ S_1-S_2  \end{bmatrix}}{}{} + \norm{\begin{bmatrix} S_1-S_2\\ L_1-L_2  \end{bmatrix}}{}{} = 2\, \norm{X_1-X_2}{}{}
+\end{align*}
+which means that a Lipschitz constant is given by $L_g =2$. It turns out that because of the separability of both the function~$h$ and the Frobenius norm the update can be be decomposed as follows:
 %
+\begin{align*}
+(L_{k+1},S_{k+1}) &= X_{k+1} = \argmin_X \left( h(X) +\frac{L_g}{2} \norm{X-G(Y_k)}{}{2} \right)  \\
+&= \argmin_{L,S} \left( \mu \norm{L}{*}{} + \mu \lambda \norm{S}{1}{} + \norm{\begin{bmatrix}L \\ S\end{bmatrix} - \begin{bmatrix}G_k^L \\ G_k^S\end{bmatrix} }{}{2} \right) \\
+&= \argmin_{L,S} \left( \norm{L}{*}{} + \frac{1}{2\frac{\mu}{2}} \norm{L - G_k^L}{}{2}  + \lambda \norm{S}{1}{}  + \frac{1}{2\frac{\mu}{2}}  \norm{S - G_k^S}{}{2} \right)
+\end{align*}
+The problem is therefore completely separable and clearly the sum of two problems of the form~\eqref{Algorithms:MainAlgs:PGM:General:GenPGA}. In particular, if $G_k^L = U \Sigma V^T$ is the SVD of~$G_k^L$ then, using the results from section~\ref{Algorithms:MainAlgs:ITM:Subsec}, the iterates~$L_{k+1}$ and $S_{k+1}$ are given by 
 \begin{align}
-\min_{L,S} \;\; &\mu \norm{L}{*}{} + \frac{1}{2} \norm{M-L}{F}{2} + \mu \lambda \norm{S}{1}{} + \frac{1}{2} \norm{M-S}{F}{2} 
-\label{Algorithms:MainAlgs:PGM:APGRPCA:RelaxSplit}
+L_{k+1} &= U \Scal_\frac{\mu}{2}[\Sigma] V^T \label{Algorithms:MainAlgs:PGM:APGRPCA:LIterate} \\
+S_{k+1} &= \Scal_\frac{\lambda\mu}{2}[G_k^S] \label{Algorithms:MainAlgs:PGM:APGRPCA:SIterate}
 \end{align}
-%
-The problem is therefore completely separable and clearly the sum of two problems of the form~\eqref{Algorithms:MainAlgs:PGM:General:GenPGA}. Using the results from section~\ref{Algorithms:MainAlgs:ITM:Subsec} it is straightforward to construct a version of Algorithm~\ref{Algorithms:MainAlgs:PGM:General:Algorithm} for the Robust PCA problem. The only change is the use of a continuation technique for the parameter~$\mu$. In~\cite{Lin:2009kx}, the authors propose to start from some large value~$\mu_0$ and then choose~$\mu_{k+1} = \max(\eta \mu_k,\bar{\mu})$, where $0<\eta<1$ and $\bar{\mu}$ is a lower limit on~$\mu_k$. This continuation technique has been observed to improve convergence. The Accelerated Proximal Gradient Algorithm applied to the Robust PCA problem is given in Algorithm~\ref{Algorithms:MainAlgs:PGM:APGRPCA:Algorithm}.
+Therefore it is rather straightforward to formulate a version Algorithm~\ref{Algorithms:MainAlgs:PGM:General:Algorithm} for the Robust PCA problem. One extension to Algorithm~\ref{Algorithms:MainAlgs:PGM:General:Algorithm} is the use of a continuation technique for the parameter~$\mu$. In~\cite{Lin:2009kx}, the authors propose to start from some large value~$\mu_0$ and then choose~$\mu_{k+1} = \max(\eta \mu_k,\bar{\mu})$, where $0<\eta<1$ and $\bar{\mu}$ is a lower limit on~$\mu_k$. This continuation technique has been observed to improve convergence. The Accelerated Proximal Gradient Algorithm applied to the Robust PCA problem is given in Algorithm~\ref{Algorithms:MainAlgs:PGM:APGRPCA:Algorithm}.
 %
 \begin{algorithm}
 \caption{Accelerated Proximal Gradient Algorithm for Robust PCA}
@@ -301,7 +311,7 @@ $G_k^L = Y_k^L -\frac{1}{2} (Y_k^L+Y_k^S-M)$\;
 $(U,\Sigma,V) = \text{svd}(G_{k}^L)$, $L_{k+1} = U \Scal_{\mu_k/2}[\Sigma] V^T$\;
 $G_k^S = Y_k^S -\frac{1}{2} (Y_k^L+Y_k^S-M)$\;
 $S_{k+1} = \Scal_{\lambda\mu_k/2}[G_{k}^S]$\;
-$t_{k+1} = (1+\sqrt{4t_k^2+1})/2$\;
+$t_{k+1} = \frac{1+\sqrt{4t_k^2+1}}{2}$\;
 $\mu_{k+1} = \max(\eta \mu_k,\bar{\mu})$\;
 $k=k+1$\;
 }
@@ -309,6 +319,20 @@ $k=k+1$\;
 \label{Algorithms:MainAlgs:PGM:APGRPCA:Algorithm}
 \end{algorithm}
 
+We will restate the main convergence theorem for Algorithm~\ref{Algorithms:MainAlgs:PGM:APGRPCA:Algorithm} without proof. 
+
+\begin{theorem}[\cite{Lin:2010fk}]
+Let $F(X) = F(L,S) := \bar{\mu} \norm{L}{*}{} + \bar{\mu} \lambda \norm{S}{1}{} + \frac{1}{2} \norm{L+S-M}{F}{2}$. Then for all $k>k_0 := -C_1\log(\eta)$ it holds that
+\begin{align*}
+F(X_k) - F(X^*) \leq \frac{4\norm{C_{k_0}-X^*}{F}{2}}{(k-k_0+1)^2}
+\end{align*}
+where~$C_1 = \log(\mu_0/\bar{\mu})$ and $X^*$ is any solution to~\eqref{Algorithms:MainAlgs:PGM:APGRPCA:Relax}.
+\end{theorem}
+
+
+\begin{remark}[Accuracy of the APG method]
+Note that for any finite $\bar{\mu}$ Algorithm~\ref{Algorithms:MainAlgs:PGM:APGRPCA:Algorithm} provides only an approximate solution of the Robust PCA problem due to the replacement of the equality constraint with the penalty term $\frac{1}{2\bar{\mu}} \norm{L+S-M}{F}{2}$.
+\end{remark}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
