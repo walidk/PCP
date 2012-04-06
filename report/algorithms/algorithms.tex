@@ -94,7 +94,7 @@ d^* = \max_{Y} \;\; &\trace Y^T\!M \\
 \label{Algorithms:MainAlgs:IPM:SDPform:DualSimpler}
 \end{align}
 
-Noting that $\norm{Y}{2}{}\leq 1 \; \Longleftrightarrow \; I-X^T(I)^{-1}X \succeq 0$ and using a Schur Complement lemma, the dual problem can be transformed into the following SDP:
+Noting that $\norm{Y}{2}{}\leq 1 \; \Longleftrightarrow \; I-X^T(I)^{-1}X \succeq 0$ and using a Schur Complement lemma, the dual problem can be transformed into the following SDP standard form:
 \begin{align}
 \begin{split}
 d^* = \max_{Y} \;\; &\trace M^T\!Y \\ 
@@ -105,16 +105,48 @@ d^* = \max_{Y} \;\; &\trace M^T\!Y \\
 \label{Algorithms:MainAlgs:IPM:SDPform:DualSDP}
 \end{align}
 %
-Here $\Delta_{ij} \in \Rbf^{m\times n}$ is such that $\Delta_{ij}(k,l) = \delta_{ik}\delta_{jl}$. Note that both primal and dual problem are (trivially) strictly feasible. In fact, the primal is unconstrained and an obvious strictly feasible dual variable is~$Y=0$. Hence strong duality holds ($p^* = d^*$) and both primal and dual problem are attained. 
+Here $\Delta_{ij} \in \Rbf^{m\times n}$ is such that $\Delta_{ij}(k,l) = \delta_{ik}\delta_{jl}$. Note that both primal and dual problem are (trivially) strictly feasible. In fact, the primal is unconstrained and an obvious strictly feasible dual variable is~$Y=0$. Hence strong duality holds ($p^* = d^*$) and both primal and dual problem are attained.\\
 
-\textbf{How to recover primal solution??}
+\textbf{Recovering the primal solution}
+
+To recover the primal solution we can distinguish the two cases $\lambda \leq 1$ and $\lambda >1$. For the latter one, first note that $\norm{Y}{\infty}{} \leq \norm{Y}{2}{}$ for all~$Y$. To show this first recall that $c := \norm{Y}{2}{} = \max_{\norm{x}{2}{}=1} \norm{Yx}{2}{}$. This means that $c - x^TY^TYx \geq0, \,\forAll x$ or, equivalently, $cI-Y^TY \succeq 0$. Using a Schur Complement this can be written as
+%
+\begin{align*}
+\begin{bmatrix} I & Y \\Y^T & cI \end{bmatrix} \succeq 0
+\end{align*}
+It is easy to see that $\forAll i,j$ this implies that  
+\begin{align*}
+\begin{bmatrix} 1 & Y_{ij} \\Y_{ij} & c \end{bmatrix} \succeq 0
+\end{align*}
+which is equivalent to $|Y_{ij}| \leq c$ for all $i,j$. This shows that $\norm{Y}{\infty}{} \leq \norm{Y}{2}{}$.
+
+Hence we observe that if $\lambda >1$ the constraint $\norm{Y}{2}{} \leq \lambda$ will be inactive, that is $|Y_{ij}|<\lambda,\;\forAll i,j$. Therefore, for $\lambda > 1$, removing this constraint from~\eqref{Algorithms:MainAlgs:IPM:SDPform:DualSimpler} does not change the problem. We have $d^* = \max_{\norm{Y}{2}{}\leq 1} \trace Y^T\!M = \norm{M}{*}{}$, a lower bound that is achieved by the primal (feasible) solution $\hat{L}=M$ and $\hat{S} =0$.
+
+If $\lambda \leq 1$, then ....
+
+%If we then dualize the resulting problem, we obtain 
+%\begin{align}
+%\begin{split}
+%p^*&=\max_{Y} \;\;\min_{\gamma\geq0}\;\; \trace Y^T\!M - \gamma \left(\min_{\norm{X}{*}{}\leq 1}\trace Y^T\!X-1\right) \\
+%&= \min_{\gamma\geq0}\;\;\max_{Y,\norm{X}{*}{}\leq 1}\;\; \trace Y^T\!M + \gamma \left( 1- \trace Y^T\!X \right) \\
+%&= \min_{\gamma\geq0}\;\;\max_{Y,\norm{X}{*}{}\leq 1}\;\; \trace Y^T\!(M -\gamma X) + \gamma 
+%\end{split}
+%\label{Algorithms:MainAlgs:IPM:SDPform:DualLambdaBig}
+%\end{align}
+%
+%Lagrangian stationarity then implies that 
+%
+%If we dualize the constraint  of
+
+
+
 
 
 %%%%%%%%%%%%%%%%%
-\subsubsection{Using Interior Point Methods for Solving the Dual}
+\subsubsection{Using Interior Point Methods to Solve the Dual}
 \label{Algorithms:MainAlgs:IPM:Complexity:Subsubsec}
 
-Problem~\eqref{Algorithms:MainAlgs:IPM:SDPform:DualSimpler} is an SDP and can therefore in principle be solved using off-the-shelf solver packages like~\cite{Sturm:1999uq} and~\cite{Toh:1999kx}. These solvers are based on interior point methods which have been shown to offer superior convergence rates~\cite{Boyd:2004aa} but unfortunately do not scale particularly well with the size of the matrix~$M$. The reason for this is because generally the computation of the step direction relies on second-order information of the (augmented) objective function, the computation of which is infeasible when the number of variables is very high. Specifically, the complexity of computing the Newton step direction is~$O(m^6)$ (CHECK THIS, PROVIDE REFERENCE). For applications that involve large-scale data matrices (with~$m$ in the thousands or even millions), the use interior point methods therefore quickly becomes infeasible. In order to overcome this scalability issue, a variety of first-order methods exploiting the particular structure of the Robust PCA problem have been proposed. Some of these methods are described will be described in the following.
+Problem~\eqref{Algorithms:MainAlgs:IPM:SDPform:DualSimpler} is an SDP and can therefore in principle be solved using off-the-shelf solver packages like~\cite{Sturm:1999uq} and~\cite{Toh:1999kx}. These solvers are based on interior point methods which have been shown to offer superior convergence rates~\cite{Boyd:2004aa} but unfortunately do not scale particularly well with the size of the matrix~$M$. The reason for this is that the computation of the step direction relies on second-order information of the (augmented) objective function, the computation of which is infeasible when the number of variables is very high. Specifically, the complexity of computing the Newton step direction is~$O(m^6)$ (CHECK THIS, PROVIDE REFERENCE). For applications that involve large-scale data matrices (with~$m$ in the thousands or even millions), the use interior point methods therefore quickly becomes infeasible. In order to overcome this scalability issue, a variety of first-order methods exploiting the particular structure of the Robust PCA problem have been proposed. Some of these methods are described will be described in the following.
 
 %A bottleneck in higher dimensions is in particular the complexity of computing the Newton step direction, which is~$O(m^6)$ (CHECK THIS, PROVIDE REFERENCE). For applications that involve large-scale data matrices (with~$m$ in the thousands or even millions), the use interior point methods therefore quickly becomes infeasible.
 %
