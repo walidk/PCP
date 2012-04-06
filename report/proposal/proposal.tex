@@ -1,0 +1,82 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% EE227A Project: algorithms.tex
+% Created by: Ka Kit Lam, Maximilian Balandat
+% Last edited: Apr 05 2012
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Use our own document class
+\documentclass{../../common/projectreport}
+
+% Input some of my LaTeX macros - Max
+\input{../../common/defs.tex}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+
+
+%%%%%%%%%%%%%%%%%%%%
+\textbf{Draft:}
+
+
+Introduction:
+\begin{itemize}
+\item Motivation and background for Robust PCA 
+\item Precise Formulation
+\end{itemize}
+Theory:
+\begin{itemize}
+\item Study the probabilistic guarantee for reliable recovery in detail
+\item Survey different variants of the performance guarantee in solving Robust PCA problem
+\end{itemize}
+Algorithms:
+\begin{itemize}
+\item Derivation and implementation of different algorithms to solve Robust PCA
+\item A comparison of different algorithms on complexity, convergence rate, scalability, etc.
+\item An exploration on how to find SVD fast (the bottle neck of most algorithms on Robust PCA) 
+\end{itemize}
+Application:
+\begin{itemize}
+\item Apply to voice signal recognition and neuron activity identification
+\item Apply to classical image processing
+\end{itemize}
+Discussion and improvement
+\begin{itemize}
+\item Problems when using Robust PCA
+\item Possible solution to remedy the problems
+\end{itemize}
+
+\vspace{5ex}
+
+%%%%%%%%%%%%%%%%%%%%
+\textbf{Introduction and motivation:}
+
+In today’s information age, we are always surrounded by big data sets. Due to the intrinsic nature of many problems, many data are redundant and thus can be modeled as the low rank component of an observed matrix. However, the data sets are usually corrupted by some sparse random data, which is not related to the compact information that we want to obtain. This makes it hard to recover the crucial low rank component from the observed matrix. This category of problems arises in many fields like computer vision, signal processing, web data analysis, etc. Regarding this, people studies Robust PCA, which is a scheme to recover low rank matrix corrupted by sparse noise through convex optimization. It is a powerful scheme to obtain compact information from redundant data sets. 
+Specifically, given an observed matrix M, robust PCA solves the following convex optimization problem.  
+%
+\begin{align*}
+p^* = \min_{L,S} \; &\norm{L}{*}{} + \lambda \norm{S}{1}{} \\
+\text{s.t.} \quad &M = L+S
+\end{align*}
+%
+We note that this formulation agrees with our intuition that nuclear norm encourage low rank and L1 norm encourages sparsity. And it turns out that under suitable assumptions ( i.e. low rank component not too sparse and the rank of the sparse component not low),  we have correct recovery of the target low rank components with high probability as the dimension of the matrix grows. 
+
+%%%%%%%%%%%%%%%%%%%%
+\textbf{Theory:}
+We first survey different results regarding robust PCA and other related topics on recovering low rank matrix. Then, we discuss in depth about why the probabilistic guarantee holds for recovering the low rank component. 
+
+%%%%%%%%%%%%%%%%%%%%
+\textbf{Algorithm:}
+Since Robust PCA is targeted to large data sets, having a guarantee on recovery is not enough. We should have fast algorithms to solve the problem. Since the problem is formulated as a convex problem, we discuss and derive various algorithms for convex optimization to solve this problem. In particular, we compare the effectiveness to solve this problem in terms of complexity and convergence rate.  
+
+%%%%%%%%%%%%%%%%%%%%
+\textbf{Applications:}
+Since robust PCA has wide range of application, we in particular apply it to solve some signal recognition problems about images, biological data sets and voice data sets. We discuss about the observation and implication of the processed data.
+
+%%%%%%%%%%%%%%%%%%%%
+\textbf{Discussion and Improvements:}
+Although Robust PCA is a feasible candidate in extracting information from large data sets, there is still some shortcoming of it, like high computation complexity. In this section, we discuss about some ideas about how we can solve this.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}  
