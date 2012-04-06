@@ -1,0 +1,57 @@
+%%%%%%%%%%%%%%%%%%
+% EE227A Project by Nathan Lam
+%%%%%%%%%%%%%%%%%%
+
+\documentclass{../../common/projectreport}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\begin{document}
+
+\section{Robust Alignment by Sparse and Low-rank Decomposition}
+\label{sec: RASL}
+
+The convex optimization framework for low-rank matrix recovery has been employed successfully. However, in practice, much more data can be viewed as low-rank only after some transformation is applied. The new formulation of this problem as Robust Alignment by Sparse and Low-rank Decomposition (RASL) \cite{Peng:2010}:
+\begin{align}
+\min_{A, E, \tau}  ||A||_{*} + \lambda||E||_{1} \quad  \text{s.t.} \;  D\circ\tau = A+E
+\label{eq:rasl:original}
+\end{align}
+where $A  \in\mathbb{R}^{m\times n}$ is low-rank matrix, $A\in\mathbb{R}^{m\times n}$ is sparse matrix, $D$ is our measurements, which is the result of $(A+E)$ subjecting to transformation $\tau^{-1}$. Here we assume that the transformation is invertible. 
+We define $D\circ\tau$ as: $D\circ\tau = [\;D_{1}\circ\tau_{1} \;|\;D_{2}\circ\tau_{2} \;|\; \dots \;|\; D_{n}\circ\tau_{n}\;]$, which is the measurements $D=[\;D_{1} \;|\;D_{2} \;|\; \dots \;|\; D_{n}\;] $subjects to set of transformations $\tau=[\;\tau_{1} \;|\;\tau_{2} \;|\; \dots \;|\; \tau_{n}\;] \in\mathbb{G}^n$, where $\mathbb{G}$ is a group of certain type of invertible transformations, which could be affine transform, rotation transform, etc.  \\
+
+The main difficulty in solving ~\eqref{eq:rasl:original} is the nonlinearity of constraint $D\circ\tau = A+E$. When the change in $\tau$ is small, we can approximate this constraint by linearizing about the current estimate of $\tau$. Here, we assume that $\mathbb{G}$ is some $p$-parameter group and identify $\tau=[\;\tau_{1} \;|\;\tau_{2} \;|\; \dots \;|\; \tau_{n}\;] \in \mathbb{R}^{p\times n}$ with the parameterizations of all of the transformations. For $\Delta\tau = [\;\Delta\tau_{1} \;|\; \Delta\tau_{2} \;|\; \dots \;|\; \Delta\tau_{n}\;]$, write $D\circ(\tau+\Delta\tau) \approx D\circ\tau + \sum_{i=1}^n J_{i}\Delta\tau_{i}\epsilon_{i}$, where $J_{i} \doteq \frac{\partial}{\partial\zeta}(D_{i}\circ\zeta)|_{\zeta = \tau_{i}}$ is the Jacobian of the $i$-th measurement with respect to the transformation parameters $\tau_{i}$. $\{\epsilon_{i}\}$ denotes the standard basis for $\mathbb{R}^n$. This leads to a convex optimization problem in unknowns $A, E, \Delta\tau$:
+\begin{align}
+\min_{A, E, \Delta\tau}  ||A||_{*} + \lambda||E||_{1}  \quad \text{s.t.} \;  D\circ\tau + \sum_{i=1}^n J_{i}\Delta\tau\epsilon_{i}\epsilon_{i}^{T}= A+E
+\label{eq:rasl:linearized}
+\end{align}
+It leads to the following algorithm:
+
+\begin{algorithm}
+\caption{RASL}
+\KwIn{$D = [\; D_{1} \;|\; D_{2} \;|\; \dots \;|\; D_{n}]$, initial transformation $\tau_{1}, \tau_{2}, \dots, \tau_{n}$ in a certain parametric group $\mathbb{G}$, weight $\lambda > 0$.}
+\While{not converged}{
+\textbf{Step 1:} compute Jacobian matrices w.r.t. transformation: %$J_{i} \leftarrow \frac{\partial}{\partial\zeta}(D_{i}\circ\zeta)|_{\zeta = \tau_{i}}$ \\
+\begin{equation}
+J_{i} \leftarrow \frac{\partial}{\partial\zeta}(D_{i}\circ\zeta)|_{\zeta = \tau_{i}} \nonumber
+\end{equation}
+\textbf{Step 2 (inner loop):} solve the linearized convex optimization:
+\begin{equation}
+(A^{*}, E^{*}, \Delta\tau^{*}) \leftarrow \argmin_{A, E, \Delta\tau}  ||A||_{*} + \lambda||E||_{1}  \quad \text{s.t.} \;  D\circ\tau + \sum_{i=1}^n J_{i}\Delta\tau\epsilon_{i}\epsilon_{i}^{T}= A+E  \nonumber
+\end{equation}
+\textbf{Step 3:} update the transformation: $\tau \leftarrow \tau + \Delta\tau^{*}$
+\newline
+}
+\KwOut{$A^{*}, E^{*}, \tau^{*}$}
+
+\end{algorithm}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bibliographystyle{abbrv}
+\bibliography{../../common/rasl_review}
+
+\end{document}
+
+
+
