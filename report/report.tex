@@ -76,6 +76,33 @@ Above, $\rho_r$ and $\rho_s$ are positive numerical constants. Note in particula
 
 %============================================================================================
 \section{Proof}
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\subsection{Prelimineries}
+\begin{itemize}
+\item The subgradient of of the $\ell_1$ norm at $S_0$ supported on $\Omega$ is of the form $\sgn(S_0)+F$ where $P_\Omega F = 0$ and $\|F\|_\infty \leq 1$.
+\item The subgradient of the nuclear norm at $L_0 = U\Sigma V^*$ is of the form $U V^* + W$ where 
+\begin{equation}
+\begin{aligned}
+&U^*W = 0 \\
+& WV = 0\\
+& \|W\| \leq 1
+\end{aligned}
+\end{equation}
+or equivalently
+\[
+P_T W = 0
+\]
+where $T$ is the linear space of matrices defined by
+\[
+T = \{UX^* + YV^*, \ , X, Y \in \mathbb{R}^{n \times r}\}
+\]
+\end{itemize}
+
+
+
+
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Elimination Theorem}
 The following elimination theorem states the intuitive fact that if PCP exactly recovers the components of $M = L+S$, then it also exactly recovers the components of $M = L+S'$ where $S'$ is a trimmed version of $S$ ($\text{supp}(S')\subset \text{supp}(S)$ and $S$ and $S'$ coincide on $\text{supp}(S')$)
 
@@ -84,10 +111,11 @@ Suppose the solution to the PCP problem (\ref{PCP}) with input data $M_0 = L_0 +
 \end{theorem}
 
 
-
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Derandomization}
 Derandomization is used to show equivalence between the problem where the signs of the entries of $S_0$ are random, and the problem where the entries of $S_0$ have fixed signs.
 
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Dual certificate}
 The following lemma gives a simple sufficient condition for the pair $(L_0,S_0)$ to be the unique optimal solution to PCP.
 
@@ -110,8 +138,63 @@ Assume that $\|P_\Omega P_T \| < 1$. Then $(L_0,S_0)$ is the unique solution to 
 \end{proof}
 
 
+The proof will use a similar result, given by the following Lemma
+\begin{lemma}
+\label{lem:dual_cert}
+Assume that $\|P_\Omega P_T \| \leq 1/2$. Then $(L_0,S_0)$ is the unique solution to PCP if $\exists (W, F)$ such that
+\begin{equation}
+\begin{aligned}
+& UV^* + W = \lambda(\text{sign}(S_0) + F + P_\Omega D) \\
+& P_T W = 0 \\
+& \|W\| \leq 1/2 \\
+& P_\Omega F = 0 \\
+& \|F\|_\infty \leq 1/2 \\
+&\|P_\Omega D \|_F \leq 1/4
+\end{aligned}
+\end{equation}
+
+\end{lemma}
+
+\begin{proof}
+\end{proof}
+
+By the previous Lemma, it suffices to produce a dual certificate $W$ such that
+\begin{equation}
+\begin{aligned}
+& W \in T^{\perp} \\
+& \|W\| < 1/2\\
+& \|P_\Omega (UV^* - \lambda \sgn(S_0) + W) \|_F \leq \lambda / 4  \\
+& \|P_{\Omega^\perp}(UV^* + W)\|_\infty < \lambda / 2
+\end{aligned}
+\end{equation}
+
+since under these conditions, $D = \frac{1}{\lambda} P_\Omega (UV^* - \lambda \sgn(S_0) + W)$ and $F = \frac{1}{\lambda} P_{\Omega^\perp} (UV^* + W)$ satisfy the sufficient conditions given by Lemma~\ref{lem:dual_cert}. Indeed we have
+
+\begin{align*}
+UV^* + W - \lambda \sign(S_0) 
+&= P_\Omega (UV^* + W - \lambda \sign(S_0))+ P_{\Omega^\perp} (UV^* + W - \lambda \sign(S_0)) \\
+&= \lambda D+ P_{\Omega^\perp} (UV^* + W) \text{ since } \sign(S_0) \in \Omega\\
+&= \lambda (D+F)
+\end{align*}
+
+and the first condition of Lemma~\ref{lem:dual_cert} is satisfied. The remaining conditions follow from the definition of $F$ and $D$.
+
+%-----------------------------------------------------------------------------
+\subsubsection{Bounding $\|P_\Omega P_T\|$}
+ Under suitable conditions on the size of the support $\Omega_0$ of the sparse component, a bound can be derived on  $\|P_\Omega P_T\|$ \cite{Candes:2009uq}.
+\begin{theorem}
+Suppose $\Omega_0$ is sampled from the Bernoulli model with parameter $\rho_0$. Then with high probability,
+\[
+\|P_T - \rho_0^{-1} P_T P_{\Omega_0} P_T\| \leq \epsilon
+\]
+provided that $\rho_0 \geq C_0 \epsilon^{-2} \frac{\mu r \log n}{n}$ where $\mu$ is the incoherence parameter and $C_0$ is a numerical constant.
+\end{theorem}
+
+As a consequence, $\|P\Omega P_T\|$ can be bounded, and if $|\Omega|$ is not too large, then the desired bound $\|P_\Omega P_T\| \leq 1/2$ holds.
 
 
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Main proof}
 
 
@@ -137,6 +220,7 @@ Problem to solve
 
 A heuristic is to minimize the nuclear norm of $L$
 
+%-------------------------------------------------------------------------
 \subsubsection{Incoherence}
 
 Singular vectors have to be sufficiently spread
@@ -162,8 +246,13 @@ Incoherent matrices:
 
 \end{itemize}
 
+%-------------------------------------------------------------------------
+\subsubsection{Main result}
 
 
+
+
+%-------------------------------------------------------------------------
 \subsubsection{Comparing results to Robust PCA}
 Robust PCA can be thought of as an extension of the matrix completion problem, where instead of having a known subset of the entries $\{(L_0)_{ij}, (i,j)\in \Omega\}$ and the rest is missing, we have an unknown subset of the entries and the rest is corrupted. In this sense, Robust PCA is a harder problem.
 
@@ -181,7 +270,6 @@ Note that the matrix $L_0$ can be recovered by Principal Component Pursuit, solv
 
 
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-\newpage
 \subsection{Stable Principal Component Pursuit}
 \subsubsection{Overview}
 
@@ -263,7 +351,7 @@ It leads to algorithm~\ref{alg:RASL}
 
 
 
-\begin{algorithm}[htbp]
+\begin{algorithm}[h!]
 \label{alg:RASL}
 \caption{RASL}
 \KwIn{$D = [\; D_{1} \;|\; D_{2} \;|\; \dots \;|\; D_{n}]$, initial transformation $\tau_{1}, \tau_{2}, \dots, \tau_{n}$ in a certain parametric group $\mathbb{G}$, weight $\lambda > 0$.}
