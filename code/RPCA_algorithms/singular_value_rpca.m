@@ -31,7 +31,9 @@ function [A,E,Y] = singular_value_rpca( D, lambda, tau, delta, svdMethod, A0)
 %   Copyright: Perception and Decision Laboratory
 %			University of Illinois, Urbana-Champaign 
 
-VERBOSE                         = 2;
+
+% VERBOSE                         = 2;
+VERBOSE                         = 0; % Max Apr 9
 EPSILON_PRIMAL                  = 5e-4;
 
 if nargin < 5,  svdMethod = 'svd'; end

@@ -91,7 +91,8 @@ if nargin > 8
     fid = fopen(outputFileName,'w') ;
 end
 
-DISPLAY_EVERY = 20 ;
+% DISPLAY_EVERY = 20 ;
+DISPLAY_EVERY = 10000; % Max Apr 9
 
 maxLineSearchIter = 200 ; % maximum number of iterations in line search per outer iteration
 
@@ -114,7 +115,7 @@ if continuationFlag
         mu_0 = lansvd(D, 1, 'L');%norm(D) ;
     end
     mu_k = mu_0 ;
-    mu_bar = 1e-9 * mu_0   
+    mu_bar = 1e-9 * mu_0; % Max Apr 9: suppress output   
 else
     mu_k = mu ;
 end

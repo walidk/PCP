@@ -89,7 +89,8 @@ if nargin > 8
 end
 
 DISPLAY_EVERY = 20 ;
-DISPLAY = 1 ;
+% DISPLAY = 1 ;
+DISPLAY = 0 ; % Max Apr 9
 
 maxLineSearchIter = 200 ; % maximum number of iterations in line search per outer iteration
 

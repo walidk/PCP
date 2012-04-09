@@ -60,8 +60,8 @@ E_hat = zeros( m, n);
 dnorm = norm(D, 'fro');
 tolProj = 1e-6 * dnorm;
 total_svd = 0;
-mu = .5/norm_two % this one can be tuned
-rho = 6          % this one can be tuned
+mu = .5/norm_two; % this one can be tuned % Max Apr 9: suppressed output
+rho = 6  ;        % this one can be tuned % Max Apr 9: suppressed output
 
 iter = 0;
 converged = false;
@@ -113,10 +113,11 @@ while ~converged
     if stopCriterion < tol
         converged = true;
     end    
-    
-    disp(['Iteration' num2str(iter) ' #svd ' num2str(total_svd) ' r(A) ' num2str(svp)...
-        ' |E|_0 ' num2str(length(find(abs(E_hat)>0)))...
-        ' stopCriterion ' num2str(stopCriterion)]);
+   
+    % Max Apr 9
+%     disp(['Iteration' num2str(iter) ' #svd ' num2str(total_svd) ' r(A) ' num2str(svp)...
+%         ' |E|_0 ' num2str(length(find(abs(E_hat)>0)))...
+%         ' stopCriterion ' num2str(stopCriterion)]);
     
     if ~converged && iter >= maxIter
         disp('Maximum iterations reached') ;
