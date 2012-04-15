@@ -543,7 +543,7 @@ Note that one of the usual assumptions made when using an augmented Lagrangian m
 \label{Algorithms:MainAlgs:AugLag:RPCA:SubStep}
 \end{align}
 %
-and can be solved using an alternating directions approach based on the ideas in section~\ref{Algorithms:MainAlgs:ITM:Subsec}. Specifically, consider~\eqref{Algorithms:MainAlgs:AugLag:RPCA:SubStep} for~$S$ fixed. The resulting ``directional'' subproblem can be formulated as
+and can be solved using an alternating directions approach based on the ideas in section~\ref{Algorithms:MainAlgs:ITM:Subsec}. Specifically, consider~\eqref{Algorithms:MainAlgs:AugLag:RPCA:SubStep} for~$S$ fixed. The corresponding ``directional'' subproblem in the variable~$L$ can be formulated as
 %
 \begin{align}
 \begin{split}
@@ -556,7 +556,7 @@ L_{k+1} &= \argmin_{L} \; \norm{L}{*}{} + \lambda \norm{S}{1}{} + \langle Y_k, M
 %
 Suppose $U\Sigma V^T = M-S+\mu_k^{-1}Y_k$ is the SVD of $M-S+\mu_k^{-1}Y_k$. Using the same arguments as in section~\ref{Algorithms:MainAlgs:ITM:Subsec}, the minimizer in~\eqref{Algorithms:MainAlgs:AugLag:RPCA:Sfixed} is given by $L_{k+1} = U \Scal_{\mu_k^{-1}}[\Sigma] V^T$, where~$\Scal_\varepsilon$ is the soft-thresholding operator defined in~\eqref{Algorithms:MainAlgs:ITM:Shrink}. 
 
-Conversely, suppose that~$L$ in~\eqref{Algorithms:MainAlgs:AugLag:RPCA:SubStep} is fixed. The other ``directional'' subproblem is
+Conversely, suppose that~$L$ in~\eqref{Algorithms:MainAlgs:AugLag:RPCA:SubStep} is fixed. The ``directional'' subproblem in the variable~$S$ is
 %
 \begin{align}
 \begin{split}
@@ -607,7 +607,7 @@ where~$f^*$ is the optimal value of the Robust PCA problem.
 \subsubsection{Inexact ALM for Robust PCA}
 \label{Algorithms:MainAlgs:AugLag:Inexact:Subsubsec}
 
-The authors in~\cite{Lin:2010fk} point out that it is not really necessary to solve~\eqref{Algorithms:MainAlgs:AugLag:RPCA:SubStep} exactly at each iteration~$k$ by running the alternating directions sub algorithm until convergence. It turns out that, under some technical conditions on the sequence~$\{\mu_k\}$, one can also prove convergence of the overall algorithm when performing only a single step in either direction at each iteration~$k$.  This results in Algorithm~\ref{Algorithms:MainAlgs:AugLag:Inexact:Algorithm} which in~\cite{Lin:2010fk} is referred to as the ``Inexact Augmented Lagrangian Method'' (IALM).
+The authors in~\cite{Lin:2010fk} point out that it is not really necessary to solve~\eqref{Algorithms:MainAlgs:AugLag:RPCA:SubStep} exactly at each iteration~$k$ by running the alternating directions subroutine until convergence. It turns out that, under some technical conditions on the sequence~$\{\mu_k\}$, one can also prove convergence of the overall algorithm when performing only a single step in either direction at each iteration~$k$.  This results in Algorithm~\ref{Algorithms:MainAlgs:AugLag:Inexact:Algorithm} which in~\cite{Lin:2010fk} is referred to as the ``Inexact Augmented Lagrangian Method'' (IALM).
 
 \begin{algorithm}
 \caption{Inexact Augmented Lagrangian Method}
@@ -648,13 +648,38 @@ Most of the presented algorithms (in fact, all of them except for the direct use
 
 When the matrix under consideration is sparse, the SVD can be carried out much faster using specialized methods~\cite{Berry:2005uq}. Unfortunately, while the iterates of the matrix~$S_k$ (in case of primal algorithms) are indeed sparse, the matrices for which the SVD actually needs to be computed are not. Therefore it does not seem clear how sparse SVD methods could help in improving performance of SVD-based Robust PCA algorithms. 
 
-If we look at the a Singular Value Thresholding operation it is obvious that one really only needs to compute those singular values that lie above the specified threshold (which is known a priori in each step and does not depend on the singular values), since the other singular values will be set to zero anyway. One possibility to speed up the algorithms that involve thresholding of singular values is therefore to use a partial SVD to compute only those singular values of interest. For the APG algorithm~\cite{Lin:2010fk} use the software PROPACK~\cite{Larsen:1998uq} that allows the computation of such a partial SVD. However, PROPACK requires the dimension of the principal singular space whose singular values are larger than the threshold, which is of course unknown a priori. Since it turns out that the rank of the the iterates~$L_k$ in the APG algorithm is monotonically increasing~\cite{Lin:2010fk}, is is not hard to do a reasonable prediction. Doing so then allows computing a partial SVD at each step rather than a full SVD, which can speed up the algorithm. It would be interesting to see if a similar situation arises in the ALM methods, where singular value thresholding is applied to matrices of the form $M-S_{k} +\mu_k^{-1}Y_{k}$.
+If we look at the a Singular Value Thresholding operation it is obvious that we really only needs to compute those singular values that lie above the specified threshold (which is known a priori in each step and does not depend on the singular values), since the other singular values will be set to zero anyway. One possibility to speed up the algorithms that involve thresholding of singular values is therefore to use a partial SVD to compute only those singular values of interest. For the APG algorithm the authors of~\cite{Lin:2010fk} use the software PROPACK~\cite{Larsen:1998uq} that allows the computation of such a partial SVD. However, PROPACK by default requires the dimension of the principal singular space whose singular values are larger than the threshold, which is of course unknown a priori. Since it turns out that the rank of the the iterates~$L_k$ in the APG algorithm is monotonically increasing, a reasonable prediction of this dimension is not too hard~\cite{Lin:2010fk}. Doing so then allows to a partial SVD at each step rather than a full SVD, which can potentially speed up the algorithm (if the partial SVD can be computed efficiently). The PROPACK package has also been modified to allow the computation of those singular values above a given threshold~\cite{Lin:2011kx}. This implementation can be used also in the ALM algorithms, where singular value thresholding is applied to matrices of the form $M-S_{k} +\mu_k^{-1}Y_{k}$.
 
+
+Another potential way of speeding up many SVD-based algorithms is to exploit the fact that the matrix of which the SVD has to be computed does generally not change much between iterations, in particular after a few iterations. To utilize this fact, the authors
+of~\cite{Lin:2010uq} propose a warm start technique for the block Lanczos method for SVD computation. 
+
+
+The following section presents a numerical comparison between Matlab's internal SVD routine, which is based on 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Numerical comparison of different SVD methods}
+\label{Algorithms:Discussion:SVD:NumericalComp:Subsubsec}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.75\textwidth]{../figures/svd_comparison}
+\caption{Numerical comparison of Matlab's and PROPACK's SVD routines}
+\label{Algorithms:Discussion:SVD:NumericalComp:time:figure}
+\end{figure}
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.75\textwidth]{../figures/thresh_svd_comparison}
+\caption{Numerical comparison of partial and full SVD via PROPACK}
+\label{Algorithms:Discussion:SVD:NumericalCompPartial:time:figure}
+\end{figure}
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Possible Directions fo Parallelization}
+\subsection{Possible Directions for Parallelization}
 \label{Algorithms:Discussion:Parallel:Subsec}
 
 With the advent of highly parallelized computing architectures in modern CPUs and GPUs, a number of projects have been devoted to the development and implementation of algorithms that exploit this massive computing power. Examples for these are MAGMA~\cite{Smith:2010tg} and CULA~\cite{Humphrey:2010kl}, which are adapting classic high-performance linear algebra packages such as LAPACK and BLAS to the highly parallelized architecture of modern GPUs. 
@@ -662,6 +687,28 @@ With the advent of highly parallelized computing architectures in modern CPUs an
 Some of the steps in the algorithms are inherently parallelizable, for example the entry-wise soft-thresholding of a matrix. Other steps require more work to be able to 
 
 \cite{Boyd:2011hc}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Outlook: Algorithms for Stable Principal Component Pursuit}
+\label{Algorithms:StablePCP:Sec}
+
+As discussed in section REFERENCE, the results obtained for the Robust PCA problem have been extended to the case when in addition to the sparse noise component, the data is corrupted also by a small non-sparse noise component~\cite{Zhou:2010vn}. The associated optimization problem is 
+%
+\begin{align}
+\begin{split}
+p^* = \min_{L,S} \; &\norm{L}{*}{} + \lambda \norm{S}{1}{} \\
+\text{s.t.} \quad &\norm{M - L - S}{F}{} \leq \delta
+\end{split}
+\label{Algorithms:StablePCP:StablePCP}
+\end{align}
+%
+where $\delta>0$ is given. 
+
+\cite{Aybat:2011vn}
+
+
 
 
 
