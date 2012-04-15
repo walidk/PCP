@@ -234,18 +234,17 @@ while ~converged
     if stopCriterion < tol 
         converged = true;
     end    
-    
-    % Max Apr 9
-%     if mod( iter, 10) == 0
-%         disp([num2str(iter) ' Y_principal ' num2str(t)...
-%             ' |E|_0 ' num2str(length(find(abs(E_dual)>0)))...
-%             ' objvalue ' num2str(obj_v) ' |D-A-E|_F ' num2str(stopCriterion)]);
-%         if nargin > 5
-%             fprintf(fid, '%s\n', [num2str(iter) ' Y_principal ' num2str(t)... 
-%             ' |E|_0 ' num2str(length(find(abs(E_dual)>0)))...
-%             ' objvalue ' num2str(obj_v) ' |D-A-E|_F ' num2str(stopCriterion)]);
-%         end
-%     end    
+
+    if mod( iter, 100) == 0 % Max Apr 14
+        disp([num2str(iter) ' Y_principal ' num2str(t)...
+            ' |E|_0 ' num2str(length(find(abs(E_dual)>0)))...
+            ' objvalue ' num2str(obj_v) ' |D-A-E|_F ' num2str(stopCriterion)]);
+        if nargin > 5
+            fprintf(fid, '%s\n', [num2str(iter) ' Y_principal ' num2str(t)... 
+            ' |E|_0 ' num2str(length(find(abs(E_dual)>0)))...
+            ' objvalue ' num2str(obj_v) ' |D-A-E|_F ' num2str(stopCriterion)]);
+        end
+    end    
     
     if ~converged && iter >= maxIter
         disp('Maximum iterations reached') ; 

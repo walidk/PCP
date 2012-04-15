@@ -1,4 +1,4 @@
-function [A,E,Y] = singular_value_rpca( D, lambda, tau, delta, svdMethod, A0)
+function [A,E,Y,iter] = singular_value_rpca( D, lambda, tol, tau, delta, svdMethod, A0)
 
 %   Solves the Robust PCA relaxation
 %
@@ -21,6 +21,7 @@ function [A,E,Y] = singular_value_rpca( D, lambda, tau, delta, svdMethod, A0)
 %                    require additional library dependencies if custom routine is used.)
 %      A0 -- true low-rank solution, if known, to enable better display of
 %            progress in each iteration.
+%      tol -- primal tolerance, default is 5e-4 
 %
 %   Outputs:
 %      A      -- estimate of the low-rank generating matrix
@@ -34,14 +35,16 @@ function [A,E,Y] = singular_value_rpca( D, lambda, tau, delta, svdMethod, A0)
 
 % VERBOSE                         = 2;
 VERBOSE                         = 0; % Max Apr 9
-EPSILON_PRIMAL                  = 5e-4;
 
-if nargin < 5,  svdMethod = 'svd'; end
+if nargin < 6,  svdMethod = 'svd'; end
 
-if nargin < 4,  delta = 0.9; end;
+if nargin < 5,  delta = 0.9; end;
 
-if nargin < 3, tau = 1e4; end;
+if nargin < 4, tau = 1e4; end;
 
+if nargin < 3,  EPSILON_PRIMAL = 5e-4; else EPSILON_PRIMAL = tol; end % Max Apr 14
+
+dnorm = norm(D,'fro'); % Max Apr 14
 
 MAX_ITER                        = 25000;
 DISPLAY_EVERY                   = 100;
@@ -84,7 +87,7 @@ while ~converged
     
     Y = Y + delta * M;
     
-    if VERBOSE > 1 && mod(iter, DISPLAY_EVERY)==0 && nargin>=6,
+    if VERBOSE > 1 && mod(iter, DISPLAY_EVERY)==0 && nargin>=7,
         disp(['    Iteration '    num2str(iter)               ...
             ' |A|_F '         num2str(norm(A,'fro'))      ...
             ' rank(A) '         num2str(rankA)              ...
@@ -99,7 +102,7 @@ while ~converged
             ' ||E||_0 ' num2str(cardE) ]);
     end
     
-    if ( norm(D-A-E,'fro')/norm(D,'fro') < EPSILON_PRIMAL || iter >= MAX_ITER )
+    if ( norm(D-A-E,'fro')/dnorm < EPSILON_PRIMAL || iter >= MAX_ITER )
         converged = true;
     end
     

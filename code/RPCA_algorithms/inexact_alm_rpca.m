@@ -102,12 +102,12 @@ while ~converged
         converged = true;
     end    
     
-    % Max Apr 9
-%     if mod( total_svd, 10) == 0
-%         disp(['#svd ' num2str(total_svd) ' r(A) ' num2str(rank(A_hat))...
-%             ' |E|_0 ' num2str(length(find(abs(E_hat)>0)))...
-%             ' stopCriterion ' num2str(stopCriterion)]);
-%     end    
+    
+    if mod( total_svd, 10) == 0 % Max Apr 9
+        disp(['#svd ' num2str(total_svd) ' r(A) ' num2str(rank(A_hat))...
+            ' |E|_0 ' num2str(length(find(abs(E_hat)>0)))...
+            ' stopCriterion ' num2str(stopCriterion)]);
+    end    
     
     if ~converged && iter >= maxIter
         disp('Maximum iterations reached') ;
