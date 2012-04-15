@@ -644,37 +644,59 @@ The current state of the art in terms of complexity, accuracy and convergence se
 \label{Algorithms:Discussion:SVD:Subsec}
 
 
-Most of the presented algorithms (in fact, all of them except for the direct use of interior point solvers on the dual) involve repeated computations of the Singular Value Decomposition (or at least a partial SVD) of matrices of considerable size. This is not very surprising, as the nuclear norm in the objective function is the sum of the singular values of the matrix argument. This repeated computation of the SVD is in fact the bottleneck of most current algorithms for Robust PCA. Hence it seems that, at least for the algorithms discussed above, being able to perform SVD on large matrices are the key to developing fast algorithms that can be used in applications with large-scale data.
+Most of the presented algorithms (in fact, all of them except for the direct use of interior point solvers on the dual) involve repeated computations of the Singular Value Decomposition (or at least a partial SVD) of matrices of considerable size. This is not very surprising, as the nuclear norm in the objective function is the sum of the singular values of the matrix argument. This repeated computation of the SVD is in fact the bottleneck of most current algorithms for Robust PCA. Hence it seems that, at least for the algorithms discussed above, being able to perform SVD on large matrices are the key to developing fast algorithms that can be used in applications with large-scale data. 
+
+
+%%%%%%%%%%%%%%%
+\subsubsection{Comparison of different SVD algorithms}
+\label{Algorithms:Discussion:SVD:Comparison:Subsubsec}
+
+Figure~\ref{Algorithms:Discussion:SVD:MatlabVSPropack:figure} shows a comparison of the average computation time of the SVD of matrices of different sizes using Matlab's internal SVD routine (based on the algorithm in~\cite{Demmel:1990vn}) and PROPACK~\cite{Larsen:1998uq}, which is based on a Lanczos bidiagonalization algorithm with partial reorthogonalization. We have compared the average running time for square matrices of different sizes, up to dimension~$3000$. For each size we generated~$20$ random matrices, and determined the average running time over this set. From Figure~\ref{Algorithms:Discussion:SVD:MatlabVSPropack:figure} we see that for smaller matrices Matlab's internal SVD routine is significantly faster than PROPACK. On the other hand, for large matrices (of dimension greater than $500 \times 500$) PROPACK is much faster than the Matlab routine. In fact, for the largest matrices we tested it is about one order of magnitude faster. This shows that the SVD-based algorithms discussed above can all benefit strongly from fast SVD algorithms. 
+%
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.75\textwidth]{../figures/svd_comparison}
+\caption{Numerical comparison of Matlab's and PROPACK's SVD routines}
+\label{Algorithms:Discussion:SVD:MatlabVSPropack:figure}
+\end{figure}
+
 
 When the matrix under consideration is sparse, the SVD can be carried out much faster using specialized methods~\cite{Berry:2005uq}. Unfortunately, while the iterates of the matrix~$S_k$ (in case of primal algorithms) are indeed sparse, the matrices for which the SVD actually needs to be computed are not. Therefore it does not seem clear how sparse SVD methods could help in improving performance of SVD-based Robust PCA algorithms. 
 
-If we look at the a Singular Value Thresholding operation it is obvious that we really only needs to compute those singular values that lie above the specified threshold (which is known a priori in each step and does not depend on the singular values), since the other singular values will be set to zero anyway. One possibility to speed up the algorithms that involve thresholding of singular values is therefore to use a partial SVD to compute only those singular values of interest. For the APG algorithm the authors of~\cite{Lin:2010fk} use the software PROPACK~\cite{Larsen:1998uq} that allows the computation of such a partial SVD. However, PROPACK by default requires the dimension of the principal singular space whose singular values are larger than the threshold, which is of course unknown a priori. Since it turns out that the rank of the the iterates~$L_k$ in the APG algorithm is monotonically increasing, a reasonable prediction of this dimension is not too hard~\cite{Lin:2010fk}. Doing so then allows to a partial SVD at each step rather than a full SVD, which can potentially speed up the algorithm (if the partial SVD can be computed efficiently). The PROPACK package has also been modified to allow the computation of those singular values above a given threshold~\cite{Lin:2011kx}. This implementation can be used also in the ALM algorithms, where singular value thresholding is applied to matrices of the form $M-S_{k} +\mu_k^{-1}Y_{k}$.
+
+%%%%%%%%%%%%%%%
+\subsubsection{Partial SVD methods}
+\label{Algorithms:Discussion:SVD:PartialSVD:Subsubsec}
+
+If we look at the a Singular Value Thresholding operation it is obvious that we really only needs to compute those singular values that lie above the specified threshold (which is known a priori in each step and does not depend on the singular values), since the other singular values will be set to zero anyway. One possibility to speed up the algorithms that involve thresholding of singular values is therefore to use a partial SVD to compute only those singular values of interest. For the APG algorithm the authors of~\cite{Lin:2010fk} use the software PROPACK that allows the computation of such a partial SVD. However, PROPACK by default requires the dimension of the principal singular space whose singular values are larger than the threshold, which is of course unknown a priori. Since it turns out that the rank of the the iterates~$L_k$ in the APG algorithm is monotonically increasing, a reasonable prediction of this dimension is not too hard~\cite{Lin:2010fk}. Doing so then allows to a partial SVD at each step rather than a full SVD, which can potentially speed up the algorithm (if the partial SVD can be computed efficiently). 
+
+The PROPACK package has later also been modified to allow the computation of those singular values above a given threshold~\cite{Lin:2011kx}. Figure~\ref{Algorithms:Discussion:SVD:lasvdThrVSlasvd:figure} shows a comparison of the computation times of PROPACK's standard (full) SVD routine and the algorithm~\cite{Lin:2011kx} for different thresholds. Contrary to what one would expect, the full SVD in all cases is significantly faster than the partial SVD. At this point it is not clear what the reason for this is. Either the algorithm for performing the ``thresholded SVD'' itself is very slow, or the implementation that is provided by~\cite{Lin:2011kx} is very inefficient (or both). Either way, with the currently available implementation it does not seem to make sense to compute partial SVDs. 
+%
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.75\textwidth]{../figures/thresh_svd_comparison}
+\caption{Numerical comparison of partial and full SVD via PROPACK}
+\label{Algorithms:Discussion:SVD:lasvdThrVSlasvd:figure}
+\end{figure}
+
+
+
+
+
+%
+%
+%This implementation can be used also in the ALM algorithms, where singular value thresholding is applied to matrices of the form $M-S_{k} +\mu_k^{-1}Y_{k}$.
+
+
+%%%%%%%%%%%%%%%
+\subsubsection{Warm-start methods for SVD}
+\label{Algorithms:Discussion:SVD:WarmstartSVD:Subsubsec}
 
 
 Another potential way of speeding up many SVD-based algorithms is to exploit the fact that the matrix of which the SVD has to be computed does generally not change much between iterations, in particular after a few iterations. To utilize this fact, the authors
 of~\cite{Lin:2010uq} propose a warm start technique for the block Lanczos method for SVD computation. 
 
 
-The following section presents a numerical comparison between Matlab's internal SVD routine, which is based on 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{Numerical comparison of different SVD methods}
-\label{Algorithms:Discussion:SVD:NumericalComp:Subsubsec}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.75\textwidth]{../figures/svd_comparison}
-\caption{Numerical comparison of Matlab's and PROPACK's SVD routines}
-\label{Algorithms:Discussion:SVD:NumericalComp:time:figure}
-\end{figure}
-
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.75\textwidth]{../figures/thresh_svd_comparison}
-\caption{Numerical comparison of partial and full SVD via PROPACK}
-\label{Algorithms:Discussion:SVD:NumericalCompPartial:time:figure}
-\end{figure}
 
 
 
@@ -694,7 +716,7 @@ Some of the steps in the algorithms are inherently parallelizable, for example t
 \section{Outlook: Algorithms for Stable Principal Component Pursuit}
 \label{Algorithms:StablePCP:Sec}
 
-As discussed in section REFERENCE, the results obtained for the Robust PCA problem have been extended to the case when in addition to the sparse noise component, the data is corrupted also by a small non-sparse noise component~\cite{Zhou:2010vn}. The associated optimization problem is 
+As discussed in section REFERENCE, the results obtained for the Robust PCA problem have been extended to the case when in addition to the sparse noise, the data is corrupted also by a small non-sparse noise component~\cite{Zhou:2010vn}. This problem is usually referred to as Stable Principal Component Pursuit (Stable PCP). The associated optimization problem is 
 %
 \begin{align}
 \begin{split}
@@ -706,7 +728,7 @@ p^* = \min_{L,S} \; &\norm{L}{*}{} + \lambda \norm{S}{1}{} \\
 %
 where $\delta>0$ is given. 
 
-\cite{Aybat:2011vn}
+In~\cite{Aybat:2011vn} a number of different algorithms for Stable PCP are discussed, most of which are based on a smoothed or partially smoothed objective function and the application of Nesterov's optimal algorithms~\cite{Nesterov:2005fk}, which yields a theoretical complexity of~$O(1/\varepsilon)$. The authors also propose a first-order algorithm that works directly with the fully non-smooth objective. While they were not able to derive theoretical complexity results, empirical evidence suggests that this algorithm is very efficient in solving the problem. 
 
 
 
