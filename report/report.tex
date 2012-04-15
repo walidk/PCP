@@ -9,7 +9,14 @@
 %============================================================================================
 \begin{document}
 \maketitle
-Given a superposition $M = L_0 + S_0$ of a low-rank matrix $L_0$ and a sparse matrix $S_0$, Robust Principal Component Analysis \cite{Candes:2011fk} is the problem of recovering the low-rank and sparse components. Under suitable assumptions on the rank and incoherence of $L_0$, and the distribution of the support of $S_0$, the components can be recovered exactly with high probability, by solving the Principal Component Pursuit (PCP) problem given by
+
+%============================================================================================
+\section{Introduction}
+Given an observed matrix $M \in \mathbb{R}^{n_1 \times n_2}$ that is formed as a superposition of a low-rank matrix $L_0$ and a sparse matrix $S_0$, 
+\[
+M = L_0 + S_0
+\]
+Robust Principal Component Analysis \cite{Candes:2011fk} is the problem of recovering the low-rank and sparse components. Under suitable assumptions on the rank and incoherence of $L_0$, and the distribution of the support of $S_0$, the components can be recovered exactly with high probability, by solving the Principal Component Pursuit (PCP) problem given by
 
 \begin{equation}
 \begin{aligned}
@@ -21,17 +28,10 @@ Given a superposition $M = L_0 + S_0$ of a low-rank matrix $L_0$ and a sparse ma
 
 Principal component pursuit minimizes a linear combination of the nuclear norm of a matrix $L$ and the $\ell_1$ norm of $M-L$. Minimizing the $\ell_1$ norm is known to favour sparsity, while minimizing the nuclear norm $\|L\|_* = \sum_{\sigma \in \sigma(L)} \sigma$ is known to favour low-rank matrices (intuitively, favours sparsity of the vector of singular values).
 
-%============================================================================================
-\section{Introduction}
-Assume we are given a superposition of a low-rank matrix and a sparse matrix, $M \in \mathbb{R}^{n_1 \times n_2}$ given by
-\[
-M = L_0 + S_0
-\]
-
 One cannot expect to recover the components exactly in the most general case. Assume for example that $L_0$ is such that $(L_0)_{ij} = \delta_i^1\delta_j^1$, and $S_0 = -L_0$. Both matrices are sparse and low-rank, and clearly one cannot expect to recover the components in this case, since the observed matrix is $M = 0$. Therefore assumptions are made on the incoherence of $L_0$ and the support of $S_0$.
 
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-\subsection{Incoherence}
+\subsection{Incoherence of the low rank component $L_0$}
 The Incoherence conditions describe how much the singular vectors of a given matrix are aligned with the vectors of the canonical basis.
 
 Let the SVD of $L_0$ be given by
@@ -57,6 +57,9 @@ and
 
 These conditions require the singular vectors to be ``spread'' enough with respect to the canonical basis. Intuitively, if the singular vectors of the low-rank matrix $L_0$ are aligned with a few canonical basis vectors, then $L_0$ will be sparse and hard to distinguish from the sparse corruption matrix $S_0$.
 
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\subsection{Support of the sparse component $S_0$}
 
 %============================================================================================
 \section{Main Result}
@@ -88,18 +91,75 @@ Above, $\rho_r$ and $\rho_s$ are positive numerical constants. Note in particula
 & \|W\| \leq 1
 \end{aligned}
 \end{equation}
+
 or equivalently
-\[
-P_T W = 0
-\]
+
+\begin{equation}
+\begin{aligned}
+& P_T W = 0 \\
+& \|W\| \leq 1
+\end{aligned}
+\end{equation}
+
 where $T$ is the linear space of matrices defined by
 \[
-T = \{UX^* + YV^*, \ , X, Y \in \mathbb{R}^{n \times r}\}
+T = \{UX^* + YV^*, \  X, Y \in \mathbb{R}^{n \times r}\}
 \]
+
+Indeed, we have
+\begin{align*}
+P_TW = 0
+&\Leftrightarrow W \in T^\perp  \\
+&\Leftrightarrow \forall M \in T, \ Tr(W^*M) = 0\\
+&\Leftrightarrow \forall X, Y \in \mathbb{R}^{n \times r}, \ Tr(W^*(UX^* + YV^*)) = 0\\
+&\Leftrightarrow \forall X, Y \in \mathbb{R}^{n \times r}, \ Tr((U^*W)^*X^*) + Tr((WV)^*Y) = 0\\
+&\Leftrightarrow U^*W = WV^* = 0
+\end{align*}
+
+
 \end{itemize}
 
+Note that the projection on the orthogonal of $T$ is given by
+\[
+P_{T^\perp} M = (I - UU^*)M(I - VV^*)
+\]
+\begin{proof}
+we have 
+\end{proof}
 
+Note that $UU^*$ is the orthogonal projection on the subspace spanned by the columns of $U$, and similarly for $VV^*$. Therefore we have in particular
+\[
+\|P_{T^\perp} M \| \leq \|M\|
+\]
 
+and for any dyad $e_i e_j^*$, we have
+
+\begin{align*}
+\|P_{T^\perp} e_ie_j^*\|_F^2
+&= Tr\left( (I-UU^*)e_ie_j^*(I-VV^*)(I-VV^*)^*e_je_i^*(I-UU^*)^* \right) \\
+&= Tr\left( e_i^*(I-UU^*)^*(I-UU^*)e_ie_j^*(I-VV^*)(I-VV^*)^*e_j \right) \\
+&= Tr\left( e_i^*(I-UU^*)^*(I-UU^*)e_i\right) Tr \left(e_j^*(I-VV^*)(I-VV^*)^*e_j \right) \\
+&= \|(I - UU^*)e_i\|_2^2 \|(I - VV^*)e_j\|_2^2
+\end{align*}
+
+and since $UU^*$ is an orthogonal projection, we have
+\begin{align*}
+\|(I - UU^*)e_i\|_2^2 
+&= \|e_i\|_2^2 - \|UU^*e_i\|_2^2 \\
+&\geq 1 - \mu r / n
+\end{align*}
+
+where the last inequality results form the incoherence condition~\ref{eq:incoherence2}, $\|U^*e_i\|_2^2 \leq \frac{\mu r}{n}$. Therefore 
+\[
+\|P_{T^\perp} e_ie_j^*\|_F^2 \geq (1 - \mu r / n)^2
+\]
+equivalently, using the fact that $\|P_{T^\perp} e_ie_j^*\|_F^2 + \|P_{T} e_ie_j^*\|_F^2 = \|e_ie_j^*\|_F^2 = 1$, we have
+\begin{align*}
+\|P_{T} e_ie_j^*\|_F^2 
+&\leq 1 - (1 - \frac{\mu r}{n})^2 \\
+&= \frac{2\mu r}{n} - \left( \frac{\mu r}{n} \right)^2 \\
+&\leq \frac{2\mu r}{n}
+\end{align*}
 
 
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -109,6 +169,34 @@ The following elimination theorem states the intuitive fact that if PCP exactly 
 \begin{theorem}
 Suppose the solution to the PCP problem (\ref{PCP}) with input data $M_0 = L_0 + S_0$ is unique and exact, and consider $M_0' = L_0 + S_0'$ where $S_0'$ is a trimmed version of $S_0$. Then the solution to (\ref{PCP}) with input $M_0'$ is exact as well.
 \end{theorem}
+
+\begin{proof}
+Let $S_0' = P_{\Omega_0} S_0$ and let $(\hat{L}, \hat{S})$ be the solution to (\ref{PCP}) with input $L_0 + S_0'$. Then since $(L_0, S_0')$ is a feasible point for (\ref{PCP}), it provides un upper bound on the optimal value
+\[
+\|\hat{L}\|_* + \lambda \|\hat{S}\|_1 \leq \|L_0\|_* + \lambda \|S_0'\|_1
+\]
+then decomposing $S_0$ into the orthogonal components $S_0 = P_{\Omega_0} S_0 + P_{\Omega_0^\perp} S_0 = S_0' + P_{\Omega_0^\perp} S_0$, we have $\|S_0'\|_1 = \|S_0\|_1 - \|P_{\Omega_0^\perp} S_0\|_1$, thus we have
+
+\[
+\|\hat{L}\|_* + \lambda \|\hat{S}\|_1 + \lambda \|P_{\Omega_0^\perp} S_0\|_1 \leq \|L_0\|_* + \lambda \|S_0\|_1
+\]
+
+and using the triangular inequality
+
+\[
+\|\hat{L}\|_* + \lambda \|\hat{S} + P_{\Omega_0^\perp} S_0\|_1 \leq \|L_0\|_* + \lambda \|S_0\|_1
+\]
+
+we observe that $(\hat{L}, \hat{S} + P_{\Omega_0^\perp} S_0)$ is feasible for the problem with input $M = L_0 + S_0$, for which the optimal value is precisely $\|L_0\|_* + \lambda \|S_0\|_1$. Therefore by uniqueness of the solution, we have
+\[
+\begin{aligned}
+&\hat{L} = L_0 \\
+&P_{\Omega_0^\perp} S_0 = S_0
+\end{aligned}
+\]
+
+the second equality is equivalent to $\hat{S} = S_0 - P_{\Omega_0^\perp} S_0 = P_{\Omega_0} S_0 = S_0'$. This completes the proof.
+\end{proof}
 
 
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -133,12 +221,60 @@ Assume that $\|P_\Omega P_T \| < 1$. Then $(L_0,S_0)$ is the unique solution to 
 
 \end{lemma}
 
+
 \begin{proof}
+We first prove that the condition $\|P_\Omega P_T\| < 1$ is equivalent to $\Omega \cap T = \{0\}$. 
+%TODO finish the proof
+
+To prove that $(L_0, S_0)$ is the unique optimizer, we show that for any feasible perturbation $(L_0 + H, S_0 - H)$ where $H \neq 0$ strictly increases the objective. Let 
+\begin{itemize}
+\item $UV^* + W_0$ be an arbitrary subgradient of the nuclear norm at $L_0$, where $\|W_0\| \leq 1$ and $P_T W_0 = 0$
+\item $\sgn (S_0) + F_0$ be an arbitrary subgradient of the $\ell_1$-norm at $S_0$, where $\|F_0\|_\infty \leq 1$ and $P_\Omega F_0 = 0$
+\end{itemize}
+
+Then we can lower bound the value of the objective
+\[
+\|L_0 + H\|_* + \lambda \|S_0 - H\|_1 \geq \|L_0\|_* + \lambda \|S_0\|_1 + \langle UV^* + W_0, H\rangle - \lambda \langle \sgn(S_0) + F_0, H\rangle
+\]
+
+Now we pick a particular pair $(W_0, F_0)$ such that
+\begin{itemize}
+\item $\langle W_0, H \rangle = \|P_{T^\perp} H\|_*$, for example $W_0 = P_{T^\perp} W$ where $W$ is a normed matrix such that $\langle W, P_{T^\perp} H \rangle = \|P_{T^\perp} H\|_*$ (by duality of $\|.\|$ and $\|.\|_*$)
+\item $\langle F_0, H \rangle = -\|P_{\Omega^\perp} H\|_1$, for example $F_0 = -\sgn(P_{\Omega^\perp} H)$
+\end{itemize}
+then we have
+
+\[
+\|L_0 + H\|_* + \lambda \|S_0 - H\|_1 \geq \|L_0\|_* + \lambda \|S_0\|_1  + \|P_{T^\perp} H\|_* + \|P_{\Omega^\perp} H\|_1 + \langle UV^* - \lambda  \sgn(S_0), H\rangle
+\]
+
+we can bound the inner product using the definition of $W$ and $F$,
+
+\begin{align*}
+|\langle UV^* - \lambda  \sgn(S_0), H\rangle|
+& = |\langle \lambda F - W, H\rangle|  & \text{since } UV^* + W = \lambda(\text{sign}(S_0) + F) \\
+&\leq |\langle W, H \rangle| + \lambda |\langle F, H \rangle| & \text{by the triangular inequality} \\
+&\leq \beta (\|P_{T^\perp} H\|_* + \lambda \|P_{\Omega^\perp} H\|_1)
+\end{align*}
+where $\beta = \max (\|W\|, \|F\|_\infty) < 1$, and the last inequality follows from the fact that
+\[
+\begin{aligned}
+& \|P_{T^\perp} H\|_* \geq \langle P_{T^\perp} H, W/\|W\| \rangle \geq \langle H, W/\|W\| \rangle\\
+& \|P_{\Omega^\perp} H\|_1 \geq \langle P_{\Omega^\perp} H, F/\|F\|_\infty \rangle \geq \langle H, F/\|F\|_\infty \rangle
+\end{aligned}
+\]
+Thus
+\begin{align*}
+\|L_0 + H\|_* + \lambda \|S_0 - H\|_1 - \|L_0\|_* - \lambda \|S_0 \|_1 
+&\geq  (1-\beta) \left( \|P_{T^\perp} H\|_* + \lambda \|P_{\Omega^\perp} H\|_1 \right) \\
+& > 0
+\end{align*}
+since, by assumption, $\Omega \cap T = {0}$ and $H \neq 0$. Therefore the objective strictly increases with a non-zero perturbation. This completes the proof.
 
 \end{proof}
 
 
-The proof will use a similar result, given by the following Lemma
+The proof of the main theorem will use a slightly different result, given by the following Lemma
 \begin{lemma}
 \label{lem:dual_cert}
 Assume that $\|P_\Omega P_T \| \leq 1/2$. Then $(L_0,S_0)$ is the unique solution to PCP if $\exists (W, F)$ such that
@@ -156,6 +292,35 @@ Assume that $\|P_\Omega P_T \| \leq 1/2$. Then $(L_0,S_0)$ is the unique solutio
 \end{lemma}
 
 \begin{proof}
+Using $\beta = \max (\|W\|, \|F\|_\infty) \leq \frac{1}{2}$ in the previous proof, we have
+\begin{align*}
+\|L_0 + H\|_* + \lambda \|S_0 - H\|_1 - \|L_0\|_* - \lambda \|S_0 \|_1 
+&\geq  \frac{1}{2} \left( \|P_{T^\perp} H\|_* + \lambda \|P_{\Omega^\perp} H\|_1 \right) - \lambda \langle P_{\Omega} D, H\rangle \\
+& \geq \frac{1}{2} \left( \|P_{T^\perp} H\|_* + \lambda \|P_{\Omega^\perp} H\|_1 \right) - \frac{\lambda}{4} \|P_{\Omega} H\|_F
+\end{align*}
+
+the last term can be further bounded
+\begin{align*}
+\|P_\Omega H\|_F
+&\leq \|P_\Omega P_T H\|_F + \|P_\Omega P_{T^\perp} H\|_F \\
+&\leq \frac{1}{2} \|H\|_F + \|P_{T^\perp} H\|_F \\
+&\leq \frac{1}{2} \|P_\Omega H\|_F + \frac{1}{2} \|P_{\Omega^\perp} H\|_F + \|P_{T^\perp} H\|_F
+\end{align*}
+
+therefore 
+
+\[
+\|P_\Omega H\|_F \leq \|P_{\Omega^\perp} H\|_F + 2 \|P_{T^\perp} H\|_F
+\]
+
+and we conclude by lower bounding the increase in the objective
+\begin{align*}
+\|L_0 + H\|_* + \lambda \|S_0 - H\|_1 - \|L_0\|_* - \lambda \|S_0 \|_1 
+&\geq  \frac{1}{2} \left( (1- \lambda) \|P_{T^\perp} H\|_* + \frac{\lambda}{2} \|P_{\Omega^\perp} H\|_1 \right) \\
+& > 0
+\end{align*}
+this completes the proof.
+
 \end{proof}
 
 By the previous Lemma, it suffices to produce a dual certificate $W$ such that
@@ -194,8 +359,390 @@ As a consequence, $\|P\Omega P_T\|$ can be bounded, and if $|\Omega|$ is not too
 
 
 
+%----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+\subsection{Proof of the equivalence of the Bernoulli sampling and uniform sampling model }
+\begin{theorem}
+Let $E$ be the event that the recovery of $(L_{0},S_{0})$ is exact
+through the RPCA. Then, $\forall\epsilon>0$,
+\end{theorem}
+
+\begin{itemize}
+\item With $\rho=\frac{m}{n^{2}}+\epsilon$, $E$ holds with high probability when the sparse matrix $S_{i,j}\sim Bern(\rho)$ iid $\Longrightarrow$$E$ holds with high probability when the sparse matrix $S\sim Uniform(m)$. 
+\item With $\rho=\frac{m}{n^{2}}-\epsilon$, $E$ holds with high probability when the sparse matrix $S\sim Uniform(m)$ $\Longrightarrow$ $E$ holds with high probability when the sparse matrix $S_{i,j}\sim Bern(\rho)$
+iid 
+\end{itemize}
+\begin{proof}
+Let us use the notation of subscrpt to denote the underlying sampling process, e.g. ,$P_{B(\rho)}(E)$ and $P_{U(m)}(E)$ be the probability of success recovery using Bernoulli sampling and uniform sampling respectively. We then upper and lower bound the difference of $P_{B(\rho)}(E)-P_{U(m)}(E)$ and show that the difference goes to zero as the dimension of the matrix $n\to\infty$. \\
+
+\begin{eqnarray*}
+ &  & P_{B(\rho)}(E)\\
+ & = & \sum_{i=0}^{n^{2}}P_{B(\rho)}(|\Omega|=i)P_{B(\rho)}(E\mid|\Omega|=i)\\
+ & = & \sum_{i=0}^{n^{2}}P_{B(\rho)}(|\Omega|=i)P_{U(i)}(E)\\
+ & \le & \sum_{i=0}^{m-1}P_{B(\rho)}(|\Omega|=i)+\sum_{i=m}^{n^{2}}P_{U(i)}(E)P_{B(\rho)}(|\Omega|=i)\\
+ & \le & \sum_{i=0}^{m-1}P_{B(\rho)}(|\Omega|=i)+\sum_{i=m}^{n^{2}}P_{U(i)}(E)P_{B(\rho)}(|\Omega|=i)\\
+ & \le & \sum_{i=0}^{m-1}P_{B(\rho)}(|\Omega|=i)+\sum_{i=m}^{n^{2}}P_{U(m)}(E)P_{B(\rho)}(|\Omega|=i)\\
+ & \le & P_{B(\rho)}(|\Omega|<m)+P_{U(m)}(E)
+\end{eqnarray*}
+
+
+This gives, $P_{B(\rho)}(E)-P_{U(m)}(E)\le P_{B(\rho)}(|\Omega|<m)$. With $\rho=\frac{m}{n^{2}}+\epsilon$, by law of large number, when $n\to\infty$ we get, $P_{B(\rho)}(E)\le P_{U(m)}(E)$ .
+
+On the other hand, 
+\begin{eqnarray*}
+ &  & P_{B(\rho)}(E)\\
+ & \ge & \sum_{i=0}^{m}P_{B(\rho)}(|\Omega|=i)P_{B(\rho)}(E\mid|\Omega|=i)\\
+ & \ge & P_{U(m)}(E)\sum_{i=0}^{m}P_{B(\rho)}(|\Omega|=i)\\
+ & = & P_{U(m)}(E)(1-P_{B(\rho)}(|\Omega|>m))\\
+ & \ge & P_{U(m)}(E)-P_{B(\rho)}(|\Omega|>m)
+\end{eqnarray*}
+
+
+This gives, $P_{B(\rho)}(E)-P_{U(m)}\ge-P_{B(\rho)}(|\Omega|>m)$. With $\rho=\frac{m}{n^{2}}-\epsilon$, by law of large number, when $n\to\infty$ we get, $P_{B(\rho)}(E)\ge P_{U(m)}(E)$ .
+\end{proof}
+
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-\subsection{Main proof}
+\subsection{Proof of the Lemma about golfing scheme and dual certificate }
+
+Golfing scheme:
+
+Recall that the golfing scheme involves creating a $W^{L}$ according to the following method. 
+\begin{enumerate}
+\item Fix $j_{0}\ge1$, define $\Omega_{j}\sim Bern(q)$ iid with $1\le j\le j_{0}$ and $\rho=(1-q)^{j_{0}}$. Define the complement of support of $\Omega$ by $\Omega=\cup_{1\le j\le j_{0}}\Omega_{j}^{C}$. 
+\item Define a sequence of matrix which finally ends at $W^{L}$
+
+\begin{enumerate}
+\item $Y_{0}=0$
+\item $Y_{j}=Y_{j-1}+\frac{1}{q}P_{\Omega_{j}}P_{T}(UV^{*}-Y_{j-1})$ for $1\le j\le j_{0}$
+\item $W^{L}=P_{\ensuremath{T^{\bot}}}(Y_{j_{0}})$
+\end{enumerate}
+
+\end{enumerate}
+
+
+\begin{fact}
+\label{fact2}
+If we fix $Z\in T$, $\Omega_{0}\sim Bern(\rho_{0})$, and $\rho_{0}\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{n}$ , then with high probability, we will have, 
+
+\label{fact5}
+\[
+||Z-\rho_{0}^{-1}P_{T}P_{\Omega_{0}}(Z)||_{\infty}\le\epsilon||Z||_{\infty}
+\]
+
+\begin{fact}
+\label{fact3}
+If we fix $Z$, $\Omega_{0}\sim Bern(\rho_{0})$, and $\rho_{0}\ge C_{0}\frac{\mu\log n}{n}$, then with high probability,
+we will have, 
+\begin{eqnarray*}
+||(I-\rho_{0}^{-1}P_{\Omega_{0}})Z|| & \le & C_{0}^{'}\sqrt{\frac{n\log n}{\rho_{0}}}||Z||_{\infty}
+\end{eqnarray*}
+
+\begin{fact}
+\label{fact4}
+If $\Omega_{0}\sim Bern(\rho_{0})$,$\rho_{0}\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{n}$, then with high probability, we will have, 
+
+\[
+||P_{T}-\rho_{0}^{-1}P_{T}P_{\Omega_{0}}P_{T}||\le\epsilon
+\]
+
+\begin{fact}
+If $\Omega_{0}\sim Bern(\rho)$ and $1-\rho\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{n}$, then with high probability $||P_{\Omega}P_{T}||^{2}\le\rho+\epsilon$ 
+\end{fact}
+\end{fact}
+\end{fact}
+\end{fact}
+
+
+\begin{thm}
+Let $S\sim Bern(\rho)$ iid for each entry with $\Omega$ as its support set. Set $j_{0}=2\log n$. With the assumptions in the main theorem of RPCA, $W^{L}$ satisfies the following with high probability. 
+\begin{enumerate}
+\item $||W^{L}||<\frac{1}{4}$ 
+\item $||P_{\Omega}(UV^{*}+W^{L})||_{F}<\frac{\lambda}{4}$ 
+\item $||P_{\Omega^{\bot}}(UV^{*}+W^{L})||<\frac{\lambda}{4}$ 
+\end{enumerate}
+\end{thm}
+
+\begin{proof}
+We define another sequence of matrix $Z_{j}=UV^{*}-P_{T}(Y_{j})$. There are some properties about $Z_{j}$ which allows us to esbablish the proof. We survey them here and provides the proof of them. 
+
+i) Note that $Z_{j}=(P_{T}-\frac{1}{q}P_{T}P_{\Omega_{j}}P_{T})Z_{j-1}.$The reason is as follows.
+\begin{eqnarray*}
+ & Z_{j}\\
+ & = & UV^{*}-P_{T}(Y_{j-1}+\frac{1}{q}P_{\Omega_{j}}P_{T}(UV^{*}-Y_{j-1}))\\
+ & = & UV^{*}-P_{T}(Y_{j-1})-\frac{1}{q}P_{T}P_{\Omega_{j}}P_{T}(UV^{*}-Y_{j-1})\\
+ & = & Z_{j-1}-q^{-1}(P_{T}P_{\Omega_{j}}(UV^{*}-P_{T}(Y_{j-1})))\text{ because }P_{T}(UV^{*})=UV^{*}\\
+ & = & P_{T}(Z_{j-1})-q^{-1}(P_{T}P_{\Omega_{j}}P_{T}Z_{j-1})\text{ because }Z_{j-1}\in T\\
+ & = & (P_{T}-q^{-1}P_{T}P_{\Omega_{j}}P_{T})Z_{j-1}
+\end{eqnarray*}
+
+
+ii) If $q\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{n}$, then $||Z_{j}||_{\infty}\le\epsilon^{j}||UV^{*}||_{\infty}$ with high probability. The reason is as follows. By Fact (\ref{fact2}), we have, 
+
+\begin{eqnarray*}
+||Z_{j-1}-q^{-1}P_{T}P_{\Omega_{j}}Z_{j-1}||_{\infty} & \le & \epsilon||Z_{j-1}||_{\infty}\\
+||Z_{j}||_{\infty} & \le & \epsilon||Z_{j-1}||_{\infty}
+\end{eqnarray*}
+
+
+Inductively, we get desired.
+
+iii) If $q\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{n}$, then $||Z_{j}||_{F}\le\epsilon^{j}\sqrt{r}$. The reason is as follows. By Fact (\ref{fact4}), we have, 
+
+\begin{eqnarray*}
+||(P_{T}-q^{-1}P_{T}P_{\Omega_{0}}P_{T})(\frac{Z_{j-1}}{||Z_{j-1}||_{F}})||_{F} & \le & \epsilon\\
+||(P_{T}-q^{-1}P_{T}P_{\Omega_{0}}P_{T})Z_{j-1}||_{F} & \le & \epsilon||Z_{j-1}||_{F}\\
+||Z_{j-1}|| & \le & \epsilon||Z_{j-1}||_{F}
+\end{eqnarray*}
+
+
+Inductively, we get desired.
+
+After establishing these properties, we are ready to prove that golfing scheme yields $W^{L}$ that satisfies the desired properties.
+
+1) Proof of (1): 
+\begin{eqnarray*}
+||W^{L}|| & = & ||P_{T^{\bot}}(Y_{j_{0}})||\\
+ & \le & \sum_{j=1}^{j_{0}}\frac{1}{q}||P_{T^{\bot}}P_{\Omega_{j}}Z_{j-1}||\text{ because }Y_{j}=Y_{j-1}+q^{-1}P_{\Omega_{j}}(Z_{j-1})\\
+ & = & \sum_{j=1}^{j_{0}}||P_{T^{\bot}}(\frac{1}{q}P_{\Omega_{j}}Z_{j-1}-Z_{j-1})||\text{ because }Z_{j}\in T\\
+ & \le & \sum_{j=1}^{j_{0}}||(\frac{1}{q}P_{\Omega_{j}}Z_{j-1}-Z_{j-1})||\text{ because }||P_{T^{\bot}}(M)||\le||M||\\
+ & \le & C_{0}^{'}\sqrt{\frac{n\log n}{q}}\sum_{j=1}^{j_{0}}||Z_{j-1}||_{\infty}\text{ because Fact(\ref{fact3})}\\
+ & \le & C_{0}^{'}\sqrt{\frac{n\log n}{q}}\sum_{j=1}^{j_{0}}\epsilon^{j}||UV^{*}||_{\infty}\\
+ & \le & C_{0}^{'}\sqrt{\frac{n\log n}{q}}\frac{1}{1-\epsilon}||UV^{*}||_{\infty}\\
+ & \le & C_{0}^{'}\sqrt{\frac{n\log n}{q}}\frac{1}{1-\epsilon}\frac{\sqrt{\mu r}}{n}\\
+ & \le & C^{''}\epsilon<\frac{1}{4}\text{for some constant }C^{''}
+\end{eqnarray*}
+
+
+2) Proof of (2) : First, we expand, 
+\begin{eqnarray*}
+||P_{\Omega}(UV^{*}+W^{L})||_{F} & = & ||P_{\Omega}(UV^{*}+P_{T^{\bot}}Y_{j_{0}})||_{F}
+\end{eqnarray*}
+
+Then, because $P_{\Omega}(Y_{j_{0}})=P_{\Omega}(\sum_{j}P_{\Omega_{j}}Z_{j-1})=0$ and $P_{\Omega}(P_{T}(Y_{j_{0}})+P_{T^{\bot}}(Y_{j_{0}}))=0$, we have, 
+\begin{eqnarray*}
+||P_{\Omega}(UV^{*}+W^{L})||_{F} & = & ||P_{\Omega}(UV^{*}-P_{T}Y_{j_{0}})||_{F}
+\end{eqnarray*}
+
+
+Continuing, 
+\begin{eqnarray*}
+||P_{\Omega}(UV^{*}+W^{L})||_{F} & = & ||P_{\Omega}(Z_{j_{0}})||_{F}\\
+ & \le & ||Z_{j_{0}}||_{F}\\
+ & \le & \epsilon^{j_{0}}\sqrt{r}\\
+ & \le & \sqrt{r}\frac{1}{n^{2}}\le\frac{\lambda}{4}
+\end{eqnarray*}
+
+
+3) Proof of (3) : 
+\begin{eqnarray*}
+||P_{\Omega^{\bot}}(UV^{*}+W^{L})||_{\infty} & = & ||P_{\Omega^{\bot}}(Z_{j_{0}}+Y_{j_{0}})||_{\infty}\\
+ & \le & ||Z_{j_{0}}||_{\infty}+||Y_{j_{0}}||_{\infty}\\
+ & \le & ||Z_{j_{0}}||_{F}+||Y_{j_{0}}||_{\infty}\\
+ & \le & \frac{\lambda}{8}+||Y_{j_{0}}||_{\infty}
+\end{eqnarray*}
+
+
+Moreover, we have 
+\begin{eqnarray*}
+||Y_{j_{0}}||_{\infty} & \le & q^{-1}\sum_{j}||P_{\Omega_{j}}Z_{j-1}||_{\infty}\\
+ & \le & q^{-1}\sum_{j}||Z_{j-1}||_{\infty}\\
+ & \le & q^{-1}\sum_{j}\epsilon^{j}\frac{\sqrt{\mu r}}{n}\\
+ & \le & \frac{\lambda}{8}\text{ if \ensuremath{\epsilon}\ \text{is sufficiently small}}
+\end{eqnarray*}
+
+\end{proof}
+
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\subsection{Proof of the Lemma about least square construction and dual certificate }
+
+Construction of $W^{S}$:
+
+\[
+W_{S}=\lambda P_{T^{\bot}}((P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}sign(S_{0}))
+\]
+
+\begin{thm}
+Let $S\sim Bern(\rho)$ iid for each entry with $\Omega$ as its support set. With the assumptions in the main theorem of RPCA, $W^{S}$ satisfies the following with high probability. 
+\begin{enumerate}
+\item $||W^{S}||<\frac{1}{4}$ 
+\item $||P_{\Omega^{\bot}}(W^{S})||<\frac{\lambda}{4}$ 
+\end{enumerate}
+\end{thm}
+\begin{proof}
+We consider the sign of $S_{0}$ to be distrbuted as follows 
+\[
+sign(S_{0})_{i,j}=\begin{cases}
+1 & \text{wp }\frac{\rho}{2}\\
+0 & \text{wp }1-\rho\\
+-1 & \text{wp }\frac{\rho}{2}
+\end{cases}
+\]
+
+
+1) Proof of (1) :
+
+I) We note the we can separate $W^{S}$into two parts and then bound them separately. 
+
+\begin{eqnarray*}
+W^{S} & = & \lambda P_{T^{\bot}}(sign(S_{0}))+\lambda P_{T^{\bot}}(\sum_{k\ge1}(P_{\Omega}P_{T}P_{\Omega})^{k}(sign(S_{0})))
+\end{eqnarray*}
+
+
+II) Then, we have 
+\begin{eqnarray*}
+\lambda P_{T^{\bot}}(sign(S_{0})) & \le & \lambda||sign(S_{0})||\\
+ & = & \frac{1}{\sqrt{n}}||sign(S_{0})||\\
+ & \le & 4\sqrt{\rho}\text{with high probability}
+\end{eqnarray*}
+
+
+where the last inequality uses the fact that for the entry-wise distribution of $sign(S_{0}$) , we can have $||sign(S_{0})||\le4\sqrt{n\rho}$ holds with high probability. 
+
+III) Now, for the other part, $\lambda P_{T^{\bot}}(\sum_{k\ge1}(P_{\Omega}P_{T}P_{\Omega})^{k}(sign(S_{0})))$, we bound it by first expressing it in the form of $<X,sign(S_{0})>$ and then claim that with high probability, this term is bounded above as desired. Let $R=\sum_{k\ge1}(P_{\Omega}P_{T}P_{\Omega})^{k}$ ,
+then we have, 
+\begin{eqnarray*}
+||P_{T^{\bot}}(R(sign(S_{0})))|| & \le & ||R(sign(S_{0}))||\\
+ & \le & 4\sup_{x,y\in N}<y,R(sign(S_{0})x)>
+\end{eqnarray*}
+
+
+where the last inequality uses the fact that there exists a $\frac{1}{2}-net$ of the Eucledean ball and it has at most $6^{n}$ elements. Continuing, we have 
+\begin{eqnarray*}
+||P_{T^{\bot}}(R(sign(S_{0})))|| & \le & 4\sup_{x,y\in N}<y,R(sign(S_{0})x)>\\
+ & = & 4\sup_{x,y\in N}<yx^{*},R(sign(S_{0}))>\\
+ & = & 4\sup_{x,y\in N}<R(yx^{*}),sign(S_{0})>
+\end{eqnarray*}
+
+
+and that we denote $X(x,y)=<R(yx^{*}),sign(S_{0})>$ afterwards.
+
+Note that, by Hoeffding's inequality, we have, 
+\begin{eqnarray*}
+Pr(|X(x,y)|>t\mid\Omega) & \le & 2exp(-\frac{t^{2}}{2||R(xy^{*})||_{F}^{2}})
+\end{eqnarray*}
+
+
+This gives, 
+\begin{eqnarray*}
+Pr(||P_{T^{\bot}}(R(sign(S_{0})))||>4t\mid\Omega) & \le & Pr(||R(sign(S_{0}))||>4t\mid\Omega)\\
+ & \le & Pr(\sup_{x,y}|X(x,y)|>t\mid\Omega)\\
+ & \le & 2N^{2}exp(-\frac{t^{2}}{2||R||_{F}^{2}})\text{because }||yx^{*}||_{F}\le1
+\end{eqnarray*}
+
+
+Now, we proceed to bound the probability without the condition on $\Omega$. 
+
+First, note that the event of $||P_{\Omega}P_{T}||\le\sigma=\rho+\epsilon$, implies that $||R||\le(\frac{\sigma^{2}}{1-\sigma^{2}})^{2}$. Thus, unconditionally, we have 
+\begin{eqnarray*}
+Pr(||R(sign(S_{0}))||>4t) & \le & 2|N|^{2}exp(\frac{-t^{2}}{2(\frac{\sigma^{2}}{1-\sigma^{2}})^{2}})+Pr(||P_{\Omega}P_{T}||>\sigma)\\
+ & \le & 2\cdot6^{2n}exp(\frac{-t^{2}}{2(\frac{\sigma^{2}}{1-\sigma^{2}})^{2}})+Pr(||P_{\Omega}P_{T}||>\sigma)
+\end{eqnarray*}
+
+
+Thus, where we finally put $t=\frac{1}{16}$ 
+\begin{eqnarray*}
+Pr(\lambda||R(sign(S_{0}))||>4t) & \le & 2\cdot6^{2n}exp(\frac{-\frac{t^{2}}{\lambda^{2}}}{2(\frac{\sigma^{2}}{1-\sigma^{2}})^{2}})+Pr(||P_{\Omega}P_{T}||>\sigma)
+\end{eqnarray*}
+
+
+With $\lambda=\sqrt{\frac{1}{n}},$we have this probability$\to0$ as $n\to\infty$. Thus with high probability $||W^{S}||\le\frac{1}{4}$
+
+2) Proof of (2) :
+
+The idea is that we first express $P_{\Omega^{\bot}}(W^{S})$ in the form of $<X,sign(S_{0})>$and we can derive upper bound on it if highly probably event of $\{||P_{\Omega}P_{T}||\le\sigma\}$ for some small $\sigma=\rho+\epsilon$ holds . 
+
+I) First, 
+\begin{eqnarray*}
+P_{\Omega^{\bot}}(W^{S}) & = & P_{\Omega^{\bot}}(\lambda(I-P_{T})(\sum_{k\ge0}(P_{\Omega}P_{T}P_{\Omega})^{k})sign(S_{0}))\\
+ & = & -\lambda P_{\Omega^{\bot}}P_{T}(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}sign(S_{0})
+\end{eqnarray*}
+
+
+For $(i,j)\in\Omega^{C}$, we have 
+\begin{eqnarray*}
+e_{i}^{*}W^{S}e_{j} & = & <e_{i}e_{j}^{*},W_{S}>\\
+ & = & <e_{i}e_{j}^{*},-\lambda P_{\Omega^{\bot}}P_{T}(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}sign(S_{0})>\\
+ & = & -\lambda<e_{i}e_{j}^{*},P_{T}(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}sign(S_{0})>\\
+ & = & -\lambda<e_{i}e_{j}^{*},P_{T}P_{\Omega}(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}sign(S_{0})>\\
+ & = & -\lambda<e_{i}e_{j}^{*},P_{T}\sum_{k\ge0}(P_{\Omega}P_{T}P_{\Omega})^{k}sign(S_{0})>
+\end{eqnarray*}
+
+
+Noting that $P_{\Omega},P_{T}$ are self-adjoint, thus, we have 
+\begin{eqnarray*}
+e_{i}^{*}W^{S}e_{j} & = & \lambda<-(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}P_{\Omega}P_{T}(e_{i}e_{j}^{*}),sign(S_{0})>
+\end{eqnarray*}
+
+
+where we now denote $X(i,j)=-(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}P_{\Omega}P_{T}(e_{i}e_{j}^{*})$
+
+II)We now consider, where we put $t=\frac{1}{4}$, 
+\begin{eqnarray*}
+Pr(||P_{\Omega^{\bot}}(W^{S})||_{\infty}>t\lambda\mid\Omega) & \le & \sum_{(i,j)\in\Omega^{C}}Pr(|e_{i}^{*}W^{S}e_{j}|>t\lambda|\Omega)\\
+ & \le & n^{2}Pr(|e_{i}^{*}W^{S}e_{j}|>t\lambda|\Omega)\text{ for some (i,j)}\\
+ & = & n^{2}Pr(|<X_{i,j},sign(S_{0})>|>t|\Omega)\\
+ & \le & 2n^{2}exp(-\frac{2t^{2}}{4||X(i,j)||_{F}})\text{ because of Hoeffding's inequality}
+\end{eqnarray*}
+
+
+III) We then proceed to bound the $||X(i,j)||$. On the event of $\{||P_{\Omega}P_{T}||\le\sigma\}$,
+we have , 
+\begin{eqnarray*}
+||P_{\Omega}P_{T}(e_{i}e_{j}^{*})||_{F} & \le & ||P_{\Omega}P_{T}||\cdot||P_{T}(e_{i}e_{j}^{*})||_{F}\\
+ & \le & \sigma\sqrt{\frac{2\mu r}{n}}
+\end{eqnarray*}
+
+
+Moreover, we have 
+\begin{eqnarray*}
+||(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}|| & \le & \sum_{k\ge0}||(P_{\Omega}P_{T}P_{\Omega})^{k}||\\
+ & \le & \frac{1}{1-\sigma}
+\end{eqnarray*}
+
+
+Finally, we have 
+\begin{eqnarray*}
+||X(i,j)||_{F} & \le & 2\sigma^{2}\frac{\frac{\mu r}{n}}{(1-\sigma)^{2}}
+\end{eqnarray*}
+
+
+Combining, we have 
+\begin{eqnarray*}
+Pr(||P_{\Omega^{\bot}}W^{S}||>t\lambda) & \le & 2n^{2}exp(\frac{-t^{2}n(1-\sigma)^{2}}{4\sigma^{2}(\mu r)})+Pr(||P_{\Omega}P_{T}||\ge\sigma)\\
+ & \le & \epsilon\text{ if }\mu r<\rho_{r}^{'}\frac{n}{\log n}
+\end{eqnarray*}
+
+\end{proof}
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\subsection{Proof of the form of sub-differential of nuclear norm }
+\begin{definition}
+For matrix norms $||\cdot||$ which satisfy $||UAV||=||A||$ $\forall U,V$ being orthonormal, then they are called orthogonally invariant norm. 
+
+\begin{definition}
+For orthogonally invariant norm $||\cdot||$ which is defined by its singular values $||A||=\phi(\vec{\sigma})$ where $\vec{\sigma}$ are the singular values of $A$, we call the function $\phi$ as a symmetric gauge function if it is a norm and it satisfies $\phi(\vec{\sigma})=\phi(\epsilon_{1}\sigma_{i_{1}},...,\epsilon_{n}\sigma_{i_{n}})$ for any permulation of $(i_{1},...,i_{n})$ of $(1,...,n)$ and $\epsilon_{i}=\pm1$.
+
+\begin{fact}
+\label{fact10}
+For orthogonally invariant norm $||\cdot||$ with symmetric
+gauge function $\phi$, the sub-differential is given by
+
+\begin{eqnarray*}
+\partial||A|| & = & \{Udiag(\vec{d})V\mid A=U\Sigma V^{T},\vec{d}\in\partial\phi(\vec{d}),U\in R^{m},V\in R^{n}\}
+\end{eqnarray*}
+
+\end{fact}
+\end{definition}
+\end{definition}
+
+\begin{thm}
+Let $A=U^{(1)}\Sigma{V^{(1)}}^{T}$ then $\partial||A||_{*}=\{U^{(1)}{V^{(1)}}^{T}+W:||W||\le1,{U^{(1)}}^{T}W=0,WV^{(1)}=0\}$ 
+\end{thm}
+
+\begin{proof}
+We take the symmetric gauge function as $||\cdot||_{1}$and then apply the Fact (\ref{fact10}) and will obtain desired.
+\end{proof}
 
 
 
@@ -370,12 +917,287 @@ J_{i} \leftarrow \frac{\partial}{\partial\zeta}(D_{i}\circ\zeta)|_{\zeta = \tau_
 \KwOut{$A^{*}, E^{*}, \tau^{*}$}
 \end{algorithm}
 
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\subsection{Robust Matrix Decomposition With Sparse Corruptions: D Hsu et. al.}
+
+%------------------------------------------------------------------------------
+\subsubsection{Question being addressed}
+
+Under deterministic setting, it studies how much sparsity is allowed for accurate recovery of the sparse-lowrank pairs.
+
+
+%------------------------------------------------------------------------------
+\subsubsection{Main ideas}
+
+Given $M$ as the observed matrix, it analyze the following two optimization problems. With arguments as $(L,S)$,
+
+\begin{eqnarray}
+\min_{(L,S)} & ||L||_{*}+\lambda||S||_{1}\nonumber \\
+s.t. & ||L+S-M||_{1}\le\epsilon_{1}\\
+ & ||L+S-M||_{*}\le\epsilon_{*}\nonumber 
+\end{eqnarray}
+
+
+and 
+\begin{eqnarray}
+\min_{(L,S)} & ||L||_{*}+\lambda||S||_{1}+\frac{1}{2\mu}||L+S-M||_{F}
+\end{eqnarray}
+
+
+It is remarked that the $M$ is a perturbed observation outcome of the original $(L_{0},S_{0})$ pairs.
+
+
+%------------------------------------------------------------------------------
+\subsubsection{Contributions}
+\begin{enumerate}
+\item It provides sufficient conditions on sparsity of the original $(L_{0},S_{0})$ pairs that allow accurate recovery in the sense that $||L_{0}-\hat{L}||_{\infty},||S_{0}-\hat{S}||_{\infty}$ is small.
+\item If the observed matrix $M$ is pertured from $L_{0}+S_{0}$ by a small amount (i.e.$\epsilon$), the optimizer $(\hat{L}, \hat{S})$ will be $\epsilon-$close to the orginal $(L_{0},S_{0})$ pairs.
+\end{enumerate}
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\subsection{Characterization of the subdifferential of some matrix norms : GA Watson et. al.}
+
+
+%------------------------------------------------------------------------------
+\subsubsection{Significance}
+
+Subdifferential of nuclear norm is a critical element in the formulation of dual certificates. This paper proves why the subdifferential of nuclear norm is of the form.
+
+\[
+\{U^{(1)}V^{(1)T}+W|U^{(1)T}W=0,WV^{(1)},||W||_{2}\le1\}
+\]
+
+
+where $A=[U^{(1)}|U^{(2)}]
+[
+\begin{array}{cc}
+\Sigma & 0\\
+0 & 0
+\end{array}
+]
+[
+\begin{array}{c}
+V^{(1)T}\\
+V^{(2)T}
+\end{array}
+]
+$
+
+
+%------------------------------------------------------------------------------
+\subsubsection{Details}
+
+\begin{lemma}
+If a norm $||\cdot||$ is orthogonal invariant and is characterized by a symmetric gauge function, then
+\textup{
+\[
+\partial||A||=conv\{Udiag(\vec{d})V|A=U[\begin{array}{cc}
+\Sigma & 0\\
+0 & 0
+\end{array}]V^{T},\vec{d}\in\partial\phi(\Sigma)\}
+\]
+}
+\end{lemma}
+
+\begin{proof}
+Sketch: For $RHS\subset LHS$, one can check that they satisfy the dual norm characterization of $\partial||A||$. For $LHS\subset RHS$, one can use maximum representation of the directional derivative of
+the $||A||$ to show that subdifferential not inside RHS will give
+a contradiction. 
+\end{proof}
+
+\begin{prop}
+\[
+\partial||A||_{*}=\{U^{(1)}V^{(1)T}+W|U^{(1)T}W=0,WV^{(1)},||W||_{2}\le1\}
+\]
+\end{prop}
+
+\begin{proof}
+Sketch: Take $\phi(\vec{\sigma}) =  \|\sigma \|_1$ and apply Lemma~\ref{} to the convex hull of all SVD of $A$.
+\end{proof}
+
+
+
+%============================================================================================
+\section{Generalization of the Robust PCA scheme with known rank}
+
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\subsection{Introduction }
+
+Recall that the nuclear norm introduced in the PCP scheme is resulted because we would like to extract the low rank component from gross random noise. Nuclear norm is used because it is a heuristic for penalizing high rank matrix. Now, we consider the case when we have extra information/guess from the data set that we know precisely what the rank of the matrix are. Therefore, it is natural to introduce the following the following heuristics. 
+
+\begin{eqnarray*}
+E^{*} & = & \min_{\{p_{i}\}\{q_{j}\},||p_{j}||_{2},1\le j\le r}||M-\sum_{j=1}^{r}p_{j}q_{j}^{T}||_{1}
+\end{eqnarray*}
+
+
+We specialize the discussion to the case of rank-1 approximation (when $r=1$) and shows that this scheme has a  probabilistic gurantee of recovery and demonstrate that an efficient power iteration can be employed to solve this problem. Empirical results are also provided to support this method. We remark that we can generalize this and obtain similar results. 
+
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\subsection{Problem statement.}
+
+We are now interested in solving the following problem. 
+
+\begin{eqnarray}
+E^{*} & = & \min_{p,q}||M-pq^{T}||_{1}\label{rankonemin}
+\end{eqnarray}
+
+
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\subsection{Algorithm derivation}
+
+Let $M=(a_{i,j})\in R^{mXn}$. We now employ the block-coordinate descent method to solve this problem. Note that 
+
+\begin{eqnarray}
+\min_{p} & ||M-pq^{T}|| & =\sum_{i=1}^{m}\min_{t}(\sum_{j=1}^{n}|a_{i,j}-tq_{j}|)\\
+ &  & =\sum_{i=1}^{m}\min_{t}(\sum_{j=1}^{n}|q_{j}||t-\frac{a_{i,j}}{q_{j}}|)\nonumber 
+\end{eqnarray}
+\begin{eqnarray}
+\min_{q} & ||M-pq^{T}|| & =\sum_{j=1}^{n}\min_{t}(\sum_{i=1}^{m}|a_{i,j}-tp_{i}|)\\
+ &  & =\sum_{j=1}^{n}\min_{t}(\sum_{j=1}^{n}|p_{i}||t-\frac{a_{i,j}}{p_{i}}|)\nonumber 
+\end{eqnarray}
+
+
+And for solving the subproblem of finding 
+\[
+\min_{t}\sum_{k=1}^{k_{0}}c_{i}|t-d_{i}|
+\]
+where $c_{i}\ge0$ is basically finding the weighted median and can be done by the following method with complexity $O(k_{0}\log k_{0})$ mostly on sorting the sequence. We call it WMH.
+
+\begin{algorithm}[tbh]
+\begin{enumerate}
+\item We first sort $\vec{\ensuremath{d}}$ s.t. $d_{i_{1}}\le d_{i_{2}}\le...\le d_{i_{k_{0}}}$ 
+\item We then find $k^{'}$s.t. 
+\begin{eqnarray*}
+\sum_{\theta=1}^{k^{'}-1}c_{i_{\theta}} & \le & \sum_{\theta=k^{'}}^{k_{0}}c_{i_{\theta}}\\
+\sum_{i=1}^{k^{'}}c_{i_{\theta}} & \ge & \sum_{i=k^{'}+1}^{k_{0}}c_{i_{\theta}}
+\end{eqnarray*}
+
+\item We then set $t^{*}$to be $d_{i_{k^{'}}}$
+\end{enumerate}
+\caption{WMH $(k_{0},\vec{c},\vec{d})$}
+\end{algorithm}
+
+
+This algorithm is optimal in finding $t$. This is justified by using the property of sub-differential of $||\cdot||_{1}$ and note that $0\in\partial(\sum_{k=1}^{k_{0}}c_{i}|t^{*}-d_{i}|)$. 
+
+Now we are ready to state the power iteration method to solve the optimization rank-1 optimization problem. We call it Poweriteration.
+
+\begin{algorithm}[tbh]
+Repeat
+\begin{enumerate}
+\item $p_{i}\leftarrow wmh(n,abs(q),M(i,:)./q)$ for each i
+\item $p\leftarrow\frac{p}{max(p)}$
+\item $q_{j}\leftarrow wmh(n,abs(p),M(:,j)./p)$ for each j
+\end{enumerate}
+Until stopping criterion is met
+
+\caption{Poweriteration($M$)}
+\end{algorithm}
+
+
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\subsection{Performance Guarantee}
+
+Here are two results about performance guarantee. One is a result for deterministic case and the other is for the random case. 
+\begin{prop}
+Let $M=pq^{T}+S$ with $\frac{2}{\epsilon}||S||_{1}<||pq^{T}||_{1}$. Then the $(\hat{p},\hat{q})$ recovered from (\ref{rankonemin})
+satisfy 
+\begin{eqnarray*}
+\frac{||pq^{T}-\hat{p}\hat{q}^{T}||}{||pq^{T}||_{1}} & \le & \epsilon
+\end{eqnarray*}
+\end{prop}
+\begin{proof}
+If $(\hat{p},\hat{q})=(p,q)$ then the proposition is trivially true.
+Now assume $(\hat{p},\hat{q})\not=(p,q)$. Then we have ,
+
+\begin{eqnarray*}
+||S||_{1} & \ge & ||pq^{T}+S-\hat{p}\hat{q}^{T}||_{1}\\
+ & \ge & ||pq^{T}-\hat{p}\hat{q}^{T}||_{1}-||S||_{1}
+\end{eqnarray*}
+
+
+Now if the conclusion is false, we will have 
+\begin{eqnarray*}
+||S||_{1} & \ge & \epsilon||pq^{T}||_{1}-||S||_{1}
+\end{eqnarray*}
+
+
+This gives a contradiction of, 
+\begin{eqnarray*}
+2||S||_{1} & \ge & \epsilon||pq^{T}||_{1}
+\end{eqnarray*}
+\end{proof}
+\begin{prop}
+Let $M=pq^{T}+S$ be $R^{nXn}$ and $S$ has $k$ possibly non-zero
+elements. If $S_{i}\sim U[-x_{s},x_{s}]$, $p_{i}\sim U[-x_{p},x_{p}]$,$q_{i}\sim U[-x_{p},x_{p}]$
+independently distributed, with $\frac{n}{k}\ge\frac{8x_{s}}{\epsilon x_{p}x_{q}}$,
+then 
+\begin{eqnarray*}
+\lim_{n\to\infty}Pr(\frac{||pq^{T}-\hat{p}\hat{q}^{T}||}{||pq^{T}||_{1}}>\epsilon) & = & 0
+\end{eqnarray*}
+\end{prop}
+\begin{proof}
+Let the event that $\frac{||pq^{T}-\hat{p}\hat{q}^{T}||}{||pq^{T}||_{1}}>\epsilon$
+be an error event. If error occurs, then 
+
+\begin{eqnarray*}
+kx_{s} & \ge & ||pq^{T}-\hat{p}\hat{q}^{T}+S||_{1}\\
+ & \ge & ||pq^{T}-\hat{p}\hat{q}^{T}||_{1}-||S||_{1}\\
+ & \ge & \epsilon||pq^{T}||_{1}-kx_{s}
+\end{eqnarray*}
+
+
+We now bounding the probability of error. 
+\begin{eqnarray*}
+ &  & Pr(\frac{||pq^{T}-\hat{p}\hat{q}^{T}||}{||pq^{T}||_{1}}>\epsilon)\\
+ & \le & Pr(kx_{s}\ge\epsilon||pq^{T}||_{1}-kx_{s})\\
+ & \le & Pr(\frac{2kx_{s}}{\epsilon}\ge||pq^{T}||_{1})\\
+ & \le & (1-(\frac{t}{x_{q}})^{n})Pr(\frac{1}{n}\sum_{i=1}^{n}|p_{i}|\le\frac{2kx_{s}}{tn\epsilon})+(\frac{t}{x_{q}})^{n}
+\end{eqnarray*}
+
+
+Then by Chebyshev inequality, we have, by putting $t=\frac{1}{2x_{q}}$
+\begin{eqnarray*}
+ &  & Pr(\frac{||pq^{T}-\hat{p}\hat{q}^{T}||}{||pq^{T}||_{1}}>\epsilon)\\
+ & \le & (1-(\frac{1}{2})^{n})\frac{\frac{1}{n}(\frac{x_{p}^{2}}{12})}{(\frac{x_{p}}{2}-\frac{2kx_{s}}{n\epsilon x_{q}})}+(\frac{1}{2})^{n}
+\end{eqnarray*}
+
+
+And this goes to zero as $n\to\infty$.
+\end{proof}
+
+
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\subsection{Empirical Evidence}
+
+We simulate the power iteration in recovering sparse noise. In this simulation, we use randomly generated the entries of $p$ and $q$ as $N(0,1)$ iid. And then we randomly generate sparse matrix with sparse support uniformly distributed across the nXn matrix. And each sparse entry has a value with distribution of $N(0,1)$. We then plot the graph of different degree of sparsity and the corresponding effectiveness of the optimization heuristic in extracting the original $pq^{T}$.
+The result is as follows.
+
+
+\begin{figure}[tbh]
+%\includegraphics[width=6in]{\string"C:/Users/kk/Desktop/EE227A/project/matlab experiments/fastalgo\string".jpg}
+\caption{Simulation result}
+\end{figure}
+
+
+
+
+
+
 %============================================================================================
 \section{Algorithms}
 
 
 %============================================================================================
 \section{Applications}
+
+
+
 
 
 %============================================================================================
