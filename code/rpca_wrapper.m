@@ -4,10 +4,20 @@
 %   problems through different algorithms. 
 
 % Copyright:   227A project group
-% Last edited:   Apr 14, 2012
+% Last edited:   Apr 16, 2012
 
 
 function results = rpca_wrapper(L,S,lambda,options)
+
+    % don't use algorithms that are not specified
+    if ~isfield(options.intpt,'active'), options.intpt.active = 0; end
+    if ~isfield(options.itth,'active'), options.itth.active = 0; end
+    if ~isfield(options.apg,'active'), options.apg.active = 0; end
+    if ~isfield(options.papg,'active'), options.papg.active = 0; end
+    if ~isfield(options.dpga,'active'), options.dpga.active = 0; end
+    if ~isfield(options.ealm,'active'), options.ealm.active = 0; end
+    if ~isfield(options.ialm,'active'), options.ialm.active = 0; end
+    if ~isfield(options.BLWSialm,'active'), options.BLWSialm.active = 0; end
 
     % extract information about problem
     [m,n] = size(L);
@@ -115,6 +125,19 @@ function results = rpca_wrapper(L,S,lambda,options)
         results.ialm.errL = norm(L-results.ialm.Lhat,'fro')/norm(L,'fro');
         results.ialm.errS = norm(S-results.ialm.Shat,'fro')/norm(S,'fro');
         results.ialm.t_run = toc;
+    end
+    
+    
+    %% augmented Lagrangian method (inexact) via BLWS SVD
+    if options.BLWSialm.active          
+        disp('Starting Inexact ALM Algorithm using on BLWS SVD');
+        tic;
+        [results.BLWSialm.Lhat, results.BLWSialm.Shat, results.BLWSialm.numIter] = ...
+            BLWS_ialm_rpca(M,lambda,options.BLWSialm.tol,options.BLWSialm.maxIter,1);
+        % compute relative errors
+        results.BLWSialm.errL = norm(L-results.BLWSialm.Lhat,'fro')/norm(L,'fro');
+        results.BLWSialm.errS = norm(S-results.BLWSialm.Shat,'fro')/norm(S,'fro');
+        results.BLWSialm.t_run = toc;
     end
 
 
