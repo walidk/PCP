@@ -51,7 +51,7 @@ options.BLWSialm.maxIter = 1000; % default: 1000
 %% Compare ialm and BLWS ialm for random data of different size
 
 nrun = 10;
-dims = [100, 200, 350, 500, 750, 1000, 1500, 2000, 3000];
+dims = [100, 200, 350, 500];%, 750, 1000, 1500, 2000, 3000];
 resultarray = cell(length(dims),1);
 
 for k=1:length(dims)
