@@ -6,3 +6,4 @@
 .DS_Store*
 *.fdb_latexmk
 *.m~
+*.fls
