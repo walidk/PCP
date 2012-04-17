@@ -120,7 +120,7 @@ function results = rpca_wrapper(L,S,lambda,options)
         disp('Starting Inexact ALM Algorithm');
         tic;
         [results.ialm.Lhat, results.ialm.Shat, results.ialm.numIter] = ...
-            inexact_alm_rpca(M,lambda);
+            BLWS_ialm_rpca(M,lambda);
         % compute relative errors
         results.ialm.errL = norm(L-results.ialm.Lhat,'fro')/norm(L,'fro');
         results.ialm.errS = norm(S-results.ialm.Shat,'fro')/norm(S,'fro');

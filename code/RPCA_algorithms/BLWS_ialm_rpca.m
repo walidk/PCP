@@ -63,7 +63,7 @@ elseif maxIter == -1
 end
 
 if nargin < 5
-    blk = 1; % Max Apr 14
+    blk = 0; % Max Apr 14
 elseif blk == -1
     blk = 0;
 end
