@@ -1,0 +1,383 @@
+\subsection{Proof of the equivalence of the Bernoulli sampling and uniform sampling model }
+\begin{theorem}
+Let $E$ be the event that the recovery of $(L_{0},S_{0})$ is exact
+through the RPCA. Then, $\forall\epsilon>0$,
+\end{theorem}
+
+\begin{itemize}
+\item With $\rho=\frac{m}{n^{2}}+\epsilon$, $E$ holds with high probability when the sparse matrix $S_{i,j}\sim Bern(\rho)$ iid $\Longrightarrow$$E$ holds with high probability when the sparse matrix $S\sim Uniform(m)$. 
+\item With $\rho=\frac{m}{n^{2}}-\epsilon$, $E$ holds with high probability when the sparse matrix $S\sim Uniform(m)$ $\Longrightarrow$ $E$ holds with high probability when the sparse matrix $S_{i,j}\sim Bern(\rho)$
+iid 
+\end{itemize}
+\begin{proof}
+Let us use the notation of subscrpt to denote the underlying sampling process, e.g. ,$P_{B(\rho)}(E)$ and $P_{U(m)}(E)$ be the probability of success recovery using Bernoulli sampling and uniform sampling respectively. We then upper and lower bound the difference of $P_{B(\rho)}(E)-P_{U(m)}(E)$ and show that the difference goes to zero as the dimension of the matrix $n\to\infty$. \\
+
+\begin{eqnarray*}
+ &  & P_{B(\rho)}(E)\\
+ & = & \sum_{i=0}^{n^{2}}P_{B(\rho)}(|\Omega|=i)P_{B(\rho)}(E\mid|\Omega|=i)\\
+ & = & \sum_{i=0}^{n^{2}}P_{B(\rho)}(|\Omega|=i)P_{U(i)}(E)\\
+ & \le & \sum_{i=0}^{m-1}P_{B(\rho)}(|\Omega|=i)+\sum_{i=m}^{n^{2}}P_{U(i)}(E)P_{B(\rho)}(|\Omega|=i)\\
+ & \le & \sum_{i=0}^{m-1}P_{B(\rho)}(|\Omega|=i)+\sum_{i=m}^{n^{2}}P_{U(i)}(E)P_{B(\rho)}(|\Omega|=i)\\
+ & \le & \sum_{i=0}^{m-1}P_{B(\rho)}(|\Omega|=i)+\sum_{i=m}^{n^{2}}P_{U(m)}(E)P_{B(\rho)}(|\Omega|=i)\\
+ & \le & P_{B(\rho)}(|\Omega|<m)+P_{U(m)}(E)
+\end{eqnarray*}
+
+
+This gives, $P_{B(\rho)}(E)-P_{U(m)}(E)\le P_{B(\rho)}(|\Omega|<m)$. With $\rho=\frac{m}{n^{2}}+\epsilon$, by law of large number, when $n\to\infty$ we get, $P_{B(\rho)}(E)\le P_{U(m)}(E)$ .
+
+On the other hand, 
+\begin{eqnarray*}
+ &  & P_{B(\rho)}(E)\\
+ & \ge & \sum_{i=0}^{m}P_{B(\rho)}(|\Omega|=i)P_{B(\rho)}(E\mid|\Omega|=i)\\
+ & \ge & P_{U(m)}(E)\sum_{i=0}^{m}P_{B(\rho)}(|\Omega|=i)\\
+ & = & P_{U(m)}(E)(1-P_{B(\rho)}(|\Omega|>m))\\
+ & \ge & P_{U(m)}(E)-P_{B(\rho)}(|\Omega|>m)
+\end{eqnarray*}
+
+
+This gives, $P_{B(\rho)}(E)-P_{U(m)}\ge-P_{B(\rho)}(|\Omega|>m)$. With $\rho=\frac{m}{n^{2}}-\epsilon$, by law of large number, when $n\to\infty$ we get, $P_{B(\rho)}(E)\ge P_{U(m)}(E)$ .
+\end{proof}
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\subsection{Proof of the Lemma about golfing scheme and dual certificate }
+
+Golfing scheme:
+
+Recall that the golfing scheme involves creating a $W^{L}$ according to the following method. 
+\begin{enumerate}
+\item Fix $j_{0}\ge1$, define $\Omega_{j}\sim Bern(q)$ iid with $1\le j\le j_{0}$ and $\rho=(1-q)^{j_{0}}$. Define the complement of support of $\Omega$ by $\Omega=\cup_{1\le j\le j_{0}}\Omega_{j}^{C}$. 
+\item Define a sequence of matrix which finally ends at $W^{L}$
+
+\begin{enumerate}
+\item $Y_{0}=0$
+\item $Y_{j}=Y_{j-1}+\frac{1}{q}P_{\Omega_{j}}P_{T}(UV^{*}-Y_{j-1})$ for $1\le j\le j_{0}$
+\item $W^{L}=P_{\ensuremath{T^{\bot}}}(Y_{j_{0}})$
+\end{enumerate}
+
+\end{enumerate}
+
+
+\begin{fact}
+\label{fact2}
+If we fix $Z\in T$, $\Omega_{0}\sim Bern(\rho_{0})$, and $\rho_{0}\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{n}$ , then with high probability, we will have, 
+
+\label{fact5}
+\[
+||Z-\rho_{0}^{-1}P_{T}P_{\Omega_{0}}(Z)||_{\infty}\le\epsilon||Z||_{\infty}
+\]
+
+\begin{fact}
+\label{fact3}
+If we fix $Z$, $\Omega_{0}\sim Bern(\rho_{0})$, and $\rho_{0}\ge C_{0}\frac{\mu\log n}{n}$, then with high probability,
+we will have, 
+\begin{eqnarray*}
+||(I-\rho_{0}^{-1}P_{\Omega_{0}})Z|| & \le & C_{0}^{'}\sqrt{\frac{n\log n}{\rho_{0}}}||Z||_{\infty}
+\end{eqnarray*}
+
+\begin{fact}
+\label{fact4}
+If $\Omega_{0}\sim Bern(\rho_{0})$,$\rho_{0}\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{n}$, then with high probability, we will have, 
+
+\[
+||P_{T}-\rho_{0}^{-1}P_{T}P_{\Omega_{0}}P_{T}||\le\epsilon
+\]
+
+\begin{fact}
+If $\Omega_{0}\sim Bern(\rho)$ and $1-\rho\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{n}$, then with high probability $||P_{\Omega}P_{T}||^{2}\le\rho+\epsilon$ 
+\end{fact}
+\end{fact}
+\end{fact}
+\end{fact}
+
+
+\begin{thm}
+Let $S\sim Bern(\rho)$ iid for each entry with $\Omega$ as its support set. Set $j_{0}=2\log n$. With the assumptions in the main theorem of RPCA, $W^{L}$ satisfies the following with high probability. 
+\begin{enumerate}
+\item $||W^{L}||<\frac{1}{4}$ 
+\item $||P_{\Omega}(UV^{*}+W^{L})||_{F}<\frac{\lambda}{4}$ 
+\item $||P_{\Omega^{\bot}}(UV^{*}+W^{L})||<\frac{\lambda}{4}$ 
+\end{enumerate}
+\end{thm}
+
+\begin{proof}
+We define another sequence of matrix $Z_{j}=UV^{*}-P_{T}(Y_{j})$. There are some properties about $Z_{j}$ which allows us to esbablish the proof. We survey them here and provides the proof of them. 
+
+i) Note that $Z_{j}=(P_{T}-\frac{1}{q}P_{T}P_{\Omega_{j}}P_{T})Z_{j-1}.$The reason is as follows.
+\begin{eqnarray*}
+ & Z_{j}\\
+ & = & UV^{*}-P_{T}(Y_{j-1}+\frac{1}{q}P_{\Omega_{j}}P_{T}(UV^{*}-Y_{j-1}))\\
+ & = & UV^{*}-P_{T}(Y_{j-1})-\frac{1}{q}P_{T}P_{\Omega_{j}}P_{T}(UV^{*}-Y_{j-1})\\
+ & = & Z_{j-1}-q^{-1}(P_{T}P_{\Omega_{j}}(UV^{*}-P_{T}(Y_{j-1})))\text{ because }P_{T}(UV^{*})=UV^{*}\\
+ & = & P_{T}(Z_{j-1})-q^{-1}(P_{T}P_{\Omega_{j}}P_{T}Z_{j-1})\text{ because }Z_{j-1}\in T\\
+ & = & (P_{T}-q^{-1}P_{T}P_{\Omega_{j}}P_{T})Z_{j-1}
+\end{eqnarray*}
+
+
+ii) If $q\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{n}$, then $||Z_{j}||_{\infty}\le\epsilon^{j}||UV^{*}||_{\infty}$ with high probability. The reason is as follows. By Fact (\ref{fact2}), we have, 
+
+\begin{eqnarray*}
+||Z_{j-1}-q^{-1}P_{T}P_{\Omega_{j}}Z_{j-1}||_{\infty} & \le & \epsilon||Z_{j-1}||_{\infty}\\
+||Z_{j}||_{\infty} & \le & \epsilon||Z_{j-1}||_{\infty}
+\end{eqnarray*}
+
+
+Inductively, we get desired.
+
+iii) If $q\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{n}$, then $||Z_{j}||_{F}\le\epsilon^{j}\sqrt{r}$. The reason is as follows. By Fact (\ref{fact4}), we have, 
+
+\begin{eqnarray*}
+||(P_{T}-q^{-1}P_{T}P_{\Omega_{0}}P_{T})(\frac{Z_{j-1}}{||Z_{j-1}||_{F}})||_{F} & \le & \epsilon\\
+||(P_{T}-q^{-1}P_{T}P_{\Omega_{0}}P_{T})Z_{j-1}||_{F} & \le & \epsilon||Z_{j-1}||_{F}\\
+||Z_{j-1}|| & \le & \epsilon||Z_{j-1}||_{F}
+\end{eqnarray*}
+
+
+Inductively, we get desired.
+
+After establishing these properties, we are ready to prove that golfing scheme yields $W^{L}$ that satisfies the desired properties.
+
+1) Proof of (1): 
+\begin{eqnarray*}
+||W^{L}|| & = & ||P_{T^{\bot}}(Y_{j_{0}})||\\
+ & \le & \sum_{j=1}^{j_{0}}\frac{1}{q}||P_{T^{\bot}}P_{\Omega_{j}}Z_{j-1}||\text{ because }Y_{j}=Y_{j-1}+q^{-1}P_{\Omega_{j}}(Z_{j-1})\\
+ & = & \sum_{j=1}^{j_{0}}||P_{T^{\bot}}(\frac{1}{q}P_{\Omega_{j}}Z_{j-1}-Z_{j-1})||\text{ because }Z_{j}\in T\\
+ & \le & \sum_{j=1}^{j_{0}}||(\frac{1}{q}P_{\Omega_{j}}Z_{j-1}-Z_{j-1})||\text{ because }||P_{T^{\bot}}(M)||\le||M||\\
+ & \le & C_{0}^{'}\sqrt{\frac{n\log n}{q}}\sum_{j=1}^{j_{0}}||Z_{j-1}||_{\infty}\text{ because Fact(\ref{fact3})}\\
+ & \le & C_{0}^{'}\sqrt{\frac{n\log n}{q}}\sum_{j=1}^{j_{0}}\epsilon^{j}||UV^{*}||_{\infty}\\
+ & \le & C_{0}^{'}\sqrt{\frac{n\log n}{q}}\frac{1}{1-\epsilon}||UV^{*}||_{\infty}\\
+ & \le & C_{0}^{'}\sqrt{\frac{n\log n}{q}}\frac{1}{1-\epsilon}\frac{\sqrt{\mu r}}{n}\\
+ & \le & C^{''}\epsilon<\frac{1}{4}\text{for some constant }C^{''}
+\end{eqnarray*}
+
+
+2) Proof of (2) : First, we expand, 
+\begin{eqnarray*}
+||P_{\Omega}(UV^{*}+W^{L})||_{F} & = & ||P_{\Omega}(UV^{*}+P_{T^{\bot}}Y_{j_{0}})||_{F}
+\end{eqnarray*}
+
+Then, because $P_{\Omega}(Y_{j_{0}})=P_{\Omega}(\sum_{j}P_{\Omega_{j}}Z_{j-1})=0$ and $P_{\Omega}(P_{T}(Y_{j_{0}})+P_{T^{\bot}}(Y_{j_{0}}))=0$, we have, 
+\begin{eqnarray*}
+||P_{\Omega}(UV^{*}+W^{L})||_{F} & = & ||P_{\Omega}(UV^{*}-P_{T}Y_{j_{0}})||_{F}
+\end{eqnarray*}
+
+
+Continuing, 
+\begin{eqnarray*}
+||P_{\Omega}(UV^{*}+W^{L})||_{F} & = & ||P_{\Omega}(Z_{j_{0}})||_{F}\\
+ & \le & ||Z_{j_{0}}||_{F}\\
+ & \le & \epsilon^{j_{0}}\sqrt{r}\\
+ & \le & \sqrt{r}\frac{1}{n^{2}}\le\frac{\lambda}{4}
+\end{eqnarray*}
+
+
+3) Proof of (3) : 
+\begin{eqnarray*}
+||P_{\Omega^{\bot}}(UV^{*}+W^{L})||_{\infty} & = & ||P_{\Omega^{\bot}}(Z_{j_{0}}+Y_{j_{0}})||_{\infty}\\
+ & \le & ||Z_{j_{0}}||_{\infty}+||Y_{j_{0}}||_{\infty}\\
+ & \le & ||Z_{j_{0}}||_{F}+||Y_{j_{0}}||_{\infty}\\
+ & \le & \frac{\lambda}{8}+||Y_{j_{0}}||_{\infty}
+\end{eqnarray*}
+
+
+Moreover, we have 
+\begin{eqnarray*}
+||Y_{j_{0}}||_{\infty} & \le & q^{-1}\sum_{j}||P_{\Omega_{j}}Z_{j-1}||_{\infty}\\
+ & \le & q^{-1}\sum_{j}||Z_{j-1}||_{\infty}\\
+ & \le & q^{-1}\sum_{j}\epsilon^{j}\frac{\sqrt{\mu r}}{n}\\
+ & \le & \frac{\lambda}{8}\text{ if \ensuremath{\epsilon}\ \text{is sufficiently small}}
+\end{eqnarray*}
+
+\end{proof}
+
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\subsection{Proof of the Lemma about least square construction and dual certificate }
+
+Construction of $W^{S}$:
+
+\[
+W_{S}=\lambda P_{T^{\bot}}((P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}sign(S_{0}))
+\]
+
+\begin{thm}
+Let $S\sim Bern(\rho)$ iid for each entry with $\Omega$ as its support set. With the assumptions in the main theorem of RPCA, $W^{S}$ satisfies the following with high probability. 
+\begin{enumerate}
+\item $||W^{S}||<\frac{1}{4}$ 
+\item $||P_{\Omega^{\bot}}(W^{S})||<\frac{\lambda}{4}$ 
+\end{enumerate}
+\end{thm}
+\begin{proof}
+We consider the sign of $S_{0}$ to be distrbuted as follows 
+\[
+sign(S_{0})_{i,j}=\begin{cases}
+1 & \text{wp }\frac{\rho}{2}\\
+0 & \text{wp }1-\rho\\
+-1 & \text{wp }\frac{\rho}{2}
+\end{cases}
+\]
+
+
+1) Proof of (1) :
+
+I) We note the we can separate $W^{S}$into two parts and then bound them separately. 
+
+\begin{eqnarray*}
+W^{S} & = & \lambda P_{T^{\bot}}(sign(S_{0}))+\lambda P_{T^{\bot}}(\sum_{k\ge1}(P_{\Omega}P_{T}P_{\Omega})^{k}(sign(S_{0})))
+\end{eqnarray*}
+
+
+II) Then, we have 
+\begin{eqnarray*}
+\lambda P_{T^{\bot}}(sign(S_{0})) & \le & \lambda||sign(S_{0})||\\
+ & = & \frac{1}{\sqrt{n}}||sign(S_{0})||\\
+ & \le & 4\sqrt{\rho}\text{with high probability}
+\end{eqnarray*}
+
+
+where the last inequality uses the fact that for the entry-wise distribution of $sign(S_{0}$) , we can have $||sign(S_{0})||\le4\sqrt{n\rho}$ holds with high probability. 
+
+III) Now, for the other part, $\lambda P_{T^{\bot}}(\sum_{k\ge1}(P_{\Omega}P_{T}P_{\Omega})^{k}(sign(S_{0})))$, we bound it by first expressing it in the form of $<X,sign(S_{0})>$ and then claim that with high probability, this term is bounded above as desired. Let $R=\sum_{k\ge1}(P_{\Omega}P_{T}P_{\Omega})^{k}$ ,
+then we have, 
+\begin{eqnarray*}
+||P_{T^{\bot}}(R(sign(S_{0})))|| & \le & ||R(sign(S_{0}))||\\
+ & \le & 4\sup_{x,y\in N}<y,R(sign(S_{0})x)>
+\end{eqnarray*}
+
+
+where the last inequality uses the fact that there exists a $\frac{1}{2}-net$ of the Eucledean ball and it has at most $6^{n}$ elements. Continuing, we have 
+\begin{eqnarray*}
+||P_{T^{\bot}}(R(sign(S_{0})))|| & \le & 4\sup_{x,y\in N}<y,R(sign(S_{0})x)>\\
+ & = & 4\sup_{x,y\in N}<yx^{*},R(sign(S_{0}))>\\
+ & = & 4\sup_{x,y\in N}<R(yx^{*}),sign(S_{0})>
+\end{eqnarray*}
+
+
+and that we denote $X(x,y)=<R(yx^{*}),sign(S_{0})>$ afterwards.
+
+Note that, by Hoeffding's inequality, we have, 
+\begin{eqnarray*}
+Pr(|X(x,y)|>t\mid\Omega) & \le & 2exp(-\frac{t^{2}}{2||R(xy^{*})||_{F}^{2}})
+\end{eqnarray*}
+
+
+This gives, 
+\begin{eqnarray*}
+Pr(||P_{T^{\bot}}(R(sign(S_{0})))||>4t\mid\Omega) & \le & Pr(||R(sign(S_{0}))||>4t\mid\Omega)\\
+ & \le & Pr(\sup_{x,y}|X(x,y)|>t\mid\Omega)\\
+ & \le & 2N^{2}exp(-\frac{t^{2}}{2||R||_{F}^{2}})\text{because }||yx^{*}||_{F}\le1
+\end{eqnarray*}
+
+
+Now, we proceed to bound the probability without the condition on $\Omega$. 
+
+First, note that the event of $||P_{\Omega}P_{T}||\le\sigma=\rho+\epsilon$, implies that $||R||\le(\frac{\sigma^{2}}{1-\sigma^{2}})^{2}$. Thus, unconditionally, we have 
+\begin{eqnarray*}
+Pr(||R(sign(S_{0}))||>4t) & \le & 2|N|^{2}exp(\frac{-t^{2}}{2(\frac{\sigma^{2}}{1-\sigma^{2}})^{2}})+Pr(||P_{\Omega}P_{T}||>\sigma)\\
+ & \le & 2\cdot6^{2n}exp(\frac{-t^{2}}{2(\frac{\sigma^{2}}{1-\sigma^{2}})^{2}})+Pr(||P_{\Omega}P_{T}||>\sigma)
+\end{eqnarray*}
+
+
+Thus, where we finally put $t=\frac{1}{16}$ 
+\begin{eqnarray*}
+Pr(\lambda||R(sign(S_{0}))||>4t) & \le & 2\cdot6^{2n}exp(\frac{-\frac{t^{2}}{\lambda^{2}}}{2(\frac{\sigma^{2}}{1-\sigma^{2}})^{2}})+Pr(||P_{\Omega}P_{T}||>\sigma)
+\end{eqnarray*}
+
+
+With $\lambda=\sqrt{\frac{1}{n}},$we have this probability$\to0$ as $n\to\infty$. Thus with high probability $||W^{S}||\le\frac{1}{4}$
+
+2) Proof of (2) :
+
+The idea is that we first express $P_{\Omega^{\bot}}(W^{S})$ in the form of $<X,sign(S_{0})>$and we can derive upper bound on it if highly probably event of $\{||P_{\Omega}P_{T}||\le\sigma\}$ for some small $\sigma=\rho+\epsilon$ holds . 
+
+I) First, 
+\begin{eqnarray*}
+P_{\Omega^{\bot}}(W^{S}) & = & P_{\Omega^{\bot}}(\lambda(I-P_{T})(\sum_{k\ge0}(P_{\Omega}P_{T}P_{\Omega})^{k})sign(S_{0}))\\
+ & = & -\lambda P_{\Omega^{\bot}}P_{T}(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}sign(S_{0})
+\end{eqnarray*}
+
+
+For $(i,j)\in\Omega^{C}$, we have 
+\begin{eqnarray*}
+e_{i}^{*}W^{S}e_{j} & = & <e_{i}e_{j}^{*},W_{S}>\\
+ & = & <e_{i}e_{j}^{*},-\lambda P_{\Omega^{\bot}}P_{T}(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}sign(S_{0})>\\
+ & = & -\lambda<e_{i}e_{j}^{*},P_{T}(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}sign(S_{0})>\\
+ & = & -\lambda<e_{i}e_{j}^{*},P_{T}P_{\Omega}(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}sign(S_{0})>\\
+ & = & -\lambda<e_{i}e_{j}^{*},P_{T}\sum_{k\ge0}(P_{\Omega}P_{T}P_{\Omega})^{k}sign(S_{0})>
+\end{eqnarray*}
+
+
+Noting that $P_{\Omega},P_{T}$ are self-adjoint, thus, we have 
+\begin{eqnarray*}
+e_{i}^{*}W^{S}e_{j} & = & \lambda<-(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}P_{\Omega}P_{T}(e_{i}e_{j}^{*}),sign(S_{0})>
+\end{eqnarray*}
+
+
+where we now denote $X(i,j)=-(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}P_{\Omega}P_{T}(e_{i}e_{j}^{*})$
+
+II)We now consider, where we put $t=\frac{1}{4}$, 
+\begin{eqnarray*}
+Pr(||P_{\Omega^{\bot}}(W^{S})||_{\infty}>t\lambda\mid\Omega) & \le & \sum_{(i,j)\in\Omega^{C}}Pr(|e_{i}^{*}W^{S}e_{j}|>t\lambda|\Omega)\\
+ & \le & n^{2}Pr(|e_{i}^{*}W^{S}e_{j}|>t\lambda|\Omega)\text{ for some (i,j)}\\
+ & = & n^{2}Pr(|<X_{i,j},sign(S_{0})>|>t|\Omega)\\
+ & \le & 2n^{2}exp(-\frac{2t^{2}}{4||X(i,j)||_{F}})\text{ because of Hoeffding's inequality}
+\end{eqnarray*}
+
+
+III) We then proceed to bound the $||X(i,j)||$. On the event of $\{||P_{\Omega}P_{T}||\le\sigma\}$,
+we have , 
+\begin{eqnarray*}
+||P_{\Omega}P_{T}(e_{i}e_{j}^{*})||_{F} & \le & ||P_{\Omega}P_{T}||\cdot||P_{T}(e_{i}e_{j}^{*})||_{F}\\
+ & \le & \sigma\sqrt{\frac{2\mu r}{n}}
+\end{eqnarray*}
+
+
+Moreover, we have 
+\begin{eqnarray*}
+||(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}|| & \le & \sum_{k\ge0}||(P_{\Omega}P_{T}P_{\Omega})^{k}||\\
+ & \le & \frac{1}{1-\sigma}
+\end{eqnarray*}
+
+
+Finally, we have 
+\begin{eqnarray*}
+||X(i,j)||_{F} & \le & 2\sigma^{2}\frac{\frac{\mu r}{n}}{(1-\sigma)^{2}}
+\end{eqnarray*}
+
+
+Combining, we have 
+\begin{eqnarray*}
+Pr(||P_{\Omega^{\bot}}W^{S}||>t\lambda) & \le & 2n^{2}exp(\frac{-t^{2}n(1-\sigma)^{2}}{4\sigma^{2}(\mu r)})+Pr(||P_{\Omega}P_{T}||\ge\sigma)\\
+ & \le & \epsilon\text{ if }\mu r<\rho_{r}^{'}\frac{n}{\log n}
+\end{eqnarray*}
+
+\end{proof}
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\subsection{Proof of the form of sub-differential of nuclear norm }
+\begin{definition}
+For matrix norms $||\cdot||$ which satisfy $||UAV||=||A||$ $\forall U,V$ being orthonormal, then they are called orthogonally invariant norm. 
+
+\begin{definition}
+For orthogonally invariant norm $||\cdot||$ which is defined by its singular values $||A||=\phi(\vec{\sigma})$ where $\vec{\sigma}$ are the singular values of $A$, we call the function $\phi$ as a symmetric gauge function if it is a norm and it satisfies $\phi(\vec{\sigma})=\phi(\epsilon_{1}\sigma_{i_{1}},...,\epsilon_{n}\sigma_{i_{n}})$ for any permulation of $(i_{1},...,i_{n})$ of $(1,...,n)$ and $\epsilon_{i}=\pm1$.
+
+\begin{fact}
+\label{fact10}
+For orthogonally invariant norm $||\cdot||$ with symmetric
+gauge function $\phi$, the sub-differential is given by
+
+\begin{eqnarray*}
+\partial||A|| & = & \{Udiag(\vec{d})V\mid A=U\Sigma V^{T},\vec{d}\in\partial\phi(\vec{d}),U\in R^{m},V\in R^{n}\}
+\end{eqnarray*}
+
+\end{fact}
+\end{definition}
+\end{definition}
+
+\begin{thm}
+Let $A=U^{(1)}\Sigma{V^{(1)}}^{T}$ then $\partial||A||_{*}=\{U^{(1)}{V^{(1)}}^{T}+W:||W||\le1,{U^{(1)}}^{T}W=0,WV^{(1)}=0\}$ 
+\end{thm}
+
+\begin{proof}
+We take the symmetric gauge function as $||\cdot||_{1}$and then apply the Fact (\ref{fact10}) and will obtain desired.
+\end{proof}
+
