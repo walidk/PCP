@@ -695,6 +695,19 @@ The PROPACK package has later also been modified to allow the computation of tho
 
 Another potential way of speeding up many SVD-based algorithms is to exploit the fact that the matrix of which the SVD has to be computed does generally not change much between iterations, in particular after a few iterations. To utilize this fact, the authors of~\cite{Lin:2010uq} propose a warm start technique for the block Lanczos method for SVD computation. 
 
+Figure~\ref{Algorithms:Discussion:SVD:BLWScomptarison:figure} shows a comparison of the performance of the warm-start block Lanczos method~\cite{Lin:2010uq} on synthetic data of different size. It can be seen that the running time of the warm-start method is roughly two thirds of that of the standard method, over all dimensions considered in the simulation. The relative errors of the solution, given by $\|\hat{L}-L\|_F/\norm{L}{F}{}$ and $\|\hat{S}-S\|_F/\norm{S}{F}{}$, respectively, are generally worse than those of the standard method. This is due to the fact that only an approximate SVD is computed at each iteration. What is remarkable in Figure~\ref{Algorithms:Discussion:SVD:BLWScomptarison:figure} is that the number of iterations is essentially independent of the matrix size. Note however that this strong consistency very likely also has to do with the fact that all the considered randomly generated matrices are structurally identical. 
+
+We want to emphasize here that the implementation of the warm-start block Lanczos method, as provided by~\cite{Lin:2011kx}, is completely Matlab-based and not fully optimized for performance. A careful implementation of the overall warm-start block Lanczos based inexact ALM algorithm in a performance-oriented language such as~C can be expected to yield further speedups. Nevertheless, even with the current implementation it is possible to solve rather large problems quite fast, with problems involving matrices with tens of million entries being solved in a few minutes. 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\textwidth]{../figures/BLWS_comparison}
+\caption{Numerical comparison of warm-start vs. standard Block-Lanczcos method}
+\label{Algorithms:Discussion:SVD:BLWScomptarison:figure}
+\end{figure}
+
+
+
 
 
 
