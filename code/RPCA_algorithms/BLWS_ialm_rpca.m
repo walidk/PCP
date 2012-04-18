@@ -94,7 +94,7 @@ mark = false;
 Block_mark = false ;
 
 while ~converged       
-    iter = iter + 1;
+    iter = iter + 1
     
     temp_T = D - A_hat + (1/mu)*Y;
     E_hat = max(temp_T - lambda/mu, 0);
