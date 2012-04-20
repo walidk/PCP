@@ -27,8 +27,12 @@ function results = rpca_wrapper(L,S,lambda,options)
     %% interior point on the dual (using cvx)
     if options.intpt.active               
         disp('Starting Interior Point Algorithm on the Dual');
+        if isfield(options.intpt,'solver')
+            if strcmp(options.intpt.solver,'sedumi'), cvx_solver sedumi; end
+            if strcmp(options.intpt.solver,'sdpt3'), cvx_solver sdpt3; end
+        end
         tic;
-        flag = cvx_quiet(false);
+        flag = cvx_quiet(true);
         cvx_precision(options.intpt.tol);
         cvx_begin        
             variable Y(m,n);

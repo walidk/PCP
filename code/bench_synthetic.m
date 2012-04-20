@@ -10,25 +10,26 @@
 %% select which algorithms to run, set other options
 
 % set to one if algorithm should be used (default is 0)
-options.intpt.active = 0;
+options.intpt.active = 1;
 options.itth.active = 0;
 options.apg.active = 0;
 options.papg.active = 0;
 options.dpga.active = 0;
 options.ealm.active = 0;
-options.ialm.active = 1;
-options.BLWSialm.active = 1;
+options.ialm.active = 0;
+options.BLWSialm.active = 0;
 
 
 % specify settings of the different algorithms
 options.intpt.tol = 'low'; % default: 'standard'
-options.itth.tol = 1e-4; % default: 5e-4 
-options.apg.tol = 1e-6; % default: 1e-6 
-options.papg.tol = 1e-6; % default: 1e-7 
-options.dpga.tol = 5e-6*norm(M,'fro'); % default: 2e-5*norm(M,'fro')
-options.dpga.maxIter = 2000; % default: 1000 
-options.ealm.tol = 1e-7; % default: 1e-7
-options.ialm.tol = 1e-7; % default: 1e-7
+options.intpt.solver = 'sedumi'; % default: 'sedumi'
+% options.itth.tol = 1e-4; % default: 5e-4 
+% options.apg.tol = 1e-6; % default: 1e-6 
+% options.papg.tol = 1e-6; % default: 1e-7 
+% options.dpga.tol = 5e-6*norm(M,'fro'); % default: 2e-5*norm(M,'fro')
+% options.dpga.maxIter = 2000; % default: 1000 
+% options.ealm.tol = 1e-7; % default: 1e-7
+% options.ialm.tol = 1e-7; % default: 1e-7
 options.BLWSialm.tol = 1e-8; % default: 1e-7
 options.BLWSialm.maxIter = 1000; % default: 1000
 
@@ -47,6 +48,24 @@ options.BLWSialm.maxIter = 1000; % default: 1000
 %     Lerrs(i) = algstruct.errL;
 %     Serrs(i) = algstruct.errS;
 % end
+
+%%
+m=20;
+n=m;
+rk = 0.1*m;
+rho =0.1;
+maxErr = 500;
+
+L = 10*randn(m,rk) * randn(rk,n);
+tmpS = sprand(m,n,rho);
+S = maxErr*2*(tmpS-0.5*sign(tmpS));
+M = L + S;
+
+%%
+
+lambda = 1/sqrt(m); % default value
+tmpresult = rpca_wrapper(L,S,lambda,options);
+
 
 %% Compare ialm and BLWS ialm for random data of different size
 
