@@ -146,7 +146,18 @@ If $\lambda \leq 1$, then ....
 \subsubsection{Using Interior Point Methods to Solve the Dual}
 \label{Algorithms:MainAlgs:IPM:Complexity:Subsubsec}
 
-Problem~\eqref{Algorithms:MainAlgs:IPM:SDPform:DualSimpler} is an SDP and can therefore in principle be solved using off-the-shelf solver packages like~\cite{Sturm:1999uq} and~\cite{Toh:1999kx}. These solvers are based on interior point methods which offer superior convergence rates~\cite{Boyd:2004aa} but unfortunately do not scale particularly well with the size of the matrix~$M$. The reason for this is that the computation of the step direction relies on second-order information of the (barrier-augmented) objective function, the computation of which is infeasible when the number of variables is very high. For applications that involve large-scale data matrices (with~$m$ in the thousands or even millions), the use interior point methods therefore quickly becomes infeasible. In order to overcome this scalability issue, a variety of first-order methods exploiting the particular structure of the Robust PCA problem have been proposed. Some of these methods will be described in the following.
+Problem~\eqref{Algorithms:MainAlgs:IPM:SDPform:DualSimpler} is an SDP and can therefore in principle be solved using off-the-shelf solver packages such as \texttt{sedum}~\cite{Sturm:1999uq} and \texttt{sdpt3}~\cite{Toh:1999kx}. These solvers are based on interior point methods which offer superior convergence rates~\cite{Boyd:2004aa} but unfortunately do not scale ell at all with the size of the matrix~$M$. Figure~\ref{Algorithms:MainAlgs:IPM:Complexity:figure} shows the average running time over 10 instances of the dual problem for the solvers \texttt{sedumi} and \texttt{sdpt3} for randomly generated data of very low dimensions. 
+%
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.5\textwidth]{../figures/intpt_comparison}
+\caption{Average running time of interior point methods for the dual problem}
+\label{Algorithms:MainAlgs:IPM:Complexity:figure}
+\end{figure}
+%
+There is a surprisingly big difference in terms of the running times: \texttt{sdpt3} is consistently faster than \texttt{sedumi}, with the spread growing significantly with the problem size. For the largest dimension \texttt{sdpt3} on average is 8 times faster than \texttt{sedumi} for this particular problem. To be able to give a realistic assessment of why this is the case would however require detailed knowledge of the solver implementation. 
+
+In any case it is obvious that, with an average running time of the faster of the two solvers of more than 2 minutes even on toy-sized problems with only 2500 matrix entries, interior point solvers are unsuitable for most problem of interest. The reason for this extremely bad scaling with the matrix dimension is that the computation of the Newton step direction relies on second-order information of the (barrier-augmented) objective function, the computation of which is infeasible when the number of variables is very high. For applications that involve large-scale data matrices (with~$mn$ in the millions or even billions), using interior point methods therefore is essentially impossible. In order to overcome this scalability issue, a variety of first-order methods exploiting the particular structure of the Robust PCA problem have been proposed. Some of these methods will be described in the following.
 
 %A bottleneck in higher dimensions is in particular the complexity of computing the Newton step direction, which is~$O(m^6)$ (CHECK THIS, PROVIDE REFERENCE). For applications that involve large-scale data matrices (with~$m$ in the thousands or even millions), the use interior point methods therefore quickly becomes infeasible.
 %
@@ -169,7 +180,7 @@ Among the first techniques used to solve~\eqref{Algorithms:Overview:RecallRPCA} 
 \label{Algorithms:MainAlgs:ITM:Relax}
 \end{align}
 %
-where $\tau \gg 1$ is a scalar parameter. Generalizing the result from~\cite{Cai:2010uq} (which considers the matrix completion problem, i.e. $S=0$), the authors of~\cite{Wright:2009fk} argue that for large values of~$\tau$ the solution of~\eqref{Algorithms:MainAlgs:ITM:Relax} will be very close to that of~\eqref{Algorithms:Overview:RecallRPCA} (but interestingly enough they do not prove it!). One can now use iterative thresholding techniques to solve~\eqref{Algorithms:MainAlgs:ITM:Relax}. Although the resulting algorithm has little relevance in practice because of its extremely slow convergence, we will see in the following sections that its main ideas are the basis for a number of other similar algorithms. Therefore we briefly describe the iterative thresholding algorithm here.\\ 
+where $\tau \gg 1$ is a scalar parameter. Generalizing the result from~\cite{Cai:2010uq} (which considers the matrix completion problem, i.e. $S=0$), the authors of~\cite{Wright:2009fk} argue that for large values of~$\tau$ the solution of~\eqref{Algorithms:MainAlgs:ITM:Relax} will be very close to that of~\eqref{Algorithms:Overview:RecallRPCA} (but interestingly enough they do not prove it!). One can now use iterative thresholding techniques to solve~\eqref{Algorithms:MainAlgs:ITM:Relax}. Although the resulting algorithm has little relevance in practice because of its extremely slow convergence, we will see in the following sections that its main ideas are the basis for a number of other similar algorithms. Therefore we briefly review the iterative thresholding algorithm here.\\ 
 
 The Lagrangian of the problem~\eqref{Algorithms:MainAlgs:ITM:Relax} is given by
 %
@@ -267,7 +278,9 @@ $Y_k = Y_{k-1} + t_k (M-L_k-S_k)$\;
 \label{Algorithms:MainAlgs:ITM:Algorithm}
 \end{algorithm}
 
-Algorithm~\ref{Algorithms:MainAlgs:ITM:Algorithm} is extremely simple to implement, as each iteration only requires the computation of an SVD of the current dual variable~$Y_k$ and a few elementary matrix operations. Note that, in fact, since the shrinking operator sets all singular values less than the threshold parameter to zero one really only needs to compute the singular values that lie above this threshold. However, while this iterative thresholding scheme is very simple and has been proved to converge, its convergence unfortunately is extremely slow. The authors of~\cite{Wright:2009fk} found that it typically requires about~$10^4$ iterations to converge for problems of reasonable size. Furthermore it is hard to find good general schemes to optimize the choice of the step size~$t_k$~\cite{Lin:2010fk}. Therefore the practical applicability of this approach is limited.
+Algorithm~\ref{Algorithms:MainAlgs:ITM:Algorithm} is extremely simple to implement, as each iteration only requires the computation of an SVD of the current dual variable~$Y_k$ and a few elementary matrix operations. Note that, in fact, since the shrinking operator sets all singular values less than the threshold parameter to zero one really only needs to compute the singular values that lie above this threshold. In section~\ref{Algorithms:Discussion:SVD:PartialSVD:Subsubsec} we will discuss how this can be exploited to achieve potential speedups in all of the algorithms considered in this chapter.
+
+While this iterative thresholding scheme is very simple and has been proved to converge, its convergence unfortunately is extremely slow. The authors of~\cite{Wright:2009fk} found that it typically requires about~$10^4$ iterations to converge for problems of reasonable size. Furthermore it is hard to find good general schemes to optimize the choice of the step size~$t_k$~\cite{Lin:2010fk}. As it turns out the other algorithms discussed in the following sections have a comparable complexity but converge much faster, both in theory and practice. Therefore the practical applicability of this approach is limited.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -401,12 +414,12 @@ Let $F(X) = F(L,S) := \bar{\mu} \norm{L}{*}{} + \bar{\mu} \lambda \norm{S}{1}{} 
 \begin{align*}
 F(X_k) - F(X^*) \leq \frac{4\norm{C_{k_0}-X^*}{F}{2}}{(k-k_0+1)^2}
 \end{align*}
-where~$C_1 = \log(\mu_0/\bar{\mu})$ and $X^*$ is any solution to~\eqref{Algorithms:MainAlgs:PGM:APGRPCA:Relax}.
+where~$C_1 = \log(\mu_0/\bar{\mu})$ and $X^*$ is any solution to~\eqref{Algorithms:MainAlgs:PGM:APGRPCA:Relax}.\\
 \end{theorem}
 
 
 \begin{remark}[Accuracy of the APG method]
-Note that for any finite $\bar{\mu}$ Algorithm~\ref{Algorithms:MainAlgs:PGM:APGRPCA:Algorithm} provides only an approximate solution of the Robust PCA problem due to the replacement of the equality constraint with the penalty term $\frac{1}{2\bar{\mu}} \norm{L+S-M}{F}{2}$.
+Note that for any finite $\bar{\mu}$ Algorithm~\ref{Algorithms:MainAlgs:PGM:APGRPCA:Algorithm} provides only an approximate solution of the Robust PCA problem due to the replacement of the equality constraint with the penalty term $\frac{1}{2\bar{\mu}} \norm{L+S-M}{F}{2}$. In practice one therefore has to tradeoff accuracy ($\bar{\mu}$ extremely small) and computational efficiency.
 \end{remark}
 
 
@@ -482,7 +495,7 @@ $k=k+1$\;
 
 Using the properties of dual norms, it is possible to show~\cite{Lin:2009kx} that the primal solution~$(\Lhat,\Shat)$ can easily be recovered from the dual optimal~$\Yhat$. Specifically, it can be shown that if $\norm{Y_k}{2}{} <1$ or $\lambda^{-1}\norm{Y_k}{\infty}{}<1$ the solution is degenerate and given by $\Lhat = 0,\Shat =M$ (in case $\norm{Y_k}{2}{} <1$) or $\Lhat = M,\Shat =0$ (in case $\lambda^{-1} \norm{Y_k}{\infty}{} <1$). If $\norm{Y_k}{2}{} = \lambda^{-1} \norm{Y_k}{\infty}{} =1$, then $(\Lhat,\Shat)$ is any pair of points that achieves convergence of the alternating projections method described above. 
 
-The algorithm at heart is a simple projected gradient ascent algorithm, the convergence rate of which is known to be $O(1/k)$ (outer iterations, not counting the alternating projection sub-algorithm). The most costly operations are the projections $\Pcal_{2}(\cdot)$ that require the computation of the largest singular value of matrices of the same size as $M$. 
+The algorithm at heart is a simple projected gradient ascent algorithm, the convergence rate of which is known to be $O(1/k)$ (in terms of outer iterations, not counting the alternating projection sub-algorithm). The most costly operations are the projections $\Pcal_{2}(\cdot)$ that require the computation of the largest singular value of matrices of the same size as $M$. 
 
 
 
@@ -640,6 +653,15 @@ The current state of the art in terms of complexity, accuracy and convergence se
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Numerical Comparison}
+\label{Algorithms:Discussion:NumComp:Subsec}
+
+In this section we provide some simulation results to illustrate the performance of the different algorithms. As seen in section~\ref{Algorithms:MainAlgs:IPM:Complexity:Subsubsec}, using interior point methods to solve the dual problem is computationally infeasible for all but the smallest problems, hence 
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{The Importance of the SVD}
 \label{Algorithms:Discussion:SVD:Subsec}
 
@@ -670,7 +692,7 @@ When the matrix under consideration is sparse, the SVD can be carried out much f
 
 If we look at the a Singular Value Thresholding operation it is obvious that we really only needs to compute those singular values that lie above the specified threshold (which is known a priori in each step and does not depend on the singular values), since the other singular values will be set to zero anyway. One possibility to speed up the algorithms that involve thresholding of singular values is therefore to use a partial SVD to compute only those singular values of interest. For the APG algorithm the authors of~\cite{Lin:2010fk} use the software PROPACK that allows the computation of such a partial SVD. However, PROPACK by default requires the dimension of the principal singular space whose singular values are larger than the threshold, which is of course unknown a priori. Since it turns out that the rank of the the iterates~$L_k$ in the APG algorithm is monotonically increasing, a reasonable prediction of this dimension is not too hard~\cite{Lin:2010fk}. Doing so then allows to a partial SVD at each step rather than a full SVD, which can potentially speed up the algorithm (if the partial SVD can be computed efficiently). 
 
-The PROPACK package has later also been modified to allow the computation of those singular values above a given threshold~\cite{Lin:2011kx}. Figure~\ref{Algorithms:Discussion:SVD:lasvdThrVSlasvd:figure} shows a comparison of the computation times of PROPACK's standard (full) SVD routine and the algorithm~\cite{Lin:2011kx} for different thresholds. Contrary to what one would expect, the full SVD in all cases is significantly faster than the partial SVD. At this point it is not clear what the reason for this is. Either the algorithm for performing the ``thresholded SVD'' itself is very slow, or the implementation that is provided by~\cite{Lin:2011kx} is very inefficient (or both). Either way, with the currently available implementation it does not seem to make sense to compute partial SVDs. 
+The PROPACK package has later also been modified to allow the computation of those singular values above a given threshold~\cite{Lin:2011kx}. Figure~\ref{Algorithms:Discussion:SVD:lasvdThrVSlasvd:figure} shows a comparison of the computation times of PROPACK's standard (full) SVD routine and the algorithm~\cite{Lin:2011kx} for different thresholds. Contrary to what one would expect, the full SVD in all cases is significantly faster than the partial SVD. At this point it is not clear what the reason for this is. Either the algorithm for performing the ``thresholded SVD'' itself is very slow, or the implementation that is provided by~\cite{Lin:2011kx} is extremely inefficient (or both). Either way, it obviously makes no sense to use to the provided implementation to compute partial SVDs. This is not to say that partial SVD is in generally slow. In fact, in~\cite{Lin:2010fk} it is found that computing the partial SVD for a fixed dimension of the principal singular space using PROPACK indeed results in a speedup of the APG algorithm. 
 %
 \begin{figure}[htbp]
 \centering
@@ -679,13 +701,9 @@ The PROPACK package has later also been modified to allow the computation of tho
 \label{Algorithms:Discussion:SVD:lasvdThrVSlasvd:figure}
 \end{figure}
 
+If we look at the discussed algorithms, we notice another problem with the partial SVD methods: the value of the threshold for the singular value thresholding operation in all cases decreases with the iteration number. Hence the number of singular values that need be computed actually grows with the number of iterations, which means that computing a partial SVD yields the highest benefit only in the early stages of the algorithm. 
 
 
-
-
-%
-%
-%This implementation can be used also in the ALM algorithms, where singular value thresholding is applied to matrices of the form $M-S_{k} +\mu_k^{-1}Y_{k}$.
 
 
 %%%%%%%%%%%%%%%
@@ -697,7 +715,7 @@ Another potential way of speeding up many SVD-based algorithms is to exploit the
 
 Figure~\ref{Algorithms:Discussion:SVD:BLWScomptarison:figure} shows a comparison of the performance of the warm-start block Lanczos method~\cite{Lin:2010uq} on synthetic data of different size. It can be seen that the running time of the warm-start method is roughly two thirds of that of the standard method, over all dimensions considered in the simulation. The relative errors of the solution, given by $\|\hat{L}-L\|_F/\norm{L}{F}{}$ and $\|\hat{S}-S\|_F/\norm{S}{F}{}$, respectively, are generally worse than those of the standard method. This is due to the fact that only an approximate SVD is computed at each iteration. What is remarkable in Figure~\ref{Algorithms:Discussion:SVD:BLWScomptarison:figure} is that the number of iterations is essentially independent of the matrix size. Note however that this strong consistency very likely also has to do with the fact that all the considered randomly generated matrices are structurally identical. 
 
-We want to emphasize here that the implementation of the warm-start block Lanczos method, as provided by~\cite{Lin:2011kx}, is completely Matlab-based and not fully optimized for performance. A careful implementation of the overall warm-start block Lanczos based inexact ALM algorithm in a performance-oriented language such as~C can be expected to yield further speedups. Nevertheless, even with the current implementation it is possible to solve rather large problems quite fast, with problems involving matrices with tens of million entries being solved in a few minutes. 
+We want to emphasize here that the implementation of the warm-start block Lanczos method, as provided by~\cite{Lin:2011kx}, is completely Matlab-based and not fully optimized for performance. A careful implementation of the complete warm-start block Lanczos based inexact ALM algorithm in a performance-oriented language such as~C can be expected to yield further speedups. Nevertheless, even with the current implementation it is possible to solve rather large problems quite fast, with problems involving matrices with tens of million entries being solved in a few minutes. 
 
 \begin{figure}[htbp]
 \centering
@@ -718,9 +736,10 @@ We want to emphasize here that the implementation of the warm-start block Lanczo
 
 With the advent of highly parallelized computing architectures in modern CPUs and GPUs, a number of projects have been devoted to the development and implementation of algorithms that exploit this massive computing power. Examples for these are MAGMA~\cite{Smith:2010tg} and CULA~\cite{Humphrey:2010kl}, which are adapting classic high-performance linear algebra packages such as LAPACK and BLAS to the highly parallelized architecture of modern GPUs. 
 
-Some of the steps in the algorithms are inherently parallelizable, for example the entry-wise soft-thresholding of a matrix. Other steps require more work to be able to 
-
-\cite{Boyd:2011hc}
+Some of the steps in the discussed SVD-based algorithms are inherently parallelizable, for example the entry-wise soft-thresholding of a matrix, the elementary matrix operations or the computation of the Frobenius norm for the stopping criterion. The parallelization of the SVD is less obvious, but research in this area is quite active and some methods have been proposed~\cite{Berry:2005uq}. At this point we do not want to go into the details of how to parallelize the surveyed algorithms (in particular the fast augmented Lagrangian methods), we merely want to point out that we indeed see potential for further speedups and hence the use of the discussed algorithms also on large-scale data.
+%
+%
+%\cite{Boyd:2011hc}
 
 
 
@@ -738,12 +757,33 @@ p^* = \min_{L,S} \; &\norm{L}{*}{} + \lambda \norm{S}{1}{} \\
 \label{Algorithms:StablePCP:StablePCP}
 \end{align}
 %
-where $\delta>0$ is given. 
+where $\delta>0$ is given. In this section we want to give a brief outlook on what algorithms have been proposed for~\eqref{Algorithms:StablePCP:StablePCP}. While to date the literature on algorithms for this problem is less extensive than for the classic Robust PCA problem, a number of efficient ALM algorithms have already been proposed. 
 
-In~\cite{Aybat:2011vn} a number of different algorithms for Stable PCP are discussed, most of which are based on a smoothed or partially smoothed objective function and the application of Nesterov's optimal algorithms~\cite{Nesterov:2005fk}, which yields a theoretical complexity of~$O(1/\varepsilon)$. The authors also propose a first-order algorithm that works directly with the fully non-smooth objective. While they were not able to derive theoretical complexity results, empirical evidence suggests that this algorithm is very efficient in solving the problem. 
+First of all, it is not hard to reformulate problem~\eqref{Algorithms:StablePCP:StablePCP} as an SDP, which can then in principle be solved using general purpose interior point solvers. However, the same scalability issues as in the standard Robust PCA problem will prohibit the use of these methods for most problems of practical interest.
+
+In the original Stable PCP paper~\cite{Zhou:2010vn}, the authors directly use the Accelerated Proximal Gradient (APG) algorithm from section~\ref{Algorithms:MainAlgs:PGM:APGRPCA:Subsubsec} for solving an approximate version of~\eqref{Algorithms:StablePCP:StablePCP}. Using a duality argument it is easy to see that~\eqref{Algorithms:StablePCP:StablePCP} is equivalent to
+\begin{align*}
+\min_{L,S} \; &||L||_* + \lambda ||S||_1 + \frac{1}{2\mu} ||M-L-S||_F
+\end{align*}
+for some value~$\mu(\delta)$. Note that the above problem is just~\eqref{Algorithms:MainAlgs:PGM:APGRPCA:Relax}. The authors make the argument that it makes sense to choose $\mu$ to be the smallest value such that the minimizer of is likely to be $\Lhat = \Shat = 0$ if $L=S=0$ and $M=Z$. In this way, $\mu$ is large enough to threshold away the noise, but not too large to over-shrink the original matrices. Assuming an iid Gaussian distribution of the dense noise component, i.e. $(Z_0)_i,j) \sim \Ncal(0,\sigma^2)$, it turns out\footnote{this based on the strong Bai Yin Theorem~\cite{Bai:1988fk}, which implies that for an $n\times n$ real matrix with entries $\xi_{ij} \sim \Ncal(0,1)$ the it holds that $\limsup_{n\rightarrow \infty} \norm{Z_0}{2}{}/\sqrt{n} = 2$ almost surely} that $n^{-1/2}\norm{Z_0}{}{} \rightarrow \sqrt{2} \sigma$ a.s. as $n\rightarrow \infty$. As a result of this, the choice for~$\mu$ becomes~$\mu = \sqrt{2n}\sigma$. We note that the assumption of a Gaussian noise matrix~$Z_0$ is often reasonable but not always satisfied. If it is not, then it is not clear whether using the APG algorithm to solve the associated approximate problem is a good idea and different algorithms may be needed. 
 
 
+In~\cite{Tao:2011vn} an algorithm for~\eqref{Algorithms:StablePCP:StablePCP} based on partial variable splitting is proposed\footnote{The authors in fact consider the more general problem where the constraint reads $\norm{\Pcal_\Omega (M - L - S)}{F}{} \leq \delta$, where $\Pcal_\Omega$ is the projection on the set~$\Omega$ of observed data}. In fact, the problem an simply be written as 
+%
+\begin{align}
+\begin{split}
+p^* = \min_{L,S,Z} \; &\norm{L}{*}{} + \lambda \norm{S}{1}{} \\
+\text{s.t.} \quad & M = L +  S + Z \\
+&\norm{Z}{F}{} \leq \delta
+\end{split}
+\label{Algorithms:StablePCP:PartialVarSplitting}
+\end{align}
+%
+At heart, the proposed ASALM algorithm is the extension of the ALM method from section~\ref{Algorithms:MainAlgs:AugLag:RPCA:Subsubsec} to the case with partial variable splitting. It turns out that the additional subproblem appearing at each iteration can be solved explicitly at a cost similar to the matrix value thresholding (the cost of which is~$O(mn)$). The dominant computation is still the singular value thresholding operation that is based on the computation of the SVD. Hence the proposed method is comparable in computational complexity to the ALM method from section~\ref{Algorithms:MainAlgs:AugLag:RPCA:Subsubsec}.
 
+In~\cite{Aybat:2011vn} a number of different algorithms for Stable PCP are discussed, most of which are based on a smoothed or partially smoothed objective function. Two of these algorithms essentially apply Nesterov's optimal algorithms~\cite{Nesterov:2005fk} to the partially smoothed problem, which yields a theoretical complexity of~$O(1/\varepsilon)$. It is further shown that the subproblems appearing in these algorithms either have a closed-form solution or can be solved very efficiently. Still using a partially smoothed objective function, the authors also apply a partial variable splitting technique and propose to use an alternating minimization algorithm for a linearized version of the associated augmented Lagrangian function. This also yields an algorithm with a theoretical complexity of~$O(1/\varepsilon)$. 
+
+The authors of~\cite{Aybat:2011vn} also propose a first-order algorithm that works directly with the fully non-smooth objective, which they call NSA. Very similar in nature to the ASALM method proposed in~\cite{Tao:2011vn}, this algorithm is also an extension of the ALM method from section~\ref{Algorithms:MainAlgs:AugLag:RPCA:Subsubsec} to the setting with partial variable splitting. While the authors were not able to derive theoretical complexity results, empirical evidence suggests that this algorithm is quite efficient in solving the Stable PCP problem. In particular, numerical simulations indicate that NSA consistently outperforms ASALM. The main reason for this seems to be that while ASALM performs an alternating minimization over three directions ($L$, $S$ and $Z$), NSA uses the fact that the joint minimization over $(S,Z)$ also has an explicit solution and therefore only alternates over two directions. 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
