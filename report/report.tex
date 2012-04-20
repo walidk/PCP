@@ -12,7 +12,7 @@
 
 %============================================================================================
 \section{Introduction}
-Given an observed matrix $M \in \mathbb{R}^{n_1 \times n_2}$ that is formed as a superposition of a low-rank matrix $L_0$ and a sparse matrix $S_0$, 
+Given an observed matrix $M \in \Rbb^{n_1 \times n_2}$ that is formed as a superposition of a low-rank matrix $L_0$ and a sparse matrix $S_0$, 
 \[
 M = L_0 + S_0
 \]
@@ -22,11 +22,13 @@ Robust Principal Component Analysis \cite{Candes:2011fk} is the problem of recov
 \begin{aligned}
 &\text{minimize} && \|L\|_* + \lambda \|S\|_1 \\
 &\text{subject to} && L+S = M
-\label{PCP}
+\label{eq:pcp}
 \end{aligned}
 \end{equation}
 
 Principal component pursuit minimizes a linear combination of the nuclear norm of a matrix $L$ and the $\ell_1$ norm of $M-L$. Minimizing the $\ell_1$ norm is known to favour sparsity, while minimizing the nuclear norm $\|L\|_* = \sum_{\sigma \in \sigma(L)} \sigma$ is known to favour low-rank matrices (intuitively, favours sparsity of the vector of singular values).
+
+The low-rank component $S_0$ is viewed as a noise matrix, that can represent measurement noise, failure in some sensors that will result in completely corrupting a fraction of the observed entries, or missing data (which translates to having a fraction of the entries equal to zero). In this setting, one would like to be able to recover the original data $L_0$, without making assumptions on the magnitude $\|S_0\|_\infty$ of the sparse component. PCP achieves recovery with high probability in this setting, under alternate assumptions on the structure of $L_0$ and sparsity pattern of $S_0$.
 
 One cannot expect to recover the components exactly in the most general case. Assume for example that $L_0$ is such that $(L_0)_{ij} = \delta_i^1\delta_j^1$, and $S_0 = -L_0$. Both matrices are sparse and low-rank, and clearly one cannot expect to recover the components in this case, since the observed matrix is $M = 0$. Therefore assumptions are made on the incoherence of $L_0$ and the support of $S_0$.
 
@@ -38,28 +40,45 @@ Let the SVD of $L_0$ be given by
 
 \begin{align}
 L_0 = U\Sigma V^* = \sum_{i=1}^r \sigma_i u_i v_i^*
+\label{eq:svd}
 \end{align}
 
-Then the incoherence conditions are given by
+where $U \in \Rbb^{n_1 \times r}$ and $V \in \Rbb^{n_2 \times r}$ are the matrices of left and right singular vectors respectivley, $U = [u_1, \dots, u_r]$, $V = [v_1, \dots, v_r]$. Then the incoherence conditions are given by
 
 \begin{equation}
 \begin{aligned}
 \max_i \|U^*e_i\|_2^2 \leq \frac{\mu r}{n_1}, && \max_i \|V^*e_i\|_2^2 \leq \frac{\mu r}{n_2}
-\label{incoherence1}
+\label{eq:incoherence1}
 \end{aligned}
 \end{equation}
 
 and
 
 \begin{equation}
-\| U V^* \|_\infty \leq \sqrt{\frac{\mu r}{n_1 n_2}} \label{incoherence2}
+\| U V^* \|_\infty \leq \sqrt{\frac{\mu r}{n_1 n_2}}
+\label{eq:incoherence2}
 \end{equation}
+
+Note that the condition $\|U^*e_i\|_2^2 \leq \frac{\mu r}{n_1}$ translates to $\sum_{k = 1}^r (u_k)_i^2 \leq \frac{\mu r}{n_1}$.  Also note that the orthogonal projection $P_U$ on $\text{Span}(u_1, \dots, u_r)$ is given by 
+\[
+UU^* = [u_1, \dots, u_r] 
+\left[ \begin{array}{c} 
+u_1^* \\ 
+\vdots \\ 
+u_r^* \\ 
+\end{array} \right] 
+= \sum_{k = 1}^r u_ku_k^*
+\]
+and the condition is equivalent to $\|P_U e_i \|_2^2 \leq \frac{\mu r}{n_1}$ since $\|U^* e_i \|_2^2 = e_i^*(UU^*)e_i = e_i^* P_U e_i = (e_i - P_Ue_i + P_U e_i )^*P_U e_i = \|P_U e_i\|_2^2$ ($P_U e_i$ and $e_i - P_U e_i$ are orthogonal). Or simply $\|P_U e_i\|_2^2 = e_i^* UU^*UU^*e_i = e_i^* UU^*e_i = \|U^*e_i\|_2^2$ since $U^*U = I_r$.
 
 These conditions require the singular vectors to be ``spread'' enough with respect to the canonical basis. Intuitively, if the singular vectors of the low-rank matrix $L_0$ are aligned with a few canonical basis vectors, then $L_0$ will be sparse and hard to distinguish from the sparse corruption matrix $S_0$.
 
 
+
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Support of the sparse component $S_0$}
+The cardinality of the support of $S_0$ is denoted $m$. Guaranteeing exact recovery requires $m$ to be small enough, in a sense that will be defined in the next section. Proving exact recovery will rely on a probabilistic argument on the distribution of sparse matrices $S_0$ on the set of matrices $\{ S \in \Rbb^{n_1 \times n_2} | \text{card}(\text{Supp}S) = m \}$assuming a uniform sampling model. The proof of the main result will use a different sampling model, and prove equivalence with the uniform model.
+
 
 %============================================================================================
 
