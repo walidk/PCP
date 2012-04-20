@@ -95,6 +95,7 @@ function results = rpca_wrapper(L,S,lambda,options)
     
     %% dual projected gradient ascent
     if options.dpga.active 
+        if ~isfield(options.dpga,'tol'), options.dpga.tol = 5e-6*norm(M,'fro'); end        
         disp('Starting Dual Projected Gradient Ascent Algorithm');
         tic;
         [results.dpga.Lhat, results.dpga.Shat, ~, results.dpga.numIter] = ...
