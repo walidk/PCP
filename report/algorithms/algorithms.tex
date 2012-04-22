@@ -122,23 +122,37 @@ for all $i,j$, which is equivalent to $|Y_{ij}| \leq c,\; \forAll i,j$. This sho
 
 Hence we observe that if $\lambda >1$ the constraint $\norm{Y}{2}{} \leq \lambda$ will be inactive, that is $|Y_{ij}|<\lambda,\;\forAll i,j$. Therefore, for $\lambda > 1$, removing this constraint from~\eqref{Algorithms:MainAlgs:IPM:SDPform:DualSimpler} does not change the problem. We have $d^* = \max_{\norm{Y}{2}{}\leq 1} \trace Y^T\!M = \norm{M}{*}{}$, and this lower bound is achieved by the primal (feasible) solution $L=M$ and $S =0$.
 
-If $\lambda \leq 1$, then ....
+If $\lambda \leq 1$, then we can look at the dual of the dual~\eqref{Algorithms:MainAlgs:IPM:SDPform:DualSimpler}. One way to form a Lagrangian of this dual problem is to introduce Lagrange multipliers $S_- \geq 0$ and $S_+ \geq 0$ for the constraints $Y_{ij} \leq \lambda$ and $-Y_{ij} \leq \lambda$, respectively:
+\begin{align*}
+\mathcal{L}(Y, S_+, S_-) 
+&= -\trace Y^T M - \trace S_-^T(Y - \lambda 1) - \trace S_+^T(-Y - \lambda 1) \\
+&= \trace (S_+ - S_- - M)^T Y + \lambda \trace (S_+ + S_-)^T 1
+\end{align*}
+Here $1$ denotes the $n \times n$ matrix whose entries are all ones. We have
+\begin{align*}
+d^*
+&= \max_{\substack{\|Y\|_2 \leq 1 \\ \|Y\|_\infty \leq \lambda}}\; -\trace M^T Y\\
+&= \max_{\|Y\|_2 \leq 1}\; \min_{\substack{S_+ \geq 0 \\ S_- \geq 0}}\; \mathcal{L}(Y, S_+, S_-) \\
+&= \min_{\substack{S_+ \geq 0 \\ S_- \geq 0}}\; \max_{\|Y\|_2 \leq 1}\;  \mathcal{L}(Y, S_+, S_-) \\
+&= \min_{\substack{S_+ \geq 0 \\ S_- \geq 0}}\; g(S_+, S_-)
+\end{align*}
+where 
+\begin{align*}
+g(S_+, S_-) 
+&= \max_{\|Y\|_2 \leq 1} \trace (S_+ - S_- - M)^T Y + \lambda \trace (S_+ + S_-)^T 1 \\
+&= \|S_+ - S_- - M\|_* + \lambda \trace (S_+ + S_-)^T 1
+\end{align*}
+A dual problem of the dual~\eqref{Algorithms:MainAlgs:IPM:SDPform:DualSimpler} is then simply
+\begin{align}
+&\min_{S_+\geq 0, S_-\geq 0}\; \|S_+ - S_- - M\|_* + \lambda \trace (S_+ + S_-)^T 1
+\end{align}
 
-%If we then dualize the resulting problem, we obtain 
-%\begin{align}
-%\begin{split}
-%p^*&=\max_{Y} \;\;\min_{\gamma\geq0}\;\; \trace Y^T\!M - \gamma \left(\min_{\norm{X}{*}{}\leq 1}\trace Y^T\!X-1\right) \\
-%&= \min_{\gamma\geq0}\;\;\max_{Y,\norm{X}{*}{}\leq 1}\;\; \trace Y^T\!M + \gamma \left( 1- \trace Y^T\!X \right) \\
-%&= \min_{\gamma\geq0}\;\;\max_{Y,\norm{X}{*}{}\leq 1}\;\; \trace Y^T\!(M -\gamma X) + \gamma 
-%\end{split}
-%\label{Algorithms:MainAlgs:IPM:SDPform:DualLambdaBig}
-%\end{align}
-%
-%Lagrangian stationarity then implies that 
-%
-%If we dualize the constraint  of
 
-
+We have $d^* = \min_{S_+\geq 0, S_-\geq 0} g(S_+, S_-)$. Note that at the optimum, the variables $S_+$ and $S_-$ satisfy $\min (S_{+ij}, S_{-ij}) = 0$ $\forall i,j$. Indeed, suppose there existed $(i,j)$ such that $\min(S_{+ij}, S_{-ij}) = a > 0$, then $g(S_+ - ae_ie_j^T, S_- - ae_ie_j^T) = g(S_+, S_-) - 2\lambda a < g(S_+, S_-)$, and $(S_+, S_-)$ is not optimal. Letting $S = S_+ - S_-$, the problem is equivalent to the primal~
+\begin{align*}
+p^* = \min_{S} \; &\norm{M-S}{*}{} + \lambda \norm{S}{1}{} 
+\end{align*}
+Therefore it is possible to recover the optimizer $S^*$ from the dual problem: Indeed, we have that $S^* = S_+^* - S_-^*$ where $S_-$ and $S_+$ are respectively the Lagrange multipliers associated with the constraints $Y_{ij} \leq \lambda$ and $-Y_{ij} \leq \lambda$
 
 
 
@@ -656,7 +670,39 @@ The current state of the art in terms of complexity, accuracy and convergence se
 \subsection{Numerical Comparison}
 \label{Algorithms:Discussion:NumComp:Subsec}
 
-In this section we provide some simulation results to illustrate the performance of the different algorithms. As seen in section~\ref{Algorithms:MainAlgs:IPM:Complexity:Subsubsec}, using interior point methods to solve the dual problem is computationally infeasible for all but the smallest problems, hence 
+In this section we provide some simulation results to illustrate the performance of the different algorithms. As seen in section~\ref{Algorithms:MainAlgs:IPM:Complexity:Subsubsec}, using interior point methods to solve the dual problem is computationally infeasible for all but the smallest problems, hence we will not include interior point methods into the comparison. Furthermore, the iterative thresholding method, while applicable also to very large problem sizes, exhibits extremely slow convergence. For a comparable relative error the required number of iterations (and therefore the computation time) for problems of reasonable size is so large that a comparison with the fast...
+
+
+Hence we are left with the Accelerated Proximal Gradient method (\texttt{apg}), the Accelerated Proximal Gradient method with partial SVD (\texttt{papg}), the Exact and Inexact Augmented Lagrangrian Methods (\texttt{ealm} and \texttt{ialm}, respectively) and the Inexact Augmented Lagrangrian Method with warm-start Block Lanczos SVD computation (\texttt{BLWSialm}).
+
+
+%
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\textwidth]{../figures/ALG_comparison}
+\caption{Numerical comparison of first-order algorithms for Robust PCA}
+\label{Algorithms:Discussion:NumComp:ALG:figure}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+%
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\textwidth]{../figures/ALM_comparison}
+\caption{Numerical comparison of different ALM methods for Robust PCA}
+\label{Algorithms:Discussion:NumComp:ALM:figure}
+\end{figure}
+
+
 
 
 

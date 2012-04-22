@@ -11,10 +11,10 @@
 
 % set to one if algorithm should be used (default is 0)
 options.intpt.active = 0;
-options.itth.active = 1;
-options.apg.active = 1;
-options.papg.active = 1;
-options.dpga.active = 1;
+options.itth.active = 0;
+options.dpga.active = 0;
+options.apg.active = 0;
+options.papg.active = 0;
 options.ealm.active = 1;
 options.ialm.active = 1;
 options.BLWSialm.active = 1;
@@ -39,8 +39,8 @@ solvers = get_solvers(options);
 
 %% Compare ialm and BLWS ialm for random data of different size
 
-nrun = 2;
-dims = [25, 50];%, 75];%, 100, 125];%, 200, 350, 500];%, 1000, 1500];%, 2000, 3000];
+nrun = 10;
+dims = [50, 100, 200, 500, 750, 1000, 1500, 2000, 2500, 3000];%, 200, 350, 500];%, 1000, 1500];%, 2000, 3000];
 resultarray = cell(length(dims),1);
 
 for k=1:length(dims)
@@ -87,7 +87,7 @@ end
 %% plot
 f = figure('Position',[100 900 800 600]);
 subplot(2,2,1);
-plot(dims,log(trun_avgs)');
+plot(dims,trun_avgs');
 title('Average running time');
 xlabel('Matrix dimension (square matrices)');
 ylabel('average computation time [s]');
