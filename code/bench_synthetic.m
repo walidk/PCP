@@ -12,12 +12,12 @@
 % set to one if algorithm should be used (default is 0)
 options.intpt.active = 0;
 options.itth.active = 0;
-options.dpga.active = 0;
-options.apg.active = 0;
+options.dpga.active = 1;
+options.apg.active = 1;
 options.papg.active = 0;
 options.ealm.active = 1;
-options.ialm.active = 1;
-options.BLWSialm.active = 1;
+options.ialm.active = 0;
+options.BLWSialm.active = 0;
 
 % specify settings of the different algorithms
 options.intpt.tol = 'low'; % default: 'standard'
@@ -37,10 +37,10 @@ solvers = get_solvers(options);
 
 
 
-%% Compare ialm and BLWS ialm for random data of different size
+%% Compare algorithms for random data of different size
 
 nrun = 10;
-dims = [50, 100, 200, 500, 750, 1000, 1500, 2000, 2500, 3000];%, 200, 350, 500];%, 1000, 1500];%, 2000, 3000];
+dims = [50, 100, 200, 300];% 500];%, 750, 1000, 1500, 2000, 2500, 3000];%, 200, 350, 500];%, 1000, 1500];%, 2000, 3000];
 resultarray = cell(length(dims),1);
 
 for k=1:length(dims)

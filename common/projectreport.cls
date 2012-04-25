@@ -28,6 +28,8 @@
 % Begin paragraphs with an empty line rather than an indent
 \usepackage[parfill]{parskip}    
 
+\usepackage{url}
+
 % customize the headers using the fancyhdr package
 \usepackage{fancyhdr}
 \pagestyle{fancy}
