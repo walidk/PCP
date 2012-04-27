@@ -1,0 +1,391 @@
+% !TEX root = report.tex
+
+%============================================================================================
+\section{Main Result}
+\begin{theorem}
+\label{thm:pcp}
+Suppose $L_0 \in \mathbb{R}^{n \times n}$ satisfies incoherence conditions~(\ref{eq:incoherence1}) and (\ref{eq:incoherence2}) and that the support of $S_0$ is uniformly distributed among all sets of cardinality $m$. Then $\exists c$ such that with high probability over the choice of support of $S_0$ (at least $1-cn^{-10}$), Principal Component Pursuit with $m = 1/\sqrt{n}$ is exact, i.e. $\hat{L} = L_0$ and $hat{S} = S_0$ provided that
+
+\begin{equation}
+\begin{aligned}
+\text{rank}(L_0) \leq \frac{\rho_r}{\mu} \frac{n}{(\log n)^2} && \text{ and } && m \leq \rho_s n^2
+\end{aligned}
+\end{equation}
+
+\end{theorem}
+
+Above, $\rho_r$ and $\rho_s$ are positive numerical constants. Note in particular that no assumptions are made on the magnitudes of the nonzero entries of $S_0$.
+
+The first condition in the theorem bounds the rank of $L_0$, but also how spread the singular vectors have to be, since we need to have $\forall i$ (from the incoherence condition)
+\[
+\|U^*e_i\|_2^2 \leq \frac{\mu \text{rank}(L_0)}{n} \leq \frac{\rho_r}{(\log n)^2}
+\]
+
+The second condition bounds the size $m$ of the support of $S_0$.
+%============================================================================================
+\section{Proof}
+
+The main arguments of the proof are the following:
+
+First, change the model of the sparse matrix $S_0$ from the uniform sampling model, to the Bernoulli sampling model with fixed signs, to the Bernoulli sampling model with random signs. To show equivalence of the results under the different sampling models, an elimination theorem is used.
+
+Then using the random sign Bernoulli sampling model, it is shown that a dual certificate can be constructed with high probability, proving that $(L_0, S_0)$ is the unique optimizer, by constructing a subgradient that shows that any non-zero perturbation $H$ will result in a strict increase in the objective value $\|L_0 + H\|_* + \lambda \|S_0 - H\|_1$.
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\subsection{Prelimineries}
+\begin{itemize}
+\item The subgradient of of the $\ell_1$ norm at $S_0$ supported on $\Omega$ is of the form $\sgn(S_0)+F$ where $P_\Omega F = 0$ and $\|F\|_\infty \leq 1$.
+\item The subgradient of the nuclear norm at $L_0 = U\Sigma V^*$ where $U, V \in \Rbb^{n \times r}$ and $\Sigma \in \Rbb^{r \times r}$, is of the form $U V^* + W$, where 
+\begin{equation}
+\begin{aligned}
+&U^*W = 0 \\
+& WV = 0\\
+& \|W\| \leq 1
+\end{aligned}
+\end{equation}
+
+or equivalently
+
+\begin{equation}
+\begin{aligned}
+& P_T W = 0 \\
+& \|W\| \leq 1
+\end{aligned}
+\end{equation}
+
+where $T$ is the linear space of matrices defined by
+\[
+T = \{UX^* + YV^*, \  X, Y \in \mathbb{R}^{n \times r}\}
+\]
+
+Indeed, we have
+\begin{align*}
+P_TW = 0
+&\Leftrightarrow W \in T^\perp  \\
+&\Leftrightarrow \forall M \in T, \ Tr(W^*M) = 0\\
+&\Leftrightarrow \forall X, Y \in \mathbb{R}^{n \times r}, \ Tr(W^*(UX^* + YV^*)) = 0\\
+&\Leftrightarrow \forall X, Y \in \mathbb{R}^{n \times r}, \ Tr((U^*W)^*X^*) + Tr((WV)^*Y) = 0\\
+&\Leftrightarrow U^*W = WV^* = 0
+\end{align*}
+
+
+\end{itemize}
+
+Note that the projection on the orthogonal of $T$ is given by
+\[
+P_{T^\perp} M = (I - UU^*)M(I - VV^*)
+\]
+
+\begin{proof}
+Note that $UU^*$ is the orthogonal projection on the subspace spanned by the columns of $U$, and similarly for $VV^*$. Let $P_U = UU^*$, $P_{U^\perp} = I - UU^*$, and similarly for $V$.
+
+Let $M_1 = (I - UU^*)M(I - VV^*) = P_{U^\perp} M P_{V^\perp}$. We have 
+\[
+P_{T^\perp} M = M_1 \Leftrightarrow (M - M_1 \in T \text{ and } M_1 \perp M - M_1)
+\]
+and we have $M - M_1 = UU^*M + MVV^* - UU^*MVV^* = U(U^*M) + (MV - UU^*MV)V^* \in T$, and 
+\begin{align*}
+Tr(M_1^* (M - M_1))
+&= Tr((I-VV^*)M^*(I-UU^*)(UU^*M + MVV^* - UU^*MVV^*)) \\
+&= Tr(P_{V^\perp}M^*P_{U^\perp}(P_UM + (M - UU^*M)P_V)) \\
+&= Tr(P_{V^\perp}M^*P_{U^\perp}P_UM) + Tr((M - UU^*M)P_VP_{V^\perp}M^*P_{U^\perp})\\
+&=0
+\end{align*}
+using the fact that $P_{U^\perp}P_U = P_V P_{V^\perp} = 0$ (projecting consecutively on a subspace and its orthogonal yields 0, or simply expanding, $(I-UU^*)UU^* = UU^* - UU^*UU^* = UU^* - U I_r U^* = 0$). This completes the proof.
+\end{proof}
+
+Note that since $P_{T^\perp}$ is an orthogonal projection, we have
+\[
+\|P_{T^\perp} M \| \leq \|M\|
+\]
+
+and for any dyad $e_i e_j^*$, we have
+
+\begin{align*}
+\|P_{T^\perp} e_ie_j^*\|_F^2
+&= Tr\left( (I-UU^*)e_ie_j^*(I-VV^*)(I-VV^*)^*e_je_i^*(I-UU^*)^* \right) \\
+&= Tr\left( e_i^*(I-UU^*)^*(I-UU^*)e_ie_j^*(I-VV^*)(I-VV^*)^*e_j \right) \\
+&= Tr\left( e_i^*(I-UU^*)^*(I-UU^*)e_i\right) Tr \left(e_j^*(I-VV^*)(I-VV^*)^*e_j \right) \\
+&= \|(I - UU^*)e_i\|_2^2 \|(I - VV^*)e_j\|_2^2
+\end{align*}
+
+and since $UU^*$ is an orthogonal projection, we have
+\begin{align*}
+\|(I - UU^*)e_i\|_2^2 
+&= \|e_i\|_2^2 - \|UU^*e_i\|_2^2 \\
+&\geq 1 - \mu r / n
+\end{align*}
+
+where the last inequality results form the incoherence condition~(\ref{eq:incoherence2}), $\|U^*e_i\|_2^2 \leq \frac{\mu r}{n}$. Therefore 
+\[
+\|P_{T^\perp} e_ie_j^*\|_F^2 \geq (1 - \mu r / n)^2
+\]
+equivalently, using the fact that $\|P_{T^\perp} e_ie_j^*\|_F^2 + \|P_{T} e_ie_j^*\|_F^2 = \|e_ie_j^*\|_F^2 = 1$, we have
+\begin{align*}
+\|P_{T} e_ie_j^*\|_F^2 
+&\leq 1 - (1 - \frac{\mu r}{n})^2 \\
+&= \frac{2\mu r}{n} - \left( \frac{\mu r}{n} \right)^2 \\
+&\leq \frac{2\mu r}{n}
+\end{align*}
+
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\subsection{Elimination Theorem}
+The following elimination theorem states the intuitive fact that if PCP exactly recovers the components of $M = L+S$, then it also exactly recovers the components of $M = L+S'$ where $S'$ is a trimmed version of $S$ ($\text{supp}(S')\subset \text{supp}(S)$ and $S$ and $S'$ coincide on $\text{supp}(S')$)
+
+\begin{theorem}
+Suppose the solution to the PCP problem (\ref{eq:pcp}) with input data $M_0 = L_0 + S_0$ is unique and exact, and consider $M_0' = L_0 + S_0'$ where $S_0'$ is a trimmed version of $S_0$. Then the solution to (\ref{eq:pcp}) with input $M_0'$ is exact as well.
+\end{theorem}
+
+\begin{proof}
+Let $S_0' = P_{\Omega_0} S_0$ and let $(\hat{L}, \hat{S})$ be the solution to (\ref{eq:pcp}) with input $L_0 + S_0'$. Then since $(L_0, S_0')$ is a feasible point for (\ref{eq:pcp}), it provides un upper bound on the optimal value
+\[
+\|\hat{L}\|_* + \lambda \|\hat{S}\|_1 \leq \|L_0\|_* + \lambda \|S_0'\|_1
+\]
+then decomposing $S_0$ into the orthogonal components $S_0 = P_{\Omega_0} S_0 + P_{\Omega_0^\perp} S_0 = S_0' + P_{\Omega_0^\perp} S_0$, we have $\|S_0'\|_1 = \|S_0\|_1 - \|P_{\Omega_0^\perp} S_0\|_1$, thus we have
+
+\[
+\|\hat{L}\|_* + \lambda \|\hat{S}\|_1 + \lambda \|P_{\Omega_0^\perp} S_0\|_1 \leq \|L_0\|_* + \lambda \|S_0\|_1
+\]
+
+and using the triangular inequality
+
+\[
+\|\hat{L}\|_* + \lambda \|\hat{S} + P_{\Omega_0^\perp} S_0\|_1 \leq \|L_0\|_* + \lambda \|S_0\|_1
+\]
+
+we observe that $(\hat{L}, \hat{S} + P_{\Omega_0^\perp} S_0)$ is feasible for the problem with input $M = L_0 + S_0$, for which the optimal value is precisely $\|L_0\|_* + \lambda \|S_0\|_1$. Therefore by uniqueness of the solution, we have
+\[
+\begin{aligned}
+&\hat{L} = L_0 \\
+&P_{\Omega_0^\perp} S_0 = S_0
+\end{aligned}
+\]
+
+the second equality is equivalent to $\hat{S} = S_0 - P_{\Omega_0^\perp} S_0 = P_{\Omega_0} S_0 = S_0'$. This completes the proof.
+\end{proof}
+
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\subsection{Derandomization}
+Derandomization is used to show equivalence between the problem where the signs of the entries of $S_0$ are random, and the problem where the entries of $S_0$ have fixed signs.
+
+In the setting of Theorem~\ref{thm:pcp}, the non-zero entries of the sparse component $S_0$ are fixed, but the proof will use a stronger assumption: the signs of the non-zero entries are independent Bernoulli variables. The following theorem shows equivalence of the two settings.
+
+\begin{theorem}
+Suppose $L_0$ satisfies conditions of Theorem~\ref{thm:pcp}, and that the support of $S_0$ is sampled from a Bernoulli model with parameter $2\rho_s$, and the signs of $S_0$ are i.i.d. Bernoulli $\pm 1$ with parameter $\frac{1}{2}$, and independent from the support. Then:
+
+If the PCP solution is exact with high probability, then it is exact with at least the same probability for the model in which values of $S_0$ are fixed and the support is sampled from a Bernoulli distribution with parameter $\rho_s$.
+\end{theorem}
+
+\begin{proof}
+Consider the fixed values model, and let $S_0 = P_\Omega S$ for some matrix $S$, and the support $\Omega$ is sampled from a Bernoulli distribution. Thus the components of $S_0$ are independent and
+\[
+(S_0)_{ij} = 
+\begin{cases}
+S_{ij} & \text{w.p. } \rho_s \\
+0 & \text{w.p. } 1 - \rho_s
+\end{cases}
+\]
+
+the idea of the proof is to craft a new model, and show that it is equivalent (in terms of probability distribution) to the above model.
+
+Let $E$ be a random sign matrix, with i.i.d. entries
+\[
+E_{ij} = 
+\begin{cases}
+1 & \text{w.p. } \rho_s \\
+0 & \text{w.p. } 1 - 2\rho_s\\
+-1 & \text{w.p. } \rho_s
+\end{cases}
+\]
+and $\Delta(E)$ an elimination matrix, function of $E$, defined as
+\[
+\Delta_{ij} = 
+\begin{cases}
+0 & \text{if } E_{ij}S_{ij} < 0 \ (E_{ij} \text{ and } S_{ij} \text{ have different signs} )\\
+1 & \text{otherwise}
+\end{cases}
+\]
+
+the entries of $\Delta$ are functions of independent variables, and are therefore independent.
+
+Now consider the following variable
+\[
+S'_0 = \Delta \circ |S| \circ E
+\]
+where $\circ$ is the component wise product. Then $S_0$ and $S'_0$ have the same distribution. Indeed, it suffices by independence to check that they have the same marginals:
+
+\begin{align*}
+P((S'_0)_{ij} = S_{ij}) 
+&= P(\Delta_{ij} = 1 \text{ and } E_{ij} = \sgn S_{ij}) \\
+&= P(E_{ij}S_{ij} \geq 0 \text{ and } E_{ij} = \sgn S_{ij}) \\
+&= P(E_{ij} = \sgn S_{ij}) \\
+&= \rho_s
+\end{align*}
+and
+\[
+P(S_0 = S_{ij}) = \rho_s
+\]
+
+Finally, since, by assumption, PCP recovers $|S| \circ E$ with high probability, then by the elimination theorem, it also recovers $\Delta \circ |S| \circ E$ with at least the same probability. The result follows since $S'_0$ and $S_0$ have the same distribution.
+\end{proof}
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\subsection{Dual certificate}
+The following lemma gives a simple sufficient condition for the pair $(L_0,S_0)$ to be the unique optimal solution to PCP.
+
+\begin{lemma}
+Assume that $\|P_\Omega P_T \| < 1$. Then $(L_0,S_0)$ is the unique solution to PCP if $\exists (W, F)$ such that
+\begin{equation}
+\begin{aligned}
+& UV^* + W = \lambda(\text{sign}(S_0) + F) \\
+& P_T W = 0 \\
+& \|W\|<1 \\
+& P_\Omega F = 0 \\
+& \|F\|_\infty < 1
+\end{aligned}
+\end{equation}
+
+\end{lemma}
+
+
+\begin{proof}
+We first prove that the condition $\|P_\Omega P_T\| < 1$ is equivalent to $\Omega \cap T = \{0\}$. 
+
+First, if $\Omega \cap T \neq \{0\}$, then let $M_0 \in \Omega \cap T$, $M_0 \neq 0$. We have $\| P_\Omega P_T M_0\| = \|M_0\|$, thus $\| P_\Omega P_T\| = \max_{M \neq 0} \frac{\| P_\Omega P_T M\|}{\|M\|} \geq 1$. 
+
+Conversely, if $\| P_\Omega P_T\| \geq 1$, then $\exists M_0 \neq 0$ such that $\|M_0\| \leq \| P_\Omega P_T M_0\|$. But since $P_\Omega$ and $P_T$ are orthogonal projections, we have $\|M_0\| \leq \| P_\Omega P_T\| \leq \|P_T M_0\| \leq \|M_0\|$, where inequalities must hold with equality. In particular, we have $\|P_T M_0\| = \|M_0\|$, which implies $P_T M_0 = M_0$ (to prove this, decompose $\|M_0\|$ into the orthogonal components $\|M_0\|^2 = \|M_0 - P_TM_0\|^2 + \|P_TM_0\|^2$, thus $\|P_TM_0\| = \|M_0\| \Rightarrow \|M_0 - P_TM_0\| = 0 \Rightarrow M_0 = P_T M_0$), then similarly, $\|P_\Omega M_0\| = \|M_0\|$, which implies $P_\Omega M_0 = M_0$. Therefore $M_0 \in \Omega \cap T$. This proves the equivalence $\|P_\Omega P_T\| < 1 \Leftrightarrow \Omega \cap T = \{0\}$.
+
+
+
+To prove that $(L_0, S_0)$ is the unique optimizer, we show that for any feasible perturbation $(L_0 + H, S_0 - H)$ where $H \neq 0$ strictly increases the objective. Let 
+\begin{itemize}
+\item $UV^* + W_0$ be an arbitrary subgradient of the nuclear norm at $L_0$, where $\|W_0\| \leq 1$ and $P_T W_0 = 0$
+\item $\sgn (S_0) + F_0$ be an arbitrary subgradient of the $\ell_1$-norm at $S_0$, where $\|F_0\|_\infty \leq 1$ and $P_\Omega F_0 = 0$
+\end{itemize}
+
+Then we can lower bound the value of the objective
+\[
+\|L_0 + H\|_* + \lambda \|S_0 - H\|_1 \geq \|L_0\|_* + \lambda \|S_0\|_1 + \langle UV^* + W_0, H\rangle - \lambda \langle \sgn(S_0) + F_0, H\rangle
+\]
+
+Now we pick a particular pair $(W_0, F_0)$ such that
+\begin{itemize}
+\item $\langle W_0, H \rangle = \|P_{T^\perp} H\|_*$, for example $W_0 = P_{T^\perp} W$ where $W$ is a normed matrix such that $\langle W, P_{T^\perp} H \rangle = \|P_{T^\perp} H\|_*$ (by duality of $\|.\|$ and $\|.\|_*$)
+\item $\langle F_0, H \rangle = -\|P_{\Omega^\perp} H\|_1$, for example $F_0 = -\sgn(P_{\Omega^\perp} H)$
+\end{itemize}
+then we have
+
+\[
+\|L_0 + H\|_* + \lambda \|S_0 - H\|_1 \geq \|L_0\|_* + \lambda \|S_0\|_1  + \|P_{T^\perp} H\|_* + \|P_{\Omega^\perp} H\|_1 + \langle UV^* - \lambda  \sgn(S_0), H\rangle
+\]
+
+we can bound the inner product using the definition of $W$ and $F$,
+
+\begin{align*}
+|\langle UV^* - \lambda  \sgn(S_0), H\rangle|
+& = |\langle \lambda F - W, H\rangle|  & \text{since } UV^* + W = \lambda(\text{sign}(S_0) + F) \\
+&\leq |\langle W, H \rangle| + \lambda |\langle F, H \rangle| & \text{by the triangular inequality} \\
+&\leq \beta (\|P_{T^\perp} H\|_* + \lambda \|P_{\Omega^\perp} H\|_1)
+\end{align*}
+where $\beta = \max (\|W\|, \|F\|_\infty) < 1$, and the last inequality follows from the fact that
+\[
+\begin{aligned}
+& \|P_{T^\perp} H\|_* \geq \langle P_{T^\perp} H, W/\|W\| \rangle \geq \langle H, W/\|W\| \rangle\\
+& \|P_{\Omega^\perp} H\|_1 \geq \langle P_{\Omega^\perp} H, F/\|F\|_\infty \rangle \geq \langle H, F/\|F\|_\infty \rangle
+\end{aligned}
+\]
+Thus
+\begin{align*}
+\|L_0 + H\|_* + \lambda \|S_0 - H\|_1 - \|L_0\|_* - \lambda \|S_0 \|_1 
+&\geq  (1-\beta) \left( \|P_{T^\perp} H\|_* + \lambda \|P_{\Omega^\perp} H\|_1 \right) \\
+& > 0
+\end{align*}
+since $\|P_{T^\perp} H\|_* = \|P_{\Omega^\perp} H\|_1 = 0$ only if $P_{T^\perp} H = P_{\Omega^\perp} H = 0$, i.e. $H \in \Omega \cap T$, and, by assumption, $\Omega \cap T = {0}$ and $H \neq 0$. Therefore the objective strictly increases with a non-zero perturbation. This completes the proof.
+
+\end{proof}
+
+
+The proof of the main theorem will use a slightly different result, given by the following Lemma
+\begin{lemma}
+\label{lem:dual_cert}
+Assume that $\|P_\Omega P_T \| \leq 1/2$. Then $(L_0,S_0)$ is the unique solution to PCP if $\exists (W, F)$ such that
+\begin{equation}
+\begin{aligned}
+& UV^* + W = \lambda(\text{sign}(S_0) + F + P_\Omega D) \\
+& P_T W = 0 \\
+& \|W\| \leq 1/2 \\
+& P_\Omega F = 0 \\
+& \|F\|_\infty \leq 1/2 \\
+&\|P_\Omega D \|_F \leq 1/4
+\end{aligned}
+\end{equation}
+
+\end{lemma}
+
+\begin{proof}
+Using $\beta = \max (\|W\|, \|F\|_\infty) \leq \frac{1}{2}$ in the previous proof, we have for a non-zero perturbation $H$
+\begin{align*}
+\|L_0 + H\|_* + \lambda \|S_0 - H\|_1 - \|L_0\|_* - \lambda \|S_0 \|_1 
+&\geq  \frac{1}{2} \left( \|P_{T^\perp} H\|_* + \lambda \|P_{\Omega^\perp} H\|_1 \right) - \lambda \langle P_{\Omega} D, H\rangle \\
+& \geq \frac{1}{2} \left( \|P_{T^\perp} H\|_* + \lambda \|P_{\Omega^\perp} H\|_1 \right) - \frac{\lambda}{4} \|P_{\Omega} H\|_F
+\end{align*}
+
+the last term can be further bounded
+\begin{align*}
+\|P_\Omega H\|_F
+&\leq \|P_\Omega P_T H\|_F + \|P_\Omega P_{T^\perp} H\|_F \\
+&\leq \frac{1}{2} \|H\|_F + \|P_{T^\perp} H\|_F & \text{using } \|P_\Omega P_T\| \leq \frac{1}{2} \text{ and } \|P_\Omega\| \leq 1 \\
+&\leq \frac{1}{2} \|P_\Omega H\|_F + \frac{1}{2} \|P_{\Omega^\perp} H\|_F + \|P_{T^\perp} H\|_F
+\end{align*}
+
+therefore 
+
+\[
+\|P_\Omega H\|_F \leq \|P_{\Omega^\perp} H\|_F + 2 \|P_{T^\perp} H\|_F
+\]
+
+and we conclude by lower bounding the increase in the objective
+\begin{align*}
+\|L_0 + H\|_* + \lambda \|S_0 - H\|_1 - \|L_0\|_* - \lambda \|S_0 \|_1 
+&\geq  \frac{1}{2} \left( (1- \lambda) \|P_{T^\perp} H\|_* + \frac{\lambda}{2} \|P_{\Omega^\perp} H\|_1 \right) \\
+& > 0
+\end{align*}
+since $ \|P_{T^\perp} H\|_* =  \|P_{\Omega^\perp} H\|_1 = 0$ only if $P_{\Omega^\perp} H = P_{T^\perp} H = 0$, i.e. $H \in \Omega \cap T$, and, by assumption, $\Omega \cap T = \{ 0 \}$ ($\|P_\Omega P_T\| \leq \frac{1}{2} < 1$).
+This completes the proof.
+
+\end{proof}
+
+By the previous Lemma, it suffices to produce a dual certificate $W$ such that
+\begin{equation}
+\begin{aligned}
+& W \in T^{\perp} \\
+& \|W\| < 1/2\\
+& \|P_\Omega (UV^* - \lambda \sgn(S_0) + W) \|_F \leq \lambda / 4  \\
+& \|P_{\Omega^\perp}(UV^* + W)\|_\infty < \lambda / 2
+\end{aligned}
+\end{equation}
+
+since under these conditions, $D = \frac{1}{\lambda} P_\Omega (UV^* - \lambda \sgn(S_0) + W)$ and $F = \frac{1}{\lambda} P_{\Omega^\perp} (UV^* + W)$ satisfy the sufficient conditions given by Lemma~\ref{lem:dual_cert}. Indeed we have
+
+\begin{align*}
+UV^* + W - \lambda \sign(S_0) 
+&= P_\Omega (UV^* + W - \lambda \sign(S_0))+ P_{\Omega^\perp} (UV^* + W - \lambda \sign(S_0)) \\
+&= \lambda D+ P_{\Omega^\perp} (UV^* + W) \text{ since } \sign(S_0) \in \Omega\\
+&= \lambda (D+F)
+\end{align*}
+
+and the first condition of Lemma~\ref{lem:dual_cert} is satisfied. The remaining conditions follow from the definition of $F$ and $D$.
+
+%-----------------------------------------------------------------------------
+\subsubsection{Bounding $\|P_\Omega P_T\|$}
+ Under suitable conditions on the size of the support $\Omega_0$ of the sparse component, a bound can be derived on  $\|P_\Omega P_T\|$ \cite{Candes:2009uq}.
+\begin{theorem}
+Suppose $\Omega_0$ is sampled from the Bernoulli model with parameter $\rho_0$. Then with high probability,
+\[
+\|P_T - \rho_0^{-1} P_T P_{\Omega_0} P_T\| \leq \epsilon
+\]
+provided that $\rho_0 \geq C_0 \epsilon^{-2} \frac{\mu r \log n}{n}$ where $\mu$ is the incoherence parameter and $C_0$ is a numerical constant.
+\end{theorem}
+
+As a consequence, $\|P\Omega P_T\|$ can be bounded, and if $|\Omega|$ is not too large, then the desired bound $\|P_\Omega P_T\| \leq 1/2$ holds.

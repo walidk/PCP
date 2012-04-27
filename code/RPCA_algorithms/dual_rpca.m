@@ -59,6 +59,7 @@ Y = Y / dual_norm;
 norm_two = norm_two / dual_norm;
 norm_inf = norm_inf / dual_norm;
 obj_v = D(:)' * Y(:);
+d_norm = norm(D, 'fro'); % Max Apr 20
 
 % projection
 A_dual = zeros( m, n);
@@ -230,7 +231,8 @@ while ~converged
     end
         
     %% stop Criterion    
-    stopCriterion = norm( D - A_dual - E_dual, 'fro' );
+%     stopCriterion = norm( D - A_dual - E_dual, 'fro' );
+    stopCriterion = norm( D - A_dual - E_dual, 'fro' )/d_norm; % Max Apr 20
     if stopCriterion < tol 
         converged = true;
     end    

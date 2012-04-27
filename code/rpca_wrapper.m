@@ -4,10 +4,20 @@
 %   problems through different algorithms. 
 
 % Copyright:   227A project group
-% Last edited:   Apr 14, 2012
+% Last edited:   Apr 16, 2012
 
 
 function results = rpca_wrapper(L,S,lambda,options)
+
+    % don't use algorithms that are not specified
+    if ~isfield(options.intpt,'active'), options.intpt.active = 0; end
+    if ~isfield(options.itth,'active'), options.itth.active = 0; end
+    if ~isfield(options.apg,'active'), options.apg.active = 0; end
+    if ~isfield(options.papg,'active'), options.papg.active = 0; end
+    if ~isfield(options.dpga,'active'), options.dpga.active = 0; end
+    if ~isfield(options.ealm,'active'), options.ealm.active = 0; end
+    if ~isfield(options.ialm,'active'), options.ialm.active = 0; end
+    if ~isfield(options.BLWSialm,'active'), options.BLWSialm.active = 0; end
 
     % extract information about problem
     [m,n] = size(L);
@@ -17,8 +27,12 @@ function results = rpca_wrapper(L,S,lambda,options)
     %% interior point on the dual (using cvx)
     if options.intpt.active               
         disp('Starting Interior Point Algorithm on the Dual');
+        if isfield(options.intpt,'solver')
+            if strcmp(options.intpt.solver,'sedumi'), cvx_solver sedumi; end
+            if strcmp(options.intpt.solver,'sdpt3'), cvx_solver sdpt3; end
+        end
         tic;
-        flag = cvx_quiet(false);
+        flag = cvx_quiet(true);
         cvx_precision(options.intpt.tol);
         cvx_begin        
             variable Y(m,n);
@@ -81,6 +95,7 @@ function results = rpca_wrapper(L,S,lambda,options)
     
     %% dual projected gradient ascent
     if options.dpga.active 
+        if ~isfield(options.dpga,'tol'), options.dpga.tol = 5e-6*norm(M,'fro'); end        
         disp('Starting Dual Projected Gradient Ascent Algorithm');
         tic;
         [results.dpga.Lhat, results.dpga.Shat, ~, results.dpga.numIter] = ...
@@ -110,11 +125,24 @@ function results = rpca_wrapper(L,S,lambda,options)
         disp('Starting Inexact ALM Algorithm');
         tic;
         [results.ialm.Lhat, results.ialm.Shat, results.ialm.numIter] = ...
-            inexact_alm_rpca(M,lambda);
+            BLWS_ialm_rpca(M,lambda);
         % compute relative errors
         results.ialm.errL = norm(L-results.ialm.Lhat,'fro')/norm(L,'fro');
         results.ialm.errS = norm(S-results.ialm.Shat,'fro')/norm(S,'fro');
         results.ialm.t_run = toc;
+    end
+    
+    
+    %% augmented Lagrangian method (inexact) via BLWS SVD
+    if options.BLWSialm.active          
+        disp('Starting Inexact ALM Algorithm using on BLWS SVD');
+        tic;
+        [results.BLWSialm.Lhat, results.BLWSialm.Shat, results.BLWSialm.numIter] = ...
+            BLWS_ialm_rpca(M,lambda,options.BLWSialm.tol,options.BLWSialm.maxIter,1);
+        % compute relative errors
+        results.BLWSialm.errL = norm(L-results.BLWSialm.Lhat,'fro')/norm(L,'fro');
+        results.BLWSialm.errS = norm(S-results.BLWSialm.Shat,'fro')/norm(S,'fro');
+        results.BLWSialm.t_run = toc;
     end
 
 

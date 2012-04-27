@@ -28,7 +28,7 @@ function [A_hat E_hat iter] = inexact_alm_rpca(D, lambda, tol, maxIter)
 % Copyright: Perception and Decision Laboratory, University of Illinois, Urbana-Champaign
 %            Microsoft Research Asia, Beijing
 
-addpath PROPACK;
+%addpath PROPACK;
 
 [m n] = size(D);
 
