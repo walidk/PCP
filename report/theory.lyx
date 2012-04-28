@@ -1,0 +1,2046 @@
+#LyX file created by tex2lyx 2.0.0
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options false
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\paperfontsize default
+\spacing single
+\use_hyperref 0
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+% !TEX root = report.tex
+\end_layout
+
+\begin_layout Standard
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+%============================================================================================
+\end_layout
+
+\begin_layout Standard
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+
+Main Result
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{theorem}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "thm:pcp"
+
+\end_inset
+
+ Suppose 
+\begin_inset Formula $L_0 \in \mathbb{R}^{n \times n}$
+\end_inset
+
+ satisfies incoherence conditions
+\begin_inset space ~
+
+\end_inset
+
+(
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:incoherence1"
+
+\end_inset
+
+) and (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:incoherence2"
+
+\end_inset
+
+) and that the support of 
+\begin_inset Formula $S_0$
+\end_inset
+
+ is uniformly distributed among all sets of cardinality 
+\begin_inset Formula $m$
+\end_inset
+
+. Then 
+\begin_inset Formula $\exists c$
+\end_inset
+
+ such that with high probability over the choice of support of 
+\begin_inset Formula $S_0$
+\end_inset
+
+ (at least 
+\begin_inset Formula $1-cn^{-10}$
+\end_inset
+
+), Principal Component Pursuit with 
+\begin_inset Formula $m = 1/\sqrt{n}$
+\end_inset
+
+ is exact, i.e. 
+\begin_inset Formula $\hat{L} = L_0$
+\end_inset
+
+ and 
+\begin_inset Formula $hat{S} = S_0$
+\end_inset
+
+ provided that
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset Formula \begin{equation}
+\begin{aligned}
+\text{rank}(L_0) \leq \frac{\rho_r}{\mu} \frac{n}{(\log n)^2} && \text{ and } && m \leq \rho_s n^2
+\end{aligned}
+\end{equation}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{theorem}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+Above, 
+\begin_inset Formula $\rho_r$
+\end_inset
+
+ and 
+\begin_inset Formula $\rho_s$
+\end_inset
+
+ are positive numerical constants. Note in particular that no assumptions are made on the magnitudes of the nonzero entries of 
+\begin_inset Formula $S_0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+The first condition in the theorem bounds the rank of 
+\begin_inset Formula $L_0$
+\end_inset
+
+, but also how spread the singular vectors have to be, since we need to have 
+\begin_inset Formula $\forall i$
+\end_inset
+
+ (from the incoherence condition) 
+\begin_inset Formula \[
+\|U^*e_i\|_2^2 \leq \frac{\mu \text{rank}(L_0)}{n} \leq \frac{\rho_r}{(\log n)^2}
+\]
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+The second condition bounds the size 
+\begin_inset Formula $m$
+\end_inset
+
+ of the support of 
+\begin_inset Formula $S_0$
+\end_inset
+
+. 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+%============================================================================================
+\end_layout
+
+\begin_layout Standard
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+
+Proof
+\end_layout
+
+\begin_layout Standard
+
+The main arguments of the proof are the following:
+\end_layout
+
+\begin_layout Standard
+
+First, change the model of the sparse matrix 
+\begin_inset Formula $S_0$
+\end_inset
+
+ from the uniform sampling model, to the Bernoulli sampling model with fixed signs, to the Bernoulli sampling model with random signs. To show equivalence of the results under the different sampling models, an elimination theorem is used.
+\end_layout
+
+\begin_layout Standard
+
+Then using the random sign Bernoulli sampling model, it is shown that a dual certificate can be constructed with high probability, proving that 
+\begin_inset Formula $(L_0, S_0)$
+\end_inset
+
+ is the unique optimizer, by constructing a subgradient that shows that any non-zero perturbation 
+\begin_inset Formula $H$
+\end_inset
+
+ will result in a strict increase in the objective value 
+\begin_inset Formula $\|L_0 + H\|_* + \lambda \|S_0 - H\|_1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\end_layout
+
+\begin_layout Standard
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+
+Preliminaries
+\end_layout
+
+\begin_layout Itemize
+
+The subgradient of of the 
+\begin_inset Formula $\ell_1$
+\end_inset
+
+ norm at 
+\begin_inset Formula $S_0$
+\end_inset
+
+ supported on 
+\begin_inset Formula $\Omega$
+\end_inset
+
+ is of the form 
+\begin_inset Formula $\sgn(S_0)+F$
+\end_inset
+
+ where 
+\begin_inset Formula $P_\Omega F = 0$
+\end_inset
+
+ and 
+\begin_inset Formula $\|F\|_\infty \leq 1$
+\end_inset
+
+. 
+\end_layout
+
+\begin_layout Itemize
+
+The subgradient of the nuclear norm at 
+\begin_inset Formula $L_0 = U\Sigma V^*$
+\end_inset
+
+ where 
+\begin_inset Formula $U, V \in \Rbb^{n \times r}$
+\end_inset
+
+ and 
+\begin_inset Formula $\Sigma \in \Rbb^{r \times r}$
+\end_inset
+
+, is of the form 
+\begin_inset Formula $U V^* + W$
+\end_inset
+
+, where 
+\begin_inset Formula \begin{equation}
+\begin{aligned}
+&U^*W = 0 \\
+& WV = 0\\
+& \|W\| \leq 1
+\end{aligned}
+\end{equation}
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+or equivalently
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset Formula \begin{equation}
+\begin{aligned}
+& P_T W = 0 \\
+& \|W\| \leq 1
+\end{aligned}
+\end{equation}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+where 
+\begin_inset Formula $T$
+\end_inset
+
+ is the linear space of matrices defined by 
+\begin_inset Formula \[
+T = \{UX^* + YV^*, \  X, Y \in \mathbb{R}^{n \times r}\}
+\]
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+Indeed, we have 
+\begin_inset Formula \begin{align*}
+P_TW = 0
+&\Leftrightarrow W \in T^\perp  \\
+&\Leftrightarrow \forall M \in T, \ Tr(W^*M) = 0\\
+&\Leftrightarrow \forall X, Y \in \mathbb{R}^{n \times r}, \ Tr(W^*(UX^* + YV^*)) = 0\\
+&\Leftrightarrow \forall X, Y \in \mathbb{R}^{n \times r}, \ Tr((U^*W)^*X^*) + Tr((WV)^*Y) = 0\\
+&\Leftrightarrow U^*W = WV^* = 0
+\end{align*}
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+
+Note that the projection on the orthogonal of 
+\begin_inset Formula $T$
+\end_inset
+
+ is given by 
+\begin_inset Formula \[
+P_{T^\perp} M = (I - UU^*)M(I - VV^*)
+\]
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{proof}
+\end_layout
+
+\end_inset
+
+ Note that 
+\begin_inset Formula $UU^*$
+\end_inset
+
+ is the orthogonal projection on the subspace spanned by the columns of 
+\begin_inset Formula $U$
+\end_inset
+
+, and similarly for 
+\begin_inset Formula $VV^*$
+\end_inset
+
+. Let 
+\begin_inset Formula $P_U = UU^*$
+\end_inset
+
+, 
+\begin_inset Formula $P_{U^\perp} = I - UU^*$
+\end_inset
+
+, and similarly for 
+\begin_inset Formula $V$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+Let 
+\begin_inset Formula $M_1 = (I - UU^*)M(I - VV^*) = P_{U^\perp} M P_{V^\perp}$
+\end_inset
+
+. We have 
+\begin_inset Formula \[
+P_{T^\perp} M = M_1 \Leftrightarrow (M - M_1 \in T \text{ and } M_1 \perp M - M_1)
+\]
+\end_inset
+
+ and we have 
+\begin_inset Formula $M - M_1 = UU^*M + MVV^* - UU^*MVV^* = U(U^*M) + (MV - UU^*MV)V^* \in T$
+\end_inset
+
+, and 
+\begin_inset Formula \begin{align*}
+Tr(M_1^* (M - M_1))
+&= Tr((I-VV^*)M^*(I-UU^*)(UU^*M + MVV^* - UU^*MVV^*)) \\
+&= Tr(P_{V^\perp}M^*P_{U^\perp}(P_UM + (M - UU^*M)P_V)) \\
+&= Tr(P_{V^\perp}M^*P_{U^\perp}P_UM) + Tr((M - UU^*M)P_VP_{V^\perp}M^*P_{U^\perp})\\
+&=0
+\end{align*}
+\end_inset
+
+ using the fact that 
+\begin_inset Formula $P_{U^\perp}P_U = P_V P_{V^\perp} = 0$
+\end_inset
+
+ (projecting consecutively on a subspace and its orthogonal yields 0, or simply expanding, 
+\begin_inset Formula $(I-UU^*)UU^* = UU^* - UU^*UU^* = UU^* - U I_r U^* = 0$
+\end_inset
+
+). This completes the proof. 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{proof}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+Note that since 
+\begin_inset Formula $P_{T^\perp}$
+\end_inset
+
+ is an orthogonal projection, we have 
+\begin_inset Formula \[
+\|P_{T^\perp} M \| \leq \|M\|
+\]
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+and for any dyad 
+\begin_inset Formula $e_i e_j^*$
+\end_inset
+
+, we have
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset Formula \begin{align*}
+\|P_{T^\perp} e_ie_j^*\|_F^2
+&= Tr\left( (I-UU^*)e_ie_j^*(I-VV^*)(I-VV^*)^*e_je_i^*(I-UU^*)^* \right) \\
+&= Tr\left( e_i^*(I-UU^*)^*(I-UU^*)e_ie_j^*(I-VV^*)(I-VV^*)^*e_j \right) \\
+&= Tr\left( e_i^*(I-UU^*)^*(I-UU^*)e_i\right) Tr \left(e_j^*(I-VV^*)(I-VV^*)^*e_j \right) \\
+&= \|(I - UU^*)e_i\|_2^2 \|(I - VV^*)e_j\|_2^2
+\end{align*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+and since 
+\begin_inset Formula $UU^*$
+\end_inset
+
+ is an orthogonal projection, we have 
+\begin_inset Formula \begin{align*}
+\|(I - UU^*)e_i\|_2^2
+&= \|e_i\|_2^2 - \|UU^*e_i\|_2^2 \\
+&\geq 1 - \mu r / n
+\end{align*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+where the last inequality results form the incoherence condition
+\begin_inset space ~
+
+\end_inset
+
+(
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:incoherence2"
+
+\end_inset
+
+), 
+\begin_inset Formula $\|U^*e_i\|_2^2 \leq \frac{\mu r}{n}$
+\end_inset
+
+. Therefore 
+\begin_inset Formula \[
+\|P_{T^\perp} e_ie_j^*\|_F^2 \geq (1 - \mu r / n)^2
+\]
+\end_inset
+
+ equivalently, using the fact that 
+\begin_inset Formula $\|P_{T^\perp} e_ie_j^*\|_F^2 + \|P_{T} e_ie_j^*\|_F^2 = \|e_ie_j^*\|_F^2 = 1$
+\end_inset
+
+, we have 
+\begin_inset Formula \begin{align*}
+\|P_{T} e_ie_j^*\|_F^2
+&\leq 1 - (1 - \frac{\mu r}{n})^2 \\
+&= \frac{2\mu r}{n} - \left( \frac{\mu r}{n} \right)^2 \\
+&\leq \frac{2\mu r}{n}
+\end{align*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\end_layout
+
+\begin_layout Standard
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+
+Elimination Theorem
+\end_layout
+
+\begin_layout Standard
+
+The following elimination theorem states the intuitive fact that if PCP exactly recovers the components of 
+\begin_inset Formula $M = L+S$
+\end_inset
+
+, then it also exactly recovers the components of 
+\begin_inset Formula $M = L+S'$
+\end_inset
+
+ where 
+\begin_inset Formula $S'$
+\end_inset
+
+ is a trimmed version of 
+\begin_inset Formula $S$
+\end_inset
+
+ (
+\begin_inset Formula $\text{supp}(S')\subset \text{supp}(S)$
+\end_inset
+
+ and 
+\begin_inset Formula $S$
+\end_inset
+
+ and 
+\begin_inset Formula $S'$
+\end_inset
+
+ coincide on 
+\begin_inset Formula $\text{supp}(S')$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{theorem}
+\end_layout
+
+\end_inset
+
+ Suppose the solution to the PCP problem (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:pcp"
+
+\end_inset
+
+) with input data 
+\begin_inset Formula $M_0 = L_0 + S_0$
+\end_inset
+
+ is unique and exact, and consider 
+\begin_inset Formula $M_0' = L_0 + S_0'$
+\end_inset
+
+ where 
+\begin_inset Formula $S_0'$
+\end_inset
+
+ is a trimmed version of 
+\begin_inset Formula $S_0$
+\end_inset
+
+. Then the solution to (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:pcp"
+
+\end_inset
+
+) with input 
+\begin_inset Formula $M_0'$
+\end_inset
+
+ is exact as well. 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{theorem}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{proof}
+\end_layout
+
+\end_inset
+
+ Let 
+\begin_inset Formula $S_0' = P_{\Omega_0} S_0$
+\end_inset
+
+ and let 
+\begin_inset Formula $(\hat{L}, \hat{S})$
+\end_inset
+
+ be the solution to (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:pcp"
+
+\end_inset
+
+) with input 
+\begin_inset Formula $L_0 + S_0'$
+\end_inset
+
+. Then since 
+\begin_inset Formula $(L_0, S_0')$
+\end_inset
+
+ is a feasible point for (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:pcp"
+
+\end_inset
+
+), it provides un upper bound on the optimal value 
+\begin_inset Formula \[
+\|\hat{L}\|_* + \lambda \|\hat{S}\|_1 \leq \|L_0\|_* + \lambda \|S_0'\|_1
+\]
+\end_inset
+
+ then decomposing 
+\begin_inset Formula $S_0$
+\end_inset
+
+ into the orthogonal components 
+\begin_inset Formula $S_0 = P_{\Omega_0} S_0 + P_{\Omega_0^\perp} S_0 = S_0' + P_{\Omega_0^\perp} S_0$
+\end_inset
+
+, we have 
+\begin_inset Formula $\|S_0'\|_1 = \|S_0\|_1 - \|P_{\Omega_0^\perp} S_0\|_1$
+\end_inset
+
+, thus we have
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset Formula \[
+\|\hat{L}\|_* + \lambda \|\hat{S}\|_1 + \lambda \|P_{\Omega_0^\perp} S_0\|_1 \leq \|L_0\|_* + \lambda \|S_0\|_1
+\]
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+and using the triangular inequality
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset Formula \[
+\|\hat{L}\|_* + \lambda \|\hat{S} + P_{\Omega_0^\perp} S_0\|_1 \leq \|L_0\|_* + \lambda \|S_0\|_1
+\]
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+we observe that 
+\begin_inset Formula $(\hat{L}, \hat{S} + P_{\Omega_0^\perp} S_0)$
+\end_inset
+
+ is feasible for the problem with input 
+\begin_inset Formula $M = L_0 + S_0$
+\end_inset
+
+, for which the optimal value is precisely 
+\begin_inset Formula $\|L_0\|_* + \lambda \|S_0\|_1$
+\end_inset
+
+. Therefore by uniqueness of the solution, we have 
+\begin_inset Formula \[
+\begin{aligned}
+&\hat{L} = L_0 \\
+&P_{\Omega_0^\perp} S_0 = S_0
+\end{aligned}
+\]
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+the second equality is equivalent to 
+\begin_inset Formula $\hat{S} = S_0 - P_{\Omega_0^\perp} S_0 = P_{\Omega_0} S_0 = S_0'$
+\end_inset
+
+. This completes the proof. 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{proof}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\end_layout
+
+\begin_layout Standard
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+
+Derandomization
+\end_layout
+
+\begin_layout Standard
+
+Derandomization is used to show equivalence between the problem where the signs of the entries of 
+\begin_inset Formula $S_0$
+\end_inset
+
+ are random, and the problem where the entries of 
+\begin_inset Formula $S_0$
+\end_inset
+
+ have fixed signs.
+\end_layout
+
+\begin_layout Standard
+
+In the setting of Theorem
+\begin_inset space ~
+
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "thm:pcp"
+
+\end_inset
+
+, the non-zero entries of the sparse component 
+\begin_inset Formula $S_0$
+\end_inset
+
+ are fixed, but the proof will use a stronger assumption: the signs of the non-zero entries are independent Bernoulli variables. The following theorem shows equivalence of the two settings.
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{theorem}
+\end_layout
+
+\end_inset
+
+ Suppose 
+\begin_inset Formula $L_0$
+\end_inset
+
+ satisfies conditions of Theorem
+\begin_inset space ~
+
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "thm:pcp"
+
+\end_inset
+
+, and that the support of 
+\begin_inset Formula $S_0$
+\end_inset
+
+ is sampled from a Bernoulli model with parameter 
+\begin_inset Formula $2\rho_s$
+\end_inset
+
+, and the signs of 
+\begin_inset Formula $S_0$
+\end_inset
+
+ are i.i.d. Bernoulli 
+\begin_inset Formula $\pm 1$
+\end_inset
+
+ with parameter 
+\begin_inset Formula $\frac{1}{2}$
+\end_inset
+
+, and independent from the support. Then:
+\end_layout
+
+\begin_layout Standard
+
+If the PCP solution is exact with high probability, then it is exact with at least the same probability for the model in which values of 
+\begin_inset Formula $S_0$
+\end_inset
+
+ are fixed and the support is sampled from a Bernoulli distribution with parameter 
+\begin_inset Formula $\rho_s$
+\end_inset
+
+. 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{theorem}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{proof}
+\end_layout
+
+\end_inset
+
+ Consider the fixed values model, and let 
+\begin_inset Formula $S_0 = P_\Omega S$
+\end_inset
+
+ for some matrix 
+\begin_inset Formula $S$
+\end_inset
+
+, and the support 
+\begin_inset Formula $\Omega$
+\end_inset
+
+ is sampled from a Bernoulli distribution. Thus the components of 
+\begin_inset Formula $S_0$
+\end_inset
+
+ are independent and 
+\begin_inset Formula \[
+(S_0)_{ij} =
+\begin{cases}
+S_{ij} & \text{w.p. } \rho_s \\
+0 & \text{w.p. } 1 - \rho_s
+\end{cases}
+\]
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+the idea of the proof is to craft a new model, and show that it is equivalent (in terms of probability distribution) to the above model.
+\end_layout
+
+\begin_layout Standard
+
+Let 
+\begin_inset Formula $E$
+\end_inset
+
+ be a random sign matrix, with i.i.d. entries 
+\begin_inset Formula \[
+E_{ij} =
+\begin{cases}
+1 & \text{w.p. } \rho_s \\
+0 & \text{w.p. } 1 - 2\rho_s\\
+-1 & \text{w.p. } \rho_s
+\end{cases}
+\]
+\end_inset
+
+ and 
+\begin_inset Formula $\Delta(E)$
+\end_inset
+
+ an elimination matrix, function of 
+\begin_inset Formula $E$
+\end_inset
+
+, defined as 
+\begin_inset Formula \[
+\Delta_{ij} =
+\begin{cases}
+0 & \text{if } E_{ij}S_{ij} < 0 \ (E_{ij} \text{ and } S_{ij} \text{ have different signs} )\\
+1 & \text{otherwise}
+\end{cases}
+\]
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+the entries of 
+\begin_inset Formula $\Delta$
+\end_inset
+
+ are functions of independent variables, and are therefore independent.
+\end_layout
+
+\begin_layout Standard
+
+Now consider the following variable 
+\begin_inset Formula \[
+S'_0 = \Delta \circ |S| \circ E
+\]
+\end_inset
+
+ where 
+\begin_inset Formula $\circ$
+\end_inset
+
+ is the component wise product. Then 
+\begin_inset Formula $S_0$
+\end_inset
+
+ and 
+\begin_inset Formula $S'_0$
+\end_inset
+
+ have the same distribution. Indeed, it suffices by independence to check that they have the same marginals:
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset Formula \begin{align*}
+P((S'_0)_{ij} = S_{ij})
+&= P(\Delta_{ij} = 1 \text{ and } E_{ij} = \sgn S_{ij}) \\
+&= P(E_{ij}S_{ij} \geq 0 \text{ and } E_{ij} = \sgn S_{ij}) \\
+&= P(E_{ij} = \sgn S_{ij}) \\
+&= \rho_s
+\end{align*}
+\end_inset
+
+ and 
+\begin_inset Formula \[
+P(S_0 = S_{ij}) = \rho_s
+\]
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+Finally, since, by assumption, PCP recovers 
+\begin_inset Formula $|S| \circ E$
+\end_inset
+
+ with high probability, then by the elimination theorem, it also recovers 
+\begin_inset Formula $\Delta \circ |S| \circ E$
+\end_inset
+
+ with at least the same probability. The result follows since 
+\begin_inset Formula $S'_0$
+\end_inset
+
+ and 
+\begin_inset Formula $S_0$
+\end_inset
+
+ have the same distribution. 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{proof}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\end_layout
+
+\begin_layout Standard
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+
+Dual certificate
+\end_layout
+
+\begin_layout Standard
+
+The following lemma gives a simple sufficient condition for the pair 
+\begin_inset Formula $(L_0,S_0)$
+\end_inset
+
+ to be the unique optimal solution to PCP.
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{lemma}
+\end_layout
+
+\end_inset
+
+ Assume that 
+\begin_inset Formula $\|P_\Omega P_T \| < 1$
+\end_inset
+
+. Then 
+\begin_inset Formula $(L_0,S_0)$
+\end_inset
+
+ is the unique solution to PCP if 
+\begin_inset Formula $\exists (W, F)$
+\end_inset
+
+ such that 
+\begin_inset Formula \begin{equation}
+\begin{aligned}
+& UV^* + W = \lambda(\text{sign}(S_0) + F) \\
+& P_T W = 0 \\
+& \|W\|<1 \\
+& P_\Omega F = 0 \\
+& \|F\|_\infty < 1
+\end{aligned}
+\end{equation}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{lemma}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{proof}
+\end_layout
+
+\end_inset
+
+ We first prove that the condition 
+\begin_inset Formula $\|P_\Omega P_T\| < 1$
+\end_inset
+
+ is equivalent to 
+\begin_inset Formula $\Omega \cap T = \{0\}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+First, if 
+\begin_inset Formula $\Omega \cap T \neq \{0\}$
+\end_inset
+
+, then let 
+\begin_inset Formula $M_0 \in \Omega \cap T$
+\end_inset
+
+, 
+\begin_inset Formula $M_0 \neq 0$
+\end_inset
+
+. We have 
+\begin_inset Formula $\| P_\Omega P_T M_0\| = \|M_0\|$
+\end_inset
+
+, thus 
+\begin_inset Formula $\| P_\Omega P_T\| = \max_{M \neq 0} \frac{\| P_\Omega P_T M\|}{\|M\|} \geq 1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+Conversely, if 
+\begin_inset Formula $\| P_\Omega P_T\| \geq 1$
+\end_inset
+
+, then 
+\begin_inset Formula $\exists M_0 \neq 0$
+\end_inset
+
+ such that 
+\begin_inset Formula $\|M_0\| \leq \| P_\Omega P_T M_0\|$
+\end_inset
+
+. But since 
+\begin_inset Formula $P_\Omega$
+\end_inset
+
+ and 
+\begin_inset Formula $P_T$
+\end_inset
+
+ are orthogonal projections, we have 
+\begin_inset Formula $\|M_0\| \leq \| P_\Omega P_T\| \leq \|P_T M_0\| \leq \|M_0\|$
+\end_inset
+
+, where inequalities must hold with equality. In particular, we have 
+\begin_inset Formula $\|P_T M_0\| = \|M_0\|$
+\end_inset
+
+, which implies 
+\begin_inset Formula $P_T M_0 = M_0$
+\end_inset
+
+ (to prove this, decompose 
+\begin_inset Formula $\|M_0\|$
+\end_inset
+
+ into the orthogonal components 
+\begin_inset Formula $\|M_0\|^2 = \|M_0 - P_TM_0\|^2 + \|P_TM_0\|^2$
+\end_inset
+
+, thus 
+\begin_inset Formula $\|P_TM_0\| = \|M_0\| \Rightarrow \|M_0 - P_TM_0\| = 0 \Rightarrow M_0 = P_T M_0$
+\end_inset
+
+), then similarly, 
+\begin_inset Formula $\|P_\Omega M_0\| = \|M_0\|$
+\end_inset
+
+, which implies 
+\begin_inset Formula $P_\Omega M_0 = M_0$
+\end_inset
+
+. Therefore 
+\begin_inset Formula $M_0 \in \Omega \cap T$
+\end_inset
+
+. This proves the equivalence 
+\begin_inset Formula $\|P_\Omega P_T\| < 1 \Leftrightarrow \Omega \cap T = \{0\}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+To prove that 
+\begin_inset Formula $(L_0, S_0)$
+\end_inset
+
+ is the unique optimizer, we show that for any feasible perturbation 
+\begin_inset Formula $(L_0 + H, S_0 - H)$
+\end_inset
+
+ where 
+\begin_inset Formula $H \neq 0$
+\end_inset
+
+ strictly increases the objective. Let 
+\end_layout
+
+\begin_layout Itemize
+
+
+\begin_inset Formula $UV^* + W_0$
+\end_inset
+
+ be an arbitrary subgradient of the nuclear norm at 
+\begin_inset Formula $L_0$
+\end_inset
+
+, where 
+\begin_inset Formula $\|W_0\| \leq 1$
+\end_inset
+
+ and 
+\begin_inset Formula $P_T W_0 = 0$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+
+
+\begin_inset Formula $\sgn (S_0) + F_0$
+\end_inset
+
+ be an arbitrary subgradient of the 
+\begin_inset Formula $\ell_1$
+\end_inset
+
+-norm at 
+\begin_inset Formula $S_0$
+\end_inset
+
+, where 
+\begin_inset Formula $\|F_0\|_\infty \leq 1$
+\end_inset
+
+ and 
+\begin_inset Formula $P_\Omega F_0 = 0$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+
+Then we can lower bound the value of the objective 
+\begin_inset Formula \[
+\|L_0 + H\|_* + \lambda \|S_0 - H\|_1 \geq \|L_0\|_* + \lambda \|S_0\|_1 + \langle UV^* + W_0, H\rangle - \lambda \langle \sgn(S_0) + F_0, H\rangle
+\]
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+Now we pick a particular pair 
+\begin_inset Formula $(W_0, F_0)$
+\end_inset
+
+ such that 
+\end_layout
+
+\begin_layout Itemize
+
+
+\begin_inset Formula $\langle W_0, H \rangle = \|P_{T^\perp} H\|_*$
+\end_inset
+
+, for example 
+\begin_inset Formula $W_0 = P_{T^\perp} W$
+\end_inset
+
+ where 
+\begin_inset Formula $W$
+\end_inset
+
+ is a normed matrix such that 
+\begin_inset Formula $\langle W, P_{T^\perp} H \rangle = \|P_{T^\perp} H\|_*$
+\end_inset
+
+ (by duality of 
+\begin_inset Formula $\|.\|$
+\end_inset
+
+ and 
+\begin_inset Formula $\|.\|_*$
+\end_inset
+
+) 
+\end_layout
+
+\begin_layout Itemize
+
+
+\begin_inset Formula $\langle F_0, H \rangle = -\|P_{\Omega^\perp} H\|_1$
+\end_inset
+
+, for example 
+\begin_inset Formula $F_0 = -\sgn(P_{\Omega^\perp} H)$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+
+then we have
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset Formula \[
+\|L_0 + H\|_* + \lambda \|S_0 - H\|_1 \geq \|L_0\|_* + \lambda \|S_0\|_1  + \|P_{T^\perp} H\|_* + \|P_{\Omega^\perp} H\|_1 + \langle UV^* - \lambda  \sgn(S_0), H\rangle
+\]
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+we can bound the inner product using the definition of 
+\begin_inset Formula $W$
+\end_inset
+
+ and 
+\begin_inset Formula $F$
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset Formula \begin{align*}
+|\langle UV^* - \lambda  \sgn(S_0), H\rangle|
+& = |\langle \lambda F - W, H\rangle|  & \text{since } UV^* + W = \lambda(\text{sign}(S_0) + F) \\
+&\leq |\langle W, H \rangle| + \lambda |\langle F, H \rangle| & \text{by the triangular inequality} \\
+&\leq \beta (\|P_{T^\perp} H\|_* + \lambda \|P_{\Omega^\perp} H\|_1)
+\end{align*}
+\end_inset
+
+ where 
+\begin_inset Formula $\beta = \max (\|W\|, \|F\|_\infty) < 1$
+\end_inset
+
+, and the last inequality follows from the fact that 
+\begin_inset Formula \[
+\begin{aligned}
+& \|P_{T^\perp} H\|_* \geq \langle P_{T^\perp} H, W/\|W\| \rangle \geq \langle H, W/\|W\| \rangle\\
+& \|P_{\Omega^\perp} H\|_1 \geq \langle P_{\Omega^\perp} H, F/\|F\|_\infty \rangle \geq \langle H, F/\|F\|_\infty \rangle
+\end{aligned}
+\]
+\end_inset
+
+ Thus 
+\begin_inset Formula \begin{align*}
+\|L_0 + H\|_* + \lambda \|S_0 - H\|_1 - \|L_0\|_* - \lambda \|S_0 \|_1
+&\geq  (1-\beta) \left( \|P_{T^\perp} H\|_* + \lambda \|P_{\Omega^\perp} H\|_1 \right) \\
+& > 0
+\end{align*}
+\end_inset
+
+ since 
+\begin_inset Formula $\|P_{T^\perp} H\|_* = \|P_{\Omega^\perp} H\|_1 = 0$
+\end_inset
+
+ only if 
+\begin_inset Formula $P_{T^\perp} H = P_{\Omega^\perp} H = 0$
+\end_inset
+
+, i.e. 
+\begin_inset Formula $H \in \Omega \cap T$
+\end_inset
+
+, and, by assumption, 
+\begin_inset Formula $\Omega \cap T = {0}$
+\end_inset
+
+ and 
+\begin_inset Formula $H \neq 0$
+\end_inset
+
+. Therefore the objective strictly increases with a non-zero perturbation. This completes the proof.
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{proof}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+The proof of the main theorem will use a slightly different result, given by the following Lemma 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{lemma}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "lem:dual_cert"
+
+\end_inset
+
+ Assume that 
+\begin_inset Formula $\|P_\Omega P_T \| \leq 1/2$
+\end_inset
+
+. Then 
+\begin_inset Formula $(L_0,S_0)$
+\end_inset
+
+ is the unique solution to PCP if 
+\begin_inset Formula $\exists (W, F)$
+\end_inset
+
+ such that 
+\begin_inset Formula \begin{equation}
+\begin{aligned}
+& UV^* + W = \lambda(\text{sign}(S_0) + F + P_\Omega D) \\
+& P_T W = 0 \\
+& \|W\| \leq 1/2 \\
+& P_\Omega F = 0 \\
+& \|F\|_\infty \leq 1/2 \\
+&\|P_\Omega D \|_F \leq 1/4
+\end{aligned}
+\end{equation}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{lemma}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{proof}
+\end_layout
+
+\end_inset
+
+ Using 
+\begin_inset Formula $\beta = \max (\|W\|, \|F\|_\infty) \leq \frac{1}{2}$
+\end_inset
+
+ in the previous proof, we have for a non-zero perturbation 
+\begin_inset Formula $H$
+\end_inset
+
+ 
+\begin_inset Formula \begin{align*}
+\|L_0 + H\|_* + \lambda \|S_0 - H\|_1 - \|L_0\|_* - \lambda \|S_0 \|_1
+&\geq  \frac{1}{2} \left( \|P_{T^\perp} H\|_* + \lambda \|P_{\Omega^\perp} H\|_1 \right) - \lambda \langle P_{\Omega} D, H\rangle \\
+& \geq \frac{1}{2} \left( \|P_{T^\perp} H\|_* + \lambda \|P_{\Omega^\perp} H\|_1 \right) - \frac{\lambda}{4} \|P_{\Omega} H\|_F
+\end{align*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+the last term can be further bounded 
+\begin_inset Formula \begin{align*}
+\|P_\Omega H\|_F
+&\leq \|P_\Omega P_T H\|_F + \|P_\Omega P_{T^\perp} H\|_F \\
+&\leq \frac{1}{2} \|H\|_F + \|P_{T^\perp} H\|_F & \text{using } \|P_\Omega P_T\| \leq \frac{1}{2} \text{ and } \|P_\Omega\| \leq 1 \\
+&\leq \frac{1}{2} \|P_\Omega H\|_F + \frac{1}{2} \|P_{\Omega^\perp} H\|_F + \|P_{T^\perp} H\|_F
+\end{align*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+therefore
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset Formula \[
+\|P_\Omega H\|_F \leq \|P_{\Omega^\perp} H\|_F + 2 \|P_{T^\perp} H\|_F
+\]
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+and we conclude by lower bounding the increase in the objective 
+\begin_inset Formula \begin{align*}
+\|L_0 + H\|_* + \lambda \|S_0 - H\|_1 - \|L_0\|_* - \lambda \|S_0 \|_1
+&\geq  \frac{1}{2} \left( (1- \lambda) \|P_{T^\perp} H\|_* + \frac{\lambda}{2} \|P_{\Omega^\perp} H\|_1 \right) \\
+& > 0
+\end{align*}
+\end_inset
+
+ since 
+\begin_inset Formula $ \|P_{T^\perp} H\|_* =  \|P_{\Omega^\perp} H\|_1 = 0$
+\end_inset
+
+ only if 
+\begin_inset Formula $P_{\Omega^\perp} H = P_{T^\perp} H = 0$
+\end_inset
+
+, i.e. 
+\begin_inset Formula $H \in \Omega \cap T$
+\end_inset
+
+, and, by assumption, 
+\begin_inset Formula $\Omega \cap T = \{ 0 \}$
+\end_inset
+
+ (
+\begin_inset Formula $\|P_\Omega P_T\| \leq \frac{1}{2} < 1$
+\end_inset
+
+). This completes the proof.
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{proof}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+By the previous Lemma, it suffices to produce a dual certificate 
+\begin_inset Formula $W$
+\end_inset
+
+ such that 
+\begin_inset Formula \begin{equation}
+\begin{aligned}
+& W \in T^{\perp} \\
+& \|W\| < 1/2\\
+& \|P_\Omega (UV^* - \lambda \sgn(S_0) + W) \|_F \leq \lambda / 4  \\
+& \|P_{\Omega^\perp}(UV^* + W)\|_\infty < \lambda / 2
+\end{aligned}
+\end{equation}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+since under these conditions, 
+\begin_inset Formula $D = \frac{1}{\lambda} P_\Omega (UV^* - \lambda \sgn(S_0) + W)$
+\end_inset
+
+ and 
+\begin_inset Formula $F = \frac{1}{\lambda} P_{\Omega^\perp} (UV^* + W)$
+\end_inset
+
+ satisfy the sufficient conditions given by Lemma
+\begin_inset space ~
+
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lem:dual_cert"
+
+\end_inset
+
+. Indeed we have
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset Formula \begin{align*}
+UV^* + W - \lambda \sign(S_0)
+&= P_\Omega (UV^* + W - \lambda \sign(S_0))+ P_{\Omega^\perp} (UV^* + W - \lambda \sign(S_0)) \\
+&= \lambda D+ P_{\Omega^\perp} (UV^* + W) \text{ since } \sign(S_0) \in \Omega\\
+&= \lambda (D+F)
+\end{align*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+and the first condition of Lemma
+\begin_inset space ~
+
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lem:dual_cert"
+
+\end_inset
+
+ is satisfied. The remaining conditions follow from the definition of 
+\begin_inset Formula $F$
+\end_inset
+
+ and 
+\begin_inset Formula $D$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+%-----------------------------------------------------------------------------
+\end_layout
+
+\begin_layout Standard
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+
+Bounding 
+\begin_inset Formula $\|P_\Omega P_T\|$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+Under suitable conditions on the size of the support 
+\begin_inset Formula $\Omega_0$
+\end_inset
+
+ of the sparse component, a bound can be derived on 
+\begin_inset Formula $\|P_\Omega P_T\|$
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+after ""
+key "Candes:2009uq"
+
+\end_inset
+
+. 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{theorem}
+\end_layout
+
+\end_inset
+
+ Suppose 
+\begin_inset Formula $\Omega_0$
+\end_inset
+
+ is sampled from the Bernoulli model with parameter 
+\begin_inset Formula $\rho_0$
+\end_inset
+
+. Then with high probability, 
+\begin_inset Formula \[
+\|P_T - \rho_0^{-1} P_T P_{\Omega_0} P_T\| \leq \epsilon
+\]
+\end_inset
+
+ provided that 
+\begin_inset Formula $\rho_0 \geq C_0 \epsilon^{-2} \frac{\mu r \log n}{n}$
+\end_inset
+
+ where 
+\begin_inset Formula $\mu$
+\end_inset
+
+ is the incoherence parameter and 
+\begin_inset Formula $C_0$
+\end_inset
+
+ is a numerical constant. 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{theorem}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+As a consequence, 
+\begin_inset Formula $\|P\Omega P_T\|$
+\end_inset
+
+ can be bounded, and if 
+\begin_inset Formula $|\Omega|$
+\end_inset
+
+ is not too large, then the desired bound 
+\begin_inset Formula $\|P_\Omega P_T\| \leq 1/2$
+\end_inset
+
+ holds. 
+\end_layout
+
+\end_body
+\end_document

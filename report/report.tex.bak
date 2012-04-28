@@ -88,7 +88,7 @@ The cardinality of the support of $S_0$ is denoted $m$. Guaranteeing exact recov
 
 \input{theory_proofs.tex}
 
-
+\input{generalization2.tex}
 %============================================================================================
 \newpage
 \section{Related Problems and Extensions}

@@ -412,23 +412,23 @@ where the constructed $W^{L}$ and $W^{S}$ will satisfy the following
 properties. First , $P_{\Omega}(W^{S})=\lambda sign(S_{0})$. Then
 it also need to satisfies the followings.
 
-\begin{lemma} \label{wl} Let $S_0\sim Bern(\rho)$ iid for each entry with $\Omega$
+\begin{lemma} \label{wl} Let $S\sim Bern(\rho)$ iid for each entry with $\Omega$
 as its support set. Set $j_{0}=2\log n$. With the assumptions in
 the main theorem of RPCA, $W^{L}$ satisfies the following with high
 probability.
 \begin{enumerate}
 \item $||W^{L}||<\frac{1}{4}$
 \item $||P_{\Omega}(UV^{*}+W^{L})||_{F}<\frac{\lambda}{4}$
-\item $||P_{\Omega^{\bot}}(UV^{*}+W^{L})||_{\infty}<\frac{\lambda}{4}$
+\item $||P_{\Omega^{\bot}}(UV^{*}+W^{L})||<\frac{\lambda}{4}$
 \end{enumerate}
 \end{lemma}
 
-\begin{lemma} \label{ws} Let $S_0\sim Bern(\rho)$ iid for each entry with $\Omega$
+\begin{lemma} \label{ws} Let $S\sim Bern(\rho)$ iid for each entry with $\Omega$
 as its support set. With the assumptions in the main theorem of RPCA,
 $W^{S}$ satisfies the following with high probability.
 \begin{enumerate}
 \item $||W^{S}||<\frac{1}{4}$
-\item $||P_{\Omega^{\bot}}(W^{S})||_{\infty}<\frac{\lambda}{4}$
+\item $||P_{\Omega^{\bot}}(W^{S})||<\frac{\lambda}{4}$
 \end{enumerate}
 \end{lemma}
 

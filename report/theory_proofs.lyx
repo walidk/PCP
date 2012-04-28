@@ -1,0 +1,1711 @@
+#LyX file created by tex2lyx 2.0.0
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options false
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\paperfontsize default
+\spacing single
+\use_hyperref 0
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\end_header
+
+\begin_body
+
+\begin_layout Subsection
+
+Proof of the equivalence of the Bernoulli sampling and uniform sampling model 
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{theorem}
+\end_layout
+
+\end_inset
+
+ Let 
+\begin_inset Formula $E$
+\end_inset
+
+ be the event that the recovery of 
+\begin_inset Formula $(L_{0},S_{0})$
+\end_inset
+
+ is exact through the RPCA. Then, 
+\begin_inset Formula $\forall\epsilon>0$
+\end_inset
+
+, 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{theorem}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+With 
+\begin_inset Formula $\rho=\frac{m}{n^{2}}+\epsilon$
+\end_inset
+
+, 
+\begin_inset Formula $E$
+\end_inset
+
+ holds with high probability when the sparse matrix 
+\begin_inset Formula $S_{i,j}\sim Bern(\rho)$
+\end_inset
+
+ iid 
+\begin_inset Formula $\Longrightarrow$
+\end_inset
+
+
+\begin_inset Formula $E$
+\end_inset
+
+ holds with high probability when the sparse matrix 
+\begin_inset Formula $S\sim Uniform(m)$
+\end_inset
+
+. 
+\end_layout
+
+\begin_layout Itemize
+
+With 
+\begin_inset Formula $\rho=\frac{m}{n^{2}}-\epsilon$
+\end_inset
+
+, 
+\begin_inset Formula $E$
+\end_inset
+
+ holds with high probability when the sparse matrix 
+\begin_inset Formula $S\sim Uniform(m)$
+\end_inset
+
+ 
+\begin_inset Formula $\Longrightarrow$
+\end_inset
+
+ 
+\begin_inset Formula $E$
+\end_inset
+
+ holds with high probability when the sparse matrix 
+\begin_inset Formula $S_{i,j}\sim Bern(\rho)$
+\end_inset
+
+ iid 
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{proof}
+\end_layout
+
+\end_inset
+
+ Let us use the notation of subscrpt to denote the underlying sampling process, e.g. ,
+\begin_inset Formula $P_{B(\rho)}(E)$
+\end_inset
+
+ and 
+\begin_inset Formula $P_{U(m)}(E)$
+\end_inset
+
+ be the probability of success recovery using Bernoulli sampling and uniform sampling respectively. We then upper and lower bound the difference of 
+\begin_inset Formula $P_{B(\rho)}(E)-P_{U(m)}(E)$
+\end_inset
+
+ and show that the difference goes to zero as the dimension of the matrix 
+\begin_inset Formula $n\to\infty$
+\end_inset
+
+. 
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset Formula \begin{eqnarray*}
+ &  & P_{B(\rho)}(E)\\
+ & = & \sum_{i=0}^{n^{2}}P_{B(\rho)}(|\Omega|=i)P_{B(\rho)}(E\mid|\Omega|=i)\\
+ & = & \sum_{i=0}^{n^{2}}P_{B(\rho)}(|\Omega|=i)P_{U(i)}(E)\\
+ & \le & \sum_{i=0}^{m-1}P_{B(\rho)}(|\Omega|=i)+\sum_{i=m}^{n^{2}}P_{U(i)}(E)P_{B(\rho)}(|\Omega|=i)\\
+ & \le & \sum_{i=0}^{m-1}P_{B(\rho)}(|\Omega|=i)+\sum_{i=m}^{n^{2}}P_{U(i)}(E)P_{B(\rho)}(|\Omega|=i)\\
+ & \le & \sum_{i=0}^{m-1}P_{B(\rho)}(|\Omega|=i)+\sum_{i=m}^{n^{2}}P_{U(m)}(E)P_{B(\rho)}(|\Omega|=i)\\
+ & \le & P_{B(\rho)}(|\Omega|<m)+P_{U(m)}(E)
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+This gives, 
+\begin_inset Formula $P_{B(\rho)}(E)-P_{U(m)}(E)\le P_{B(\rho)}(|\Omega|<m)$
+\end_inset
+
+. With 
+\begin_inset Formula $\rho=\frac{m}{n^{2}}+\epsilon$
+\end_inset
+
+, by law of large number, when 
+\begin_inset Formula $n\to\infty$
+\end_inset
+
+ we get, 
+\begin_inset Formula $P_{B(\rho)}(E)\le P_{U(m)}(E)$
+\end_inset
+
+ .
+\end_layout
+
+\begin_layout Standard
+
+On the other hand, 
+\begin_inset Formula \begin{eqnarray*}
+ &  & P_{B(\rho)}(E)\\
+ & \ge & \sum_{i=0}^{m}P_{B(\rho)}(|\Omega|=i)P_{B(\rho)}(E\mid|\Omega|=i)\\
+ & \ge & P_{U(m)}(E)\sum_{i=0}^{m}P_{B(\rho)}(|\Omega|=i)\\
+ & = & P_{U(m)}(E)(1-P_{B(\rho)}(|\Omega|>m))\\
+ & \ge & P_{U(m)}(E)-P_{B(\rho)}(|\Omega|>m)
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+This gives, 
+\begin_inset Formula $P_{B(\rho)}(E)-P_{U(m)}\ge-P_{B(\rho)}(|\Omega|>m)$
+\end_inset
+
+. With 
+\begin_inset Formula $\rho=\frac{m}{n^{2}}-\epsilon$
+\end_inset
+
+, by law of large number, when 
+\begin_inset Formula $n\to\infty$
+\end_inset
+
+ we get, 
+\begin_inset Formula $P_{B(\rho)}(E)\ge P_{U(m)}(E)$
+\end_inset
+
+ . 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{proof}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\end_layout
+
+\begin_layout Standard
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+
+Proof of the Lemma about golfing scheme and dual certificate 
+\end_layout
+
+\begin_layout Standard
+
+Golfing scheme:
+\end_layout
+
+\begin_layout Standard
+
+Recall that the golfing scheme involves creating a 
+\begin_inset Formula $W^{L}$
+\end_inset
+
+ according to the following method. 
+\end_layout
+
+\begin_layout Enumerate
+
+Fix 
+\begin_inset Formula $j_{0}\ge1$
+\end_inset
+
+, define 
+\begin_inset Formula $\Omega_{j}\sim Bern(q)$
+\end_inset
+
+ iid with 
+\begin_inset Formula $1\le j\le j_{0}$
+\end_inset
+
+ and 
+\begin_inset Formula $\rho=(1-q)^{j_{0}}$
+\end_inset
+
+. Define the complement of support of 
+\begin_inset Formula $\Omega$
+\end_inset
+
+ by 
+\begin_inset Formula $\Omega=\cup_{1\le j\le j_{0}}\Omega_{j}^{C}$
+\end_inset
+
+. 
+\end_layout
+
+\begin_layout Enumerate
+
+Define a sequence of matrix which finally ends at 
+\begin_inset Formula $W^{L}$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+
+
+\begin_inset Formula $Y_{0}=0$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+
+\begin_inset Formula $Y_{j}=Y_{j-1}+\frac{1}{q}P_{\Omega_{j}}P_{T}(UV^{*}-Y_{j-1})$
+\end_inset
+
+ for 
+\begin_inset Formula $1\le j\le j_{0}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+
+\begin_inset Formula $W^{L}=P_{\ensuremath{T^{\bot}}}(Y_{j_{0}})$
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{fact}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fact2"
+
+\end_inset
+
+ If we fix 
+\begin_inset Formula $Z\in T$
+\end_inset
+
+, 
+\begin_inset Formula $\Omega_{0}\sim Bern(\rho_{0})$
+\end_inset
+
+, and 
+\begin_inset Formula $\rho_{0}\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{n}$
+\end_inset
+
+ , then with high probability, we will have,
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fact5"
+
+\end_inset
+
+ 
+\begin_inset Formula \[
+||Z-\rho_{0}^{-1}P_{T}P_{\Omega_{0}}(Z)||_{\infty}\le\epsilon||Z||_{\infty}
+\]
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{fact}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fact3"
+
+\end_inset
+
+ If we fix 
+\begin_inset Formula $Z$
+\end_inset
+
+, 
+\begin_inset Formula $\Omega_{0}\sim Bern(\rho_{0})$
+\end_inset
+
+, and 
+\begin_inset Formula $\rho_{0}\ge C_{0}\frac{\mu\log n}{n}$
+\end_inset
+
+, then with high probability, we will have, 
+\begin_inset Formula \begin{eqnarray*}
+||(I-\rho_{0}^{-1}P_{\Omega_{0}})Z|| & \le & C_{0}^{'}\sqrt{\frac{n\log n}{\rho_{0}}}||Z||_{\infty}
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{fact}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fact4"
+
+\end_inset
+
+ If 
+\begin_inset Formula $\Omega_{0}\sim Bern(\rho_{0})$
+\end_inset
+
+,
+\begin_inset Formula $\rho_{0}\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{n}$
+\end_inset
+
+, then with high probability, we will have,
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset Formula \[
+||P_{T}-\rho_{0}^{-1}P_{T}P_{\Omega_{0}}P_{T}||\le\epsilon
+\]
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{fact}
+\end_layout
+
+\end_inset
+
+ If 
+\begin_inset Formula $\Omega_{0}\sim Bern(\rho)$
+\end_inset
+
+ and 
+\begin_inset Formula $1-\rho\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{n}$
+\end_inset
+
+, then with high probability 
+\begin_inset Formula $||P_{\Omega}P_{T}||^{2}\le\rho+\epsilon$
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{fact}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{fact}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{fact}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{fact}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{thm}
+\end_layout
+
+\end_inset
+
+ Let 
+\begin_inset Formula $S\sim Bern(\rho)$
+\end_inset
+
+ iid for each entry with 
+\begin_inset Formula $\Omega$
+\end_inset
+
+ as its support set. Set 
+\begin_inset Formula $j_{0}=2\log n$
+\end_inset
+
+. With the assumptions in the main theorem of RPCA, 
+\begin_inset Formula $W^{L}$
+\end_inset
+
+ satisfies the following with high probability. 
+\end_layout
+
+\begin_layout Enumerate
+
+
+\begin_inset Formula $||W^{L}||<\frac{1}{4}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+
+\begin_inset Formula $||P_{\Omega}(UV^{*}+W^{L})||_{F}<\frac{\lambda}{4}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+
+\begin_inset Formula $||P_{\Omega^{\bot}}(UV^{*}+W^{L})||<\frac{\lambda}{4}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{thm}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{proof}
+\end_layout
+
+\end_inset
+
+ We define another sequence of matrix 
+\begin_inset Formula $Z_{j}=UV^{*}-P_{T}(Y_{j})$
+\end_inset
+
+. There are some properties about 
+\begin_inset Formula $Z_{j}$
+\end_inset
+
+ which allows us to esbablish the proof. We survey them here and provides the proof of them.
+\end_layout
+
+\begin_layout Standard
+
+i) Note that 
+\begin_inset Formula $Z_{j}=(P_{T}-\frac{1}{q}P_{T}P_{\Omega_{j}}P_{T})Z_{j-1}.$
+\end_inset
+
+The reason is as follows. 
+\begin_inset Formula \begin{eqnarray*}
+ & Z_{j}\\
+ & = & UV^{*}-P_{T}(Y_{j-1}+\frac{1}{q}P_{\Omega_{j}}P_{T}(UV^{*}-Y_{j-1}))\\
+ & = & UV^{*}-P_{T}(Y_{j-1})-\frac{1}{q}P_{T}P_{\Omega_{j}}P_{T}(UV^{*}-Y_{j-1})\\
+ & = & Z_{j-1}-q^{-1}(P_{T}P_{\Omega_{j}}(UV^{*}-P_{T}(Y_{j-1})))\text{ because }P_{T}(UV^{*})=UV^{*}\\
+ & = & P_{T}(Z_{j-1})-q^{-1}(P_{T}P_{\Omega_{j}}P_{T}Z_{j-1})\text{ because }Z_{j-1}\in T\\
+ & = & (P_{T}-q^{-1}P_{T}P_{\Omega_{j}}P_{T})Z_{j-1}
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+ii) If 
+\begin_inset Formula $q\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{n}$
+\end_inset
+
+, then 
+\begin_inset Formula $||Z_{j}||_{\infty}\le\epsilon^{j}||UV^{*}||_{\infty}$
+\end_inset
+
+ with high probability. The reason is as follows. By Fact (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fact2"
+
+\end_inset
+
+), we have,
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset Formula \begin{eqnarray*}
+||Z_{j-1}-q^{-1}P_{T}P_{\Omega_{j}}Z_{j-1}||_{\infty} & \le & \epsilon||Z_{j-1}||_{\infty}\\
+||Z_{j}||_{\infty} & \le & \epsilon||Z_{j-1}||_{\infty}
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+Inductively, we get desired.
+\end_layout
+
+\begin_layout Standard
+
+iii) If 
+\begin_inset Formula $q\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{n}$
+\end_inset
+
+, then 
+\begin_inset Formula $||Z_{j}||_{F}\le\epsilon^{j}\sqrt{r}$
+\end_inset
+
+. The reason is as follows. By Fact (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fact4"
+
+\end_inset
+
+), we have,
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset Formula \begin{eqnarray*}
+||(P_{T}-q^{-1}P_{T}P_{\Omega_{0}}P_{T})(\frac{Z_{j-1}}{||Z_{j-1}||_{F}})||_{F} & \le & \epsilon\\
+||(P_{T}-q^{-1}P_{T}P_{\Omega_{0}}P_{T})Z_{j-1}||_{F} & \le & \epsilon||Z_{j-1}||_{F}\\
+||Z_{j-1}|| & \le & \epsilon||Z_{j-1}||_{F}
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+Inductively, we get desired.
+\end_layout
+
+\begin_layout Standard
+
+After establishing these properties, we are ready to prove that golfing scheme yields 
+\begin_inset Formula $W^{L}$
+\end_inset
+
+ that satisfies the desired properties.
+\end_layout
+
+\begin_layout Standard
+
+1) Proof of (1): 
+\begin_inset Formula \begin{eqnarray*}
+||W^{L}|| & = & ||P_{T^{\bot}}(Y_{j_{0}})||\\
+ & \le & \sum_{j=1}^{j_{0}}\frac{1}{q}||P_{T^{\bot}}P_{\Omega_{j}}Z_{j-1}||\text{ because }Y_{j}=Y_{j-1}+q^{-1}P_{\Omega_{j}}(Z_{j-1})\\
+ & = & \sum_{j=1}^{j_{0}}||P_{T^{\bot}}(\frac{1}{q}P_{\Omega_{j}}Z_{j-1}-Z_{j-1})||\text{ because }Z_{j}\in T\\
+ & \le & \sum_{j=1}^{j_{0}}||(\frac{1}{q}P_{\Omega_{j}}Z_{j-1}-Z_{j-1})||\text{ because }||P_{T^{\bot}}(M)||\le||M||\\
+ & \le & C_{0}^{'}\sqrt{\frac{n\log n}{q}}\sum_{j=1}^{j_{0}}||Z_{j-1}||_{\infty}\text{ because Fact(\ref{fact3})}\\
+ & \le & C_{0}^{'}\sqrt{\frac{n\log n}{q}}\sum_{j=1}^{j_{0}}\epsilon^{j}||UV^{*}||_{\infty}\\
+ & \le & C_{0}^{'}\sqrt{\frac{n\log n}{q}}\frac{1}{1-\epsilon}||UV^{*}||_{\infty}\\
+ & \le & C_{0}^{'}\sqrt{\frac{n\log n}{q}}\frac{1}{1-\epsilon}\frac{\sqrt{\mu r}}{n}\\
+ & \le & C^{''}\epsilon<\frac{1}{4}\text{for some constant }C^{''}
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+2) Proof of (2) : First, we expand, 
+\begin_inset Formula \begin{eqnarray*}
+||P_{\Omega}(UV^{*}+W^{L})||_{F} & = & ||P_{\Omega}(UV^{*}+P_{T^{\bot}}Y_{j_{0}})||_{F}
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+Then, because 
+\begin_inset Formula $P_{\Omega}(Y_{j_{0}})=P_{\Omega}(\sum_{j}P_{\Omega_{j}}Z_{j-1})=0$
+\end_inset
+
+ and 
+\begin_inset Formula $P_{\Omega}(P_{T}(Y_{j_{0}})+P_{T^{\bot}}(Y_{j_{0}}))=0$
+\end_inset
+
+, we have, 
+\begin_inset Formula \begin{eqnarray*}
+||P_{\Omega}(UV^{*}+W^{L})||_{F} & = & ||P_{\Omega}(UV^{*}-P_{T}Y_{j_{0}})||_{F}
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+Continuing, 
+\begin_inset Formula \begin{eqnarray*}
+||P_{\Omega}(UV^{*}+W^{L})||_{F} & = & ||P_{\Omega}(Z_{j_{0}})||_{F}\\
+ & \le & ||Z_{j_{0}}||_{F}\\
+ & \le & \epsilon^{j_{0}}\sqrt{r}\\
+ & \le & \sqrt{r}\frac{1}{n^{2}}\le\frac{\lambda}{4}
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+3) Proof of (3) : 
+\begin_inset Formula \begin{eqnarray*}
+||P_{\Omega^{\bot}}(UV^{*}+W^{L})||_{\infty} & = & ||P_{\Omega^{\bot}}(Z_{j_{0}}+Y_{j_{0}})||_{\infty}\\
+ & \le & ||Z_{j_{0}}||_{\infty}+||Y_{j_{0}}||_{\infty}\\
+ & \le & ||Z_{j_{0}}||_{F}+||Y_{j_{0}}||_{\infty}\\
+ & \le & \frac{\lambda}{8}+||Y_{j_{0}}||_{\infty}
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+Moreover, we have 
+\begin_inset Formula \begin{eqnarray*}
+||Y_{j_{0}}||_{\infty} & \le & q^{-1}\sum_{j}||P_{\Omega_{j}}Z_{j-1}||_{\infty}\\
+ & \le & q^{-1}\sum_{j}||Z_{j-1}||_{\infty}\\
+ & \le & q^{-1}\sum_{j}\epsilon^{j}\frac{\sqrt{\mu r}}{n}\\
+ & \le & \frac{\lambda}{8}\text{ if \ensuremath{\epsilon}\ \text{is sufficiently small}}
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{proof}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\end_layout
+
+\begin_layout Standard
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+
+Proof of the Lemma about least square construction and dual certificate 
+\end_layout
+
+\begin_layout Standard
+
+Construction of 
+\begin_inset Formula $W^{S}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset Formula \[
+W_{S}=\lambda P_{T^{\bot}}((P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}sign(S_{0}))
+\]
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{thm}
+\end_layout
+
+\end_inset
+
+ Let 
+\begin_inset Formula $S\sim Bern(\rho)$
+\end_inset
+
+ iid for each entry with 
+\begin_inset Formula $\Omega$
+\end_inset
+
+ as its support set. With the assumptions in the main theorem of RPCA, 
+\begin_inset Formula $W^{S}$
+\end_inset
+
+ satisfies the following with high probability. 
+\end_layout
+
+\begin_layout Enumerate
+
+
+\begin_inset Formula $||W^{S}||<\frac{1}{4}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+
+\begin_inset Formula $||P_{\Omega^{\bot}}(W^{S})||<\frac{\lambda}{4}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{thm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{proof}
+\end_layout
+
+\end_inset
+
+ We consider the sign of 
+\begin_inset Formula $S_{0}$
+\end_inset
+
+ to be distrbuted as follows 
+\begin_inset Formula \[
+sign(S_{0})_{i,j}=\begin{cases}
+1 & \text{wp }\frac{\rho}{2}\\
+0 & \text{wp }1-\rho\\
+-1 & \text{wp }\frac{\rho}{2}
+\end{cases}
+\]
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+1) Proof of (1) :
+\end_layout
+
+\begin_layout Standard
+
+I) We note the we can separate 
+\begin_inset Formula $W^{S}$
+\end_inset
+
+into two parts and then bound them separately.
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset Formula \begin{eqnarray*}
+W^{S} & = & \lambda P_{T^{\bot}}(sign(S_{0}))+\lambda P_{T^{\bot}}(\sum_{k\ge1}(P_{\Omega}P_{T}P_{\Omega})^{k}(sign(S_{0})))
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+II) Then, we have 
+\begin_inset Formula \begin{eqnarray*}
+\lambda P_{T^{\bot}}(sign(S_{0})) & \le & \lambda||sign(S_{0})||\\
+ & = & \frac{1}{\sqrt{n}}||sign(S_{0})||\\
+ & \le & 4\sqrt{\rho}\text{with high probability}
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+where the last inequality uses the fact that for the entry-wise distribution of 
+\begin_inset Formula $sign(S_{0}$
+\end_inset
+
+) , we can have 
+\begin_inset Formula $||sign(S_{0})||\le4\sqrt{n\rho}$
+\end_inset
+
+ holds with high probability.
+\end_layout
+
+\begin_layout Standard
+
+III) Now, for the other part, 
+\begin_inset Formula $\lambda P_{T^{\bot}}(\sum_{k\ge1}(P_{\Omega}P_{T}P_{\Omega})^{k}(sign(S_{0})))$
+\end_inset
+
+, we bound it by first expressing it in the form of 
+\begin_inset Formula $<X,sign(S_{0})>$
+\end_inset
+
+ and then claim that with high probability, this term is bounded above as desired. Let 
+\begin_inset Formula $R=\sum_{k\ge1}(P_{\Omega}P_{T}P_{\Omega})^{k}$
+\end_inset
+
+ , then we have, 
+\begin_inset Formula \begin{eqnarray*}
+||P_{T^{\bot}}(R(sign(S_{0})))|| & \le & ||R(sign(S_{0}))||\\
+ & \le & 4\sup_{x,y\in N}<y,R(sign(S_{0})x)>
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+where the last inequality uses the fact that there exists a 
+\begin_inset Formula $\frac{1}{2}-net$
+\end_inset
+
+ of the Eucledean ball and it has at most 
+\begin_inset Formula $6^{n}$
+\end_inset
+
+ elements. Continuing, we have 
+\begin_inset Formula \begin{eqnarray*}
+||P_{T^{\bot}}(R(sign(S_{0})))|| & \le & 4\sup_{x,y\in N}<y,R(sign(S_{0})x)>\\
+ & = & 4\sup_{x,y\in N}<yx^{*},R(sign(S_{0}))>\\
+ & = & 4\sup_{x,y\in N}<R(yx^{*}),sign(S_{0})>
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+and that we denote 
+\begin_inset Formula $X(x,y)=<R(yx^{*}),sign(S_{0})>$
+\end_inset
+
+ afterwards.
+\end_layout
+
+\begin_layout Standard
+
+Note that, by Hoeffding's inequality, we have, 
+\begin_inset Formula \begin{eqnarray*}
+Pr(|X(x,y)|>t\mid\Omega) & \le & 2exp(-\frac{t^{2}}{2||R(xy^{*})||_{F}^{2}})
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+This gives, 
+\begin_inset Formula \begin{eqnarray*}
+Pr(||P_{T^{\bot}}(R(sign(S_{0})))||>4t\mid\Omega) & \le & Pr(||R(sign(S_{0}))||>4t\mid\Omega)\\
+ & \le & Pr(\sup_{x,y}|X(x,y)|>t\mid\Omega)\\
+ & \le & 2N^{2}exp(-\frac{t^{2}}{2||R||_{F}^{2}})\text{because }||yx^{*}||_{F}\le1
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+Now, we proceed to bound the probability without the condition on 
+\begin_inset Formula $\Omega$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+First, note that the event of 
+\begin_inset Formula $||P_{\Omega}P_{T}||\le\sigma=\rho+\epsilon$
+\end_inset
+
+, implies that 
+\begin_inset Formula $||R||\le(\frac{\sigma^{2}}{1-\sigma^{2}})^{2}$
+\end_inset
+
+. Thus, unconditionally, we have 
+\begin_inset Formula \begin{eqnarray*}
+Pr(||R(sign(S_{0}))||>4t) & \le & 2|N|^{2}exp(\frac{-t^{2}}{2(\frac{\sigma^{2}}{1-\sigma^{2}})^{2}})+Pr(||P_{\Omega}P_{T}||>\sigma)\\
+ & \le & 2\cdot6^{2n}exp(\frac{-t^{2}}{2(\frac{\sigma^{2}}{1-\sigma^{2}})^{2}})+Pr(||P_{\Omega}P_{T}||>\sigma)
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+Thus, where we finally put 
+\begin_inset Formula $t=\frac{1}{16}$
+\end_inset
+
+ 
+\begin_inset Formula \begin{eqnarray*}
+Pr(\lambda||R(sign(S_{0}))||>4t) & \le & 2\cdot6^{2n}exp(\frac{-\frac{t^{2}}{\lambda^{2}}}{2(\frac{\sigma^{2}}{1-\sigma^{2}})^{2}})+Pr(||P_{\Omega}P_{T}||>\sigma)
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+With 
+\begin_inset Formula $\lambda=\sqrt{\frac{1}{n}},$
+\end_inset
+
+we have this probability
+\begin_inset Formula $\to0$
+\end_inset
+
+ as 
+\begin_inset Formula $n\to\infty$
+\end_inset
+
+. Thus with high probability 
+\begin_inset Formula $||W^{S}||\le\frac{1}{4}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+2) Proof of (2) :
+\end_layout
+
+\begin_layout Standard
+
+The idea is that we first express 
+\begin_inset Formula $P_{\Omega^{\bot}}(W^{S})$
+\end_inset
+
+ in the form of 
+\begin_inset Formula $<X,sign(S_{0})>$
+\end_inset
+
+and we can derive upper bound on it if highly probably event of 
+\begin_inset Formula $\{||P_{\Omega}P_{T}||\le\sigma\}$
+\end_inset
+
+ for some small 
+\begin_inset Formula $\sigma=\rho+\epsilon$
+\end_inset
+
+ holds .
+\end_layout
+
+\begin_layout Standard
+
+I) First, 
+\begin_inset Formula \begin{eqnarray*}
+P_{\Omega^{\bot}}(W^{S}) & = & P_{\Omega^{\bot}}(\lambda(I-P_{T})(\sum_{k\ge0}(P_{\Omega}P_{T}P_{\Omega})^{k})sign(S_{0}))\\
+ & = & -\lambda P_{\Omega^{\bot}}P_{T}(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}sign(S_{0})
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+For 
+\begin_inset Formula $(i,j)\in\Omega^{C}$
+\end_inset
+
+, we have 
+\begin_inset Formula \begin{eqnarray*}
+e_{i}^{*}W^{S}e_{j} & = & <e_{i}e_{j}^{*},W_{S}>\\
+ & = & <e_{i}e_{j}^{*},-\lambda P_{\Omega^{\bot}}P_{T}(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}sign(S_{0})>\\
+ & = & -\lambda<e_{i}e_{j}^{*},P_{T}(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}sign(S_{0})>\\
+ & = & -\lambda<e_{i}e_{j}^{*},P_{T}P_{\Omega}(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}sign(S_{0})>\\
+ & = & -\lambda<e_{i}e_{j}^{*},P_{T}\sum_{k\ge0}(P_{\Omega}P_{T}P_{\Omega})^{k}sign(S_{0})>
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+Noting that 
+\begin_inset Formula $P_{\Omega},P_{T}$
+\end_inset
+
+ are self-adjoint, thus, we have 
+\begin_inset Formula \begin{eqnarray*}
+e_{i}^{*}W^{S}e_{j} & = & \lambda<-(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}P_{\Omega}P_{T}(e_{i}e_{j}^{*}),sign(S_{0})>
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+where we now denote 
+\begin_inset Formula $X(i,j)=-(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}P_{\Omega}P_{T}(e_{i}e_{j}^{*})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+II)We now consider, where we put 
+\begin_inset Formula $t=\frac{1}{4}$
+\end_inset
+
+, 
+\begin_inset Formula \begin{eqnarray*}
+Pr(||P_{\Omega^{\bot}}(W^{S})||_{\infty}>t\lambda\mid\Omega) & \le & \sum_{(i,j)\in\Omega^{C}}Pr(|e_{i}^{*}W^{S}e_{j}|>t\lambda|\Omega)\\
+ & \le & n^{2}Pr(|e_{i}^{*}W^{S}e_{j}|>t\lambda|\Omega)\text{ for some (i,j)}\\
+ & = & n^{2}Pr(|<X_{i,j},sign(S_{0})>|>t|\Omega)\\
+ & \le & 2n^{2}exp(-\frac{2t^{2}}{4||X(i,j)||_{F}})\text{ because of Hoeffding's inequality}
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+III) We then proceed to bound the 
+\begin_inset Formula $||X(i,j)||$
+\end_inset
+
+. On the event of 
+\begin_inset Formula $\{||P_{\Omega}P_{T}||\le\sigma\}$
+\end_inset
+
+, we have , 
+\begin_inset Formula \begin{eqnarray*}
+||P_{\Omega}P_{T}(e_{i}e_{j}^{*})||_{F} & \le & ||P_{\Omega}P_{T}||\cdot||P_{T}(e_{i}e_{j}^{*})||_{F}\\
+ & \le & \sigma\sqrt{\frac{2\mu r}{n}}
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+Moreover, we have 
+\begin_inset Formula \begin{eqnarray*}
+||(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}|| & \le & \sum_{k\ge0}||(P_{\Omega}P_{T}P_{\Omega})^{k}||\\
+ & \le & \frac{1}{1-\sigma}
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+Finally, we have 
+\begin_inset Formula \begin{eqnarray*}
+||X(i,j)||_{F} & \le & 2\sigma^{2}\frac{\frac{\mu r}{n}}{(1-\sigma)^{2}}
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+Combining, we have 
+\begin_inset Formula \begin{eqnarray*}
+Pr(||P_{\Omega^{\bot}}W^{S}||>t\lambda) & \le & 2n^{2}exp(\frac{-t^{2}n(1-\sigma)^{2}}{4\sigma^{2}(\mu r)})+Pr(||P_{\Omega}P_{T}||\ge\sigma)\\
+ & \le & \epsilon\text{ if }\mu r<\rho_{r}^{'}\frac{n}{\log n}
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{proof}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\end_layout
+
+\begin_layout Standard
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+
+Proof of the form of sub-differential of nuclear norm 
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{definition}
+\end_layout
+
+\end_inset
+
+ For matrix norms 
+\begin_inset Formula $||\cdot||$
+\end_inset
+
+ which satisfy 
+\begin_inset Formula $||UAV||=||A||$
+\end_inset
+
+ 
+\begin_inset Formula $\forall U,V$
+\end_inset
+
+ being orthonormal, then they are called orthogonally invariant norm.
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{definition}
+\end_layout
+
+\end_inset
+
+ For orthogonally invariant norm 
+\begin_inset Formula $||\cdot||$
+\end_inset
+
+ which is defined by its singular values 
+\begin_inset Formula $||A||=\phi(\vec{\sigma})$
+\end_inset
+
+ where 
+\begin_inset Formula $\vec{\sigma}$
+\end_inset
+
+ are the singular values of 
+\begin_inset Formula $A$
+\end_inset
+
+, we call the function 
+\begin_inset Formula $\phi$
+\end_inset
+
+ as a symmetric gauge function if it is a norm and it satisfies 
+\begin_inset Formula $\phi(\vec{\sigma})=\phi(\epsilon_{1}\sigma_{i_{1}},...,\epsilon_{n}\sigma_{i_{n}})$
+\end_inset
+
+ for any permulation of 
+\begin_inset Formula $(i_{1},...,i_{n})$
+\end_inset
+
+ of 
+\begin_inset Formula $(1,...,n)$
+\end_inset
+
+ and 
+\begin_inset Formula $\epsilon_{i}=\pm1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{fact}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fact10"
+
+\end_inset
+
+ For orthogonally invariant norm 
+\begin_inset Formula $||\cdot||$
+\end_inset
+
+ with symmetric gauge function 
+\begin_inset Formula $\phi$
+\end_inset
+
+, the sub-differential is given by
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset Formula \begin{eqnarray*}
+\partial||A|| & = & \{Udiag(\vec{d})V\mid A=U\Sigma V^{T},\vec{d}\in\partial\phi(\vec{d}),U\in R^{m},V\in R^{n}\}
+\end{eqnarray*}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{fact}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{definition}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{definition}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{thm}
+\end_layout
+
+\end_inset
+
+ Let 
+\begin_inset Formula $A=U^{(1)}\Sigma{V^{(1)}}^{T}$
+\end_inset
+
+ then 
+\begin_inset Formula $\partial||A||_{*}=\{U^{(1)}{V^{(1)}}^{T}+W:||W||\le1,{U^{(1)}}^{T}W=0,WV^{(1)}=0\}$
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{thm}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{proof}
+\end_layout
+
+\end_inset
+
+ We take the symmetric gauge function as 
+\begin_inset Formula $||\cdot||_{1}$
+\end_inset
+
+and then apply the Fact (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fact10"
+
+\end_inset
+
+) and will obtain desired. 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+end{proof}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
