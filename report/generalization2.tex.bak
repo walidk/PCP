@@ -35,10 +35,6 @@
 
 \section{Robust PCA with known rank: a block coordinate descent approach}
 
-\subsection{Motivation}
-In some application, we normally have some prior information about the low rank component of an observed matrix. For examples, in computer vision, if we are to extract the background from different frames of a video, then it is natural to consider each video frame as a long vector. The background that we are recovering is then a long vector, which is of rank 1. Therefore, it is natural to see if we can utilize this additional rank information to derive faster algorithms while retaining the performance guarantee.
-
-
 
 \subsection{Equivalence formulation of Robust PCA with rank information}
 
@@ -70,7 +66,7 @@ With high probability, $(L_{1},S_{1})=(L_{0},S_{0})$. Now, over the
 event of $(L_{1},S_{1})=(L_{0},S_{0})$, $(L_{1},S_{1})$ is also
 a feasible solution for (\ref{eq:restricted} ). Since $J_{1}\le J_{2}$ always,
 now $(L_{1},S_{1})$ achieve the bound for (\ref{eq:restricted} ).
-Note that it should also be unique because otherwise it would contradict with
+Note that it should also be unique because it would contradict with
 the recovery of (\ref{eq:general}).
 \end{IEEEproof}
 Now we apply Proposition (\ref{prop:restriction prob}) to the case
@@ -116,11 +112,11 @@ E^{*} & = & \min_{\{p_{j}\}\{q_{j}\},1\le j\le r}||M-\sum_{j=1}^{r}p_{j}q_{j}^{T
 
 
 
-\subsubsection{Performance guarantee for the $L_1$ heuristic}
+\subsubsection{Performance guarantee for the simplified version}
 
-For this new heuristic, we provide some performance guarantee for the case
+Regarding this, we provide some performance guarantee for the case
 when the noise is bounded. One is a result for deterministic case
-and the other is for the random case. They are as follows.
+and the other is for the random case.
 \begin{prop}
 Let $M=S+\sum_{i=1}^{r}p_{i}q_{i}^{T}$, $\frac{2}{\epsilon}||S||_{1}\le||\sum_{i=1}^{r}p_{i}q_{i}^{T}||_{1}$,
 then, for the recovered $(\hat{L},\hat{S})$ from (\ref{heu}) , it
@@ -146,7 +142,7 @@ This gives a contradition, which is,
 \begin{prop}
 Let $M=\sum_{i=1}^{r}p_{i}q_{i}^{T}+S$, where $S_{i,j}\sim Uniform(-x_{s},x_{s})$,
 $(p_{i})_{j}\sim Uniform(-x_{p},x_{p})$, $(q_{i})_{j}\sim Uniform(-x_{q},x_{q})$
-all of the random variables being independent. With $|S|=k$ such that
+all of the random variables are independent. With $|S|=k$ such that
 $\lim_{n\to\infty}\frac{k^{2}}{n}$, then we have,
 \begin{eqnarray*}
 \lim_{n\to\infty}P(\frac{||\sum_{i=1}^{r}p_{i}q_{i}^{T}-\hat{L}||_{1}}{||\sum_{i=1}^{r}p_{i}q_{i}^{T}||_{1}}>\epsilon) & = & 0
@@ -178,43 +174,13 @@ Thus, since $\frac{1}{n}(\frac{2kx_{s}}{\epsilon})^{2}\to0$. This
 gives $Pr(E)\to0$ as $n\to\infty$.
 \end{IEEEproof}
 
-However, we know that the $L_1$ heuristic cannot work well in the case of unbounded noise. In particular, we consider the following example. 
-
-Say , for $n=100$, $L_{0}=[\begin{array}{c}
-1\\
-1\\
-.\\
-.\\
-1
-\end{array}][\begin{array}{ccccc}
-1 & 1 & . & . & 1\end{array}],S_{0}=[\begin{array}{ccccc}
-10^{9} & 0 & 0 & ... & 0\\
-0 & 0 & 0 & ... & 0\\
-. & . & . & ... & .\\
-. & . & . & ... & .\\
-0 & 0 & 0 & ... & 0
-\end{array}]$, then by the $L_{1}$ heuristics, we would get $\hat{L_{0}}\sim[\begin{array}{c}
-10^{9}\\
-1\\
-.\\
-.\\
-1
-\end{array}][\begin{array}{ccccc}
-1 & 10^{-9} & . & . & 10^{-9}\end{array}],\hat{S_{0}}\sim[\begin{array}{ccccc}
-1 & 0 & 0 & ... & 0\\
-0 & 1 & 1 & ... & 1\\
-. & . & . & ... & .\\
-. & . & . & ... & .\\
-0 & 1 & 1 & ... & 1
-\end{array}]$, which deviates from what we expect. However, the robust PCA can
-recover even for this case because it penalize the nuclear norm of L. 
-
 \subsection{Algorithms derivation}
 
 Note that the form for both (\ref{eq:rank form}) and (\ref{heu})
 are similar. Indeed, one can generalize the method for $r=1$ in (\ref{heu})
 to higher dimensions for both (\ref{eq:rank form}) and (\ref{heu}).
-Therefore, we restrict our discussion to $r=1$ in (\ref{heu}).
+Therefore, we restrict our discussion to $r=1$ in (\ref{heu}) for
+the following discussion.
 
 Let $M=(a_{i,j})\in R^{mXn}$. We now employ the block-coordinate
 descent approach to solve this problem. Note that
@@ -257,12 +223,13 @@ the property of sub-differential of $||\cdot||_{1}$ and note that
 $0\in\partial(\sum_{k=1}^{k_{0}}c_{i}|t^{*}-d_{i}|)$.
 
 Now we are ready to state the power iteration method to solve the
-rank-1 optimization problem. We call it Poweriteration.
+optimization rank-1 optimization problem. We call it Poweriteration.
 
 \begin{algorithm}[h]
 Repeat
 \begin{enumerate}
 \item $p_{i}\leftarrow wmh(n,abs(q),M(i,:)./q)$ for each i
+\item $p\leftarrow\frac{p}{max(p)}$
 \item $q_{j}\leftarrow wmh(n,abs(p),M(:,j)./p)$ for each j
 \end{enumerate}
 Until stopping criterion is met
