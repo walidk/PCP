@@ -27,7 +27,7 @@ The second condition bounds the size $m$ of the support of $S_0$.
 
 The main arguments of the proof are the following:
 
-First, change the model of the sparse matrix $S_0$ from the uniform sampling model, to the Bernoulli sampling model with fixed signs, to the Bernoulli sampling model with random signs. To show equivalence of the results under the different sampling models, an elimination theorem is used.
+First, change the model of the sparse matrix $S_0$ from the uniform sampling model, to the Bernoulli sampling model with fixed signs, then to the Bernoulli sampling model with random signs. To show equivalence of the results under the different sampling models, an elimination theorem is used.
 
 Then using the random sign Bernoulli sampling model, it is shown that a dual certificate can be constructed with high probability, proving that $(L_0, S_0)$ is the unique optimizer, by constructing a subgradient that shows that any non-zero perturbation $H$ will result in a strict increase in the objective value $\|L_0 + H\|_* + \lambda \|S_0 - H\|_1$.
 
@@ -35,7 +35,7 @@ Then using the random sign Bernoulli sampling model, it is shown that a dual cer
 \subsection{Preliminaries}
 \begin{itemize}
 \item The subgradient of of the $\ell_1$ norm at $S_0$ supported on $\Omega$ is of the form $\sgn(S_0)+F$ where $P_\Omega F = 0$ and $\|F\|_\infty \leq 1$.
-\item The subgradient of the nuclear norm (For details see Sec. \ref{sub:nuclearnorm})at $L_0 = U\Sigma V^*$ where $U, V \in \Rbb^{n \times r}$ and $\Sigma \in \Rbb^{r \times r}$, is of the form $U V^* + W$, where
+\item The subgradient of the nuclear norm (For details see Sec. \ref{sub:nuclearnorm}) at $L_0 = U\Sigma V^*$ where $U, V \in \Rbb^{n \times r}$ and $\Sigma \in \Rbb^{r \times r}$, is of the form $U V^* + W$, where
 \begin{equation}
 \begin{aligned}
 &U^*W = 0 \\
@@ -402,7 +402,7 @@ As a consequence, $\|P\Omega P_T\|$ can be bounded, and if $|\Omega|$ is not too
 
 \subsection{Probabilistic Guarantee via Dual Certification}
 
-We now present the proof that , under the assumptions of Robust PCA,
+We now present the proof that, under the assumptions of Robust PCA,
 then , with high probability, we can find a dual certificate $(W,F,D)$
 such that it can satisfy Lemma (?) . This can then finish the proof
 of the probabilistic guarantee of recovery of $(L_{0},S_{0})$.
