@@ -43,6 +43,7 @@ Video is a natural candidate for low-rank modeling, due to the correlation betwe
 
 We consider five frames from an original video, as shown in fig.~\ref{fig:video:original}, which is a scenario that  one man passes by. The resolution of each frame is $176\times144$. We first separate them into three channels (RGB). For each channel, we stack each frame as a column  of our matrix $M\in\mathbb{R}^{25344\times5}$. We decompose $M$ into low-rank components $L$ and sparse components $S$ by Robust PCA. Then we combine the three channels again to form images with low-rank component and sparse components respectively. We are using a 2GHz qual core laptop and it takes 0.92s to finish decomposition for three channels. We can find that the $L$, as shown in fig.~\ref{fig:video:low_rank}, correctly recovers the background, while $S$, as shown in fig.~\ref{fig:video:sparse}, correctly identifies the moving person.
 
+%%%%%%%
 \subsection{Using Robust PCA in speech recognition}
 Intuitively, a consistent sound would be of low-rank structure. If someone is speaking with background noise which is consistent, we would believe that we can separate a clearer speech (the sparse component) from background noise (low-rank component) via Robust PCA framework. If we get a clearer speech signal, the accuracy of speech recognition with current standard technique will increase. According to this thought, we did an experiment and try to see whether Robust PCA works in such case.
 
@@ -61,6 +62,37 @@ Intuitively, a consistent sound would be of low-rank structure. If someone is sp
 \end{figure}
 
 Figure~\ref{fig:speech:clean} shows the features of a clean speech signal, where the x-axis denotes indices of small time frames and the y-axis denote the features vectors at each frame. These features are computed by a standard method refering to \cite{}. Figure~\ref{fig:speech:noisy} shows the features domain of the same speech signal subjecting to noise with $SNR = 0$ in this case. We apply Robust PCA to decouple these features into low-rank component, as shown in fig.~\ref{fig:speech:low_rank}, and sparse component, as shown in fig.~\ref{fig:speech:sparse}. Technically, we would believe that sparse component is corresponding to our speech signal whereas low-rank component is corresponding to noise. Then we use the sparse component as new features and train a classifier via method in \cite{}. Unfortunately, comparing to the original method without  Robust PCA, we only got improvement in data set with subway noise, which we consider as the most consistent noise among the data set. In this data set, Robust PCA improve the accuracy rate with 3\% comparing to original method. For other noise, such as street noise and car noise, we both got decrease about 7\% in accuracy. One possible reason is that in the real world, most of the noise is not low-rank and they are not consistent. However, speech signal could be low-rank sometimes because there are only a limited vowels and consonants in a language, which makes Robust PCA not so suitable for de-noising.  
+
+%%%%%%
+%%%%%%
+\subsection{Senators voting data analysis}
+We have used Robust PCA to analyze voting data of the US senators. The data involves 100 senators voting at 542 bills around 2005 to 2008. The original data matrix is a $542\times100$ matrix with elements \{-1, 0, 1\}, representing voting for, against the bill and abstention. We first form a $100\times100$ covariant matrix and then run Robust PCA to this covariant matrix. We choose $\lambda = 1/\sqrt{10} = 0.1$ as general. The rank of the low-rank component is 58 and the number of non-zero entries in sparse component is 6222. The results is shown in the following fig.~\ref{fig:vote:covariant}:
+
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1.1\textwidth]{vote_cov.jpg}
+  \caption{Covariant matrix and its low-rank component and sparse component}
+  \label{fig:vote:covariant}
+\end{figure}
+
+By analyzing the sparse component, we found that the sparse matrix seems to tell us some elements (i.e. senators) with strong connection. In general, the values in diagonal terms are large in sparse component because they are highly correlated. On the other hand, we could find there are some other highly correlated elements expect for the diagonal terms from the sparse matrix. We filter the value which is bigger than 0.8 in the sparse matrix expect for the diagonal terms. We found the following senators who are highly correlated in the sparse matrix: 1. (Specter, Snowe); 2. (Specter, Collins); 3. (Snowe, Collins) 4. (Jeffords, Collins) 5. (Dorgan, Conrad) 6. (Inouye, Akaka) 7. (McCain, Kyl). Interestingly, the real facts seem to match these results. First, the three Republican senators Specter, Snowe and Collins, who appear in pairs 1, 2 and 3, are always doing the same decisions, which can be shown by several reports\footnote{"The Gang of Three: Specter, Collins and Snowe" \url{http://usconservatives.about.com/b/2009/02/11/the-gang-of-three-specter-collins-and-snowe.htm}} \footnote{"NYT: Obama thanked Collins, Snowe, Specter for their “patriotism” \url{http://hotair.com/archives/2009/02/07/nyt-obama-thanked-collins-snowe-specter-for-their-patriotism/}}. Dorgan and Conrad in pair 5 are both from North Dakota. Inouye and Akaka in pair 6 are both from Hawaii. McCain and Kyl are both from Arizona. 
+
+As shown is fig.~\ref{fig:vote:covariant:pca} and fig.~\ref{fig:vote:covariant:lr:pca}, we also compared the first two principal components in the original covariant matrix and the low-rank component. Their patterns remain similar with each other.  
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.85\textwidth]{vote_cov_mat_pca.jpg}
+  \caption{General PCA with first two principal components in original covariant matrix}
+  \label{fig:vote:covariant:pca}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.85\textwidth]{vote_cov_lr_pca.jpg}
+  \caption{General PCA with first two principal components in low-rank component of covariant matrix}
+  \label{fig:vote:covariant:lr:pca}
+\end{figure}
 
 
 
@@ -104,6 +136,7 @@ For the $90\deg$ task Figure~\ref{Applications:RPCAapps:BMI:comparison90deg} sho
 \end{figure}
 
 Based on the difference in neurons firing patterns between different tasks one can use machine learning techniques to predict from neural measurements which task the monkey is performing. Here Robust PCA could be used as a pre-processing step to filter out the sparse noise component. However, due to our lack of domain knowledge it is at this point unclear whether the Robust PCA framework has advantages over other and possibly simpler methods, for example a simple low-pass filters along the rows of the data matrix. Our main reason for presenting this application example here was to illustrate that Robust PCA can indeed be used as a tool to analyze interesting real data of reasonable size. 
+
 
 
 
