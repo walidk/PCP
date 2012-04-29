@@ -8,14 +8,15 @@
 \ProvidesClass{projectreport}[2012/04/02 v0.1alpha Problem Set Class]
 
 % Passes class options to the underlying article class
-\DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{report}}
 \ProcessOptions
 
 % Load LaTeX's article class with the `titlepage' option so that \maketitle creates a title page, not just a title block
-\LoadClass[11pt]{article}
+\LoadClass[11pt]{report}
 
 % import some important packages
 \usepackage{graphicx}
+\usepackage{subfig}
 \usepackage{amsmath} 
 \usepackage{amssymb} 
 \usepackage{amsthm}

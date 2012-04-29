@@ -1,14 +1,9 @@
+% !TEX root = ../report/report.tex
+
 %%%%%%%%%%%%%%%%%%
 % EE227A Project by Nathan Lam
 %%%%%%%%%%%%%%%%%%
 
-
-\documentclass{../../common/projectreport}
-
-\usepackage{subfig}
-\usepackage{graphicx}
-
-\begin{document}
 
 \section{Overview}
 
@@ -22,21 +17,21 @@ Video is a natural candidate for low-rank modeling, due to the correlation betwe
 
 \begin{figure}[hb]
   \centering
-  \includegraphics[width=1\textwidth]{SwitchLight_original.jpg}
+  \includegraphics[width=1\textwidth]{../figures/SwitchLight_original.jpg}
   \caption{Original video frames}
   \label{fig:video:original}
 \end{figure}
 
 \begin{figure}[hb]
   \centering
-  \includegraphics[width=1\textwidth]{SwitchLight_low_rank.jpg}
+  \includegraphics[width=1\textwidth]{../figures/SwitchLight_low_rank.jpg}
   \caption{Low-rank components}
   \label{fig:video:low_rank}
 \end{figure}
 
 \begin{figure}[hb]
   \centering
-  \includegraphics[width=1\textwidth]{SwitchLight_sparse.jpg}
+  \includegraphics[width=1\textwidth]{../figures/SwitchLight_sparse.jpg}
   \caption{Sparse components}
   \label{fig:video:sparse}
 \end{figure}
@@ -49,13 +44,13 @@ Intuitively, a consistent sound would be of low-rank structure. If someone is sp
 
 \begin{figure}[hb]
   \centering
-  \subfloat[clean]{\label{fig:speech:clean}\includegraphics[width=0.5\textwidth]{speech_clean.jpg}}
+  \subfloat[clean]{\label{fig:speech:clean}\includegraphics[width=0.5\textwidth]{../figures/speech_clean.jpg}}
   ~ %add desired spacing between images, e. g. ~, \quad, \qquad etc. (or a blank line to force the subfig onto a new line)
-  \subfloat[noisy]{\label{fig:speech:noisy}\includegraphics[width=0.5\textwidth]{speech_noisy.jpg}}
+  \subfloat[noisy]{\label{fig:speech:noisy}\includegraphics[width=0.5\textwidth]{../figures/speech_noisy.jpg}}
   ~ 
-  \\ \subfloat[sparse]{\label{fig:speech:sparse}\includegraphics[width=0.5\textwidth]{speech_sparse.jpg}}
+  \\ \subfloat[sparse]{\label{fig:speech:sparse}\includegraphics[width=0.5\textwidth]{../figures/speech_sparse.jpg}}
   ~
-  \subfloat[low-rank]{\label{fig:speech:low_rank}\includegraphics[width=0.5\textwidth]{speech_low_rank.jpg}}
+  \subfloat[low-rank]{\label{fig:speech:low_rank}\includegraphics[width=0.5\textwidth]{../figures/speech_low_rank.jpg}}
 
   \caption{Speech features}
   \label{fig:speech}
@@ -71,7 +66,7 @@ We have used Robust PCA to analyze voting data of the US senators. The data invo
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=1.1\textwidth]{vote_cov.jpg}
+  \includegraphics[width=1.1\textwidth]{../figures/vote_cov.jpg}
   \caption{Covariant matrix and its low-rank component and sparse component}
   \label{fig:vote:covariant}
 \end{figure}
@@ -82,14 +77,14 @@ As shown is fig.~\ref{fig:vote:covariant:pca} and fig.~\ref{fig:vote:covariant:l
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.85\textwidth]{vote_cov_mat_pca.jpg}
+  \includegraphics[width=0.85\textwidth]{../figures/vote_cov_mat_pca.jpg}
   \caption{General PCA with first two principal components in original covariant matrix}
   \label{fig:vote:covariant:pca}
 \end{figure}
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.85\textwidth]{vote_cov_lr_pca.jpg}
+  \includegraphics[width=0.85\textwidth]{../figures/vote_cov_lr_pca.jpg}
   \caption{General PCA with first two principal components in low-rank component of covariant matrix}
   \label{fig:vote:covariant:lr:pca}
 \end{figure}
@@ -156,9 +151,4 @@ p^* = \min_{L,S} \; &||L||_{*} + \lambda \||S||_{1} + \beta\sum_{i, j\in\mathcal
 \end{align}
 where $\mathcal{N}(i)$ means all the entries next to $i$ in matrix $S$. This problem is still convex so we can solve it via existing algorithm for convex optimization problems.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\bibliographystyle{abbrv}
-\bibliography{../../common/applications}
 
-
-\end{document}

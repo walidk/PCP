@@ -1,41 +1,14 @@
-%% LyX 2.0.0 created this file.  For more info, see http://www.lyx.org/.
-%% Do not edit unless you really know what you are doing.
-\documentclass[onecolumn,english]{IEEEtran}
-\usepackage[T1]{fontenc}
-\usepackage[latin9]{inputenc}
-\usepackage{float}
-\usepackage{amsthm}
-\usepackage{amstext}
-\usepackage{graphicx}
-
-\makeatletter
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
-%% A simple dot to overcome graphicx limitations
-\newcommand{\lyxdot}{.}
-
-\floatstyle{ruled}
-\newfloat{algorithm}{tbp}{loa}
-\providecommand{\algorithmname}{Algorithm}
-\floatname{algorithm}{\protect\algorithmname}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
-\theoremstyle{plain}
-\newtheorem{thm}{\protect\theoremname}
-\theoremstyle{plain}
-\newtheorem{prop}[thm]{\protect\propositionname}
-
-\makeatother
-
-\usepackage{babel}
-\providecommand{\propositionname}{Proposition}
-\providecommand{\theoremname}{Theorem}
-
-\begin{document}
-
+% !TEX root = report.tex
+%============================================================================================
 \section{Robust PCA with known rank: a block coordinate descent approach}
 
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\subsection{Motivation}
+In some application, we normally have some prior information about the low rank component of an observed matrix. For examples, in computer vision, if we are to extract the background from different frames of a video, then it is natural to consider each video frame as a long vector. The background that we are recovering is then a long vector, which is of rank 1. Therefore, it is natural to see if we can utilize this additional rank information to derive faster algorithms while retaining the performance guarantee.
 
+
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Equivalence formulation of Robust PCA with rank information}
 
 We first shows that in the robust PCA framework, the same probability
@@ -60,15 +33,15 @@ J_{2} & =\min_{L,S} & ||L||_{*}+\lambda||S||_{1}\label{eq:restricted}\\
 
 where $T(L,S)$ are conditions on $(L,S)$ that $(L_{0},S_{0})$ also
 satisfies.\end{prop}
-\begin{IEEEproof}
+\begin{proof}
 We use subscript to denote the optimizer for $J_{1}$ and $J_{2}$ respectively.
 With high probability, $(L_{1},S_{1})=(L_{0},S_{0})$. Now, over the
 event of $(L_{1},S_{1})=(L_{0},S_{0})$, $(L_{1},S_{1})$ is also
 a feasible solution for (\ref{eq:restricted} ). Since $J_{1}\le J_{2}$ always,
 now $(L_{1},S_{1})$ achieve the bound for (\ref{eq:restricted} ).
-Note that it should also be unique because it would contradict with
+Note that it should also be unique because otherwise it would contradict with
 the recovery of (\ref{eq:general}).
-\end{IEEEproof}
+\end{proof}
 Now we apply Proposition (\ref{prop:restriction prob}) to the case
 when the rank information is known and derive a block coordinate descent
 framework for future algorithm design.
@@ -94,9 +67,11 @@ median problem where efficient algorithm is known. And by the Proposition
 can recover the orginal $(L_{0},S_{0})$ with high probability.
 
 
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Simplification using $L_{1}$ heuristic}
 
 
+%------------------------------------------------------------------------------
 \subsubsection{Introduction}
 
 Recall that the nuclear norm introduced in the PCP scheme is resulted
@@ -112,11 +87,12 @@ E^{*} & = & \min_{\{p_{j}\}\{q_{j}\},1\le j\le r}||M-\sum_{j=1}^{r}p_{j}q_{j}^{T
 
 
 
-\subsubsection{Performance guarantee for the simplified version}
+%------------------------------------------------------------------------------
+\subsubsection{Performance guarantee for the $L_1$ heuristic}
 
-Regarding this, we provide some performance guarantee for the case
+For this new heuristic, we provide some performance guarantee for the case
 when the noise is bounded. One is a result for deterministic case
-and the other is for the random case.
+and the other is for the random case. They are as follows.
 \begin{prop}
 Let $M=S+\sum_{i=1}^{r}p_{i}q_{i}^{T}$, $\frac{2}{\epsilon}||S||_{1}\le||\sum_{i=1}^{r}p_{i}q_{i}^{T}||_{1}$,
 then, for the recovered $(\hat{L},\hat{S})$ from (\ref{heu}) , it
@@ -125,7 +101,7 @@ will satisfy
 \frac{||\sum_{i=1}^{r}p_{i}q_{i}^{T}-\hat{L}||_{1}}{||\sum_{i=1}^{r}p_{i}q_{i}^{T}||_{1}} & \le & \epsilon
 \end{eqnarray*}
 \end{prop}
-\begin{IEEEproof}
+\begin{proof}
 Assume not, then
 \begin{eqnarray*}
 ||S||_{1} & \ge & ||\sum_{i=1}^{r}p_{i}q_{i}^{T}+S-\hat{L}||_{1}\\
@@ -133,7 +109,7 @@ Assume not, then
  & > & \epsilon||\sum_{i=1}^{r}p_{i}q_{i}^{T}||_{1}-||S||_{1}
 \end{eqnarray*}
 
-\end{IEEEproof}
+\end{proof}
 This gives a contradition, which is,
 \begin{eqnarray*}
 \frac{2}{\epsilon}||S||_{1} & > & ||\sum_{i=1}^{r}p_{i}q_{i}^{T}||
@@ -142,13 +118,13 @@ This gives a contradition, which is,
 \begin{prop}
 Let $M=\sum_{i=1}^{r}p_{i}q_{i}^{T}+S$, where $S_{i,j}\sim Uniform(-x_{s},x_{s})$,
 $(p_{i})_{j}\sim Uniform(-x_{p},x_{p})$, $(q_{i})_{j}\sim Uniform(-x_{q},x_{q})$
-all of the random variables are independent. With $|S|=k$ such that
+all of the random variables being independent. With $|S|=k$ such that
 $\lim_{n\to\infty}\frac{k^{2}}{n}$, then we have,
 \begin{eqnarray*}
 \lim_{n\to\infty}P(\frac{||\sum_{i=1}^{r}p_{i}q_{i}^{T}-\hat{L}||_{1}}{||\sum_{i=1}^{r}p_{i}q_{i}^{T}||_{1}}>\epsilon) & = & 0
 \end{eqnarray*}
 \end{prop}
-\begin{IEEEproof}
+\begin{proof}
 Let $E$ be the error event that $\frac{||\sum_{i=1}^{r}p_{i}q_{i}^{T}-\hat{L}||_{1}}{||\sum_{i=1}^{r}p_{i}q_{i}^{T}||_{1}}>\epsilon$.
 If error occurs,
 \begin{eqnarray*}
@@ -172,15 +148,48 @@ Moreover, as $E(\sum_{i=1}^{r}(p_{i})_{l_{1}}(q_{i})_{l_{1}})^{2})=\frac{r}{3}x_
 by law of large number, $\frac{1}{n}\sum_{l_{1}=1}^{n}(\sum_{i=1}^{r}(p_{i})_{l_{1}}(q_{i})_{l_{1}})^{2})\to\frac{r}{3}x_{p}^{2}x_{q}^{2}$.
 Thus, since $\frac{1}{n}(\frac{2kx_{s}}{\epsilon})^{2}\to0$. This
 gives $Pr(E)\to0$ as $n\to\infty$.
-\end{IEEEproof}
+\end{proof}
 
+However, we know that the $L_1$ heuristic cannot work well in the case of unbounded noise. In particular, we consider the following example. 
+
+Say , for $n=100$, $L_{0}=\left[\begin{array}{c}
+1\\
+1\\
+.\\
+.\\
+1
+\end{array}\right]
+[\begin{array}{ccccc}
+1 & 1 & . & . & 1\end{array}],S_{0}=\left[ \begin{array}{ccccc}
+10^{9} & 0 & 0 & ... & 0\\
+0 & 0 & 0 & ... & 0\\
+. & . & . & ... & .\\
+. & . & . & ... & .\\
+0 & 0 & 0 & ... & 0
+\end{array}\right]$, then by the $L_{1}$ heuristics, we would get $\hat{L_{0}}\sim \left[ \begin{array}{c}
+10^{9}\\
+1\\
+.\\
+.\\
+1
+\end{array} \right]
+\left[\begin{array}{ccccc}
+1 & 10^{-9} & . & . & 10^{-9}
+\end{array}\right], \hat{S_{0}} \sim \left[\begin{array}{ccccc}
+1 & 0 & 0 & ... & 0\\
+0 & 1 & 1 & ... & 1\\
+. & . & . & ... & .\\
+. & . & . & ... & .\\
+0 & 1 & 1 & ... & 1
+\end{array}\right]$, which deviates from what we expect. However, the robust PCA can recover even for this case because it penalize the nuclear norm of L. 
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Algorithms derivation}
 
 Note that the form for both (\ref{eq:rank form}) and (\ref{heu})
 are similar. Indeed, one can generalize the method for $r=1$ in (\ref{heu})
 to higher dimensions for both (\ref{eq:rank form}) and (\ref{heu}).
-Therefore, we restrict our discussion to $r=1$ in (\ref{heu}) for
-the following discussion.
+Therefore, we restrict our discussion to $r=1$ in (\ref{heu}).
 
 Let $M=(a_{i,j})\in R^{mXn}$. We now employ the block-coordinate
 descent approach to solve this problem. Note that
@@ -223,13 +232,12 @@ the property of sub-differential of $||\cdot||_{1}$ and note that
 $0\in\partial(\sum_{k=1}^{k_{0}}c_{i}|t^{*}-d_{i}|)$.
 
 Now we are ready to state the power iteration method to solve the
-optimization rank-1 optimization problem. We call it Poweriteration.
+rank-1 optimization problem. We call it Poweriteration.
 
 \begin{algorithm}[h]
 Repeat
 \begin{enumerate}
 \item $p_{i}\leftarrow wmh(n,abs(q),M(i,:)./q)$ for each i
-\item $p\leftarrow\frac{p}{max(p)}$
 \item $q_{j}\leftarrow wmh(n,abs(p),M(:,j)./p)$ for each j
 \end{enumerate}
 Until stopping criterion is met
@@ -239,6 +247,7 @@ Until stopping criterion is met
 
 
 
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Sensitivity to $\lambda$}
 
 Note that in the robust PCA framework, the parameter $\lambda$ is
@@ -291,9 +300,11 @@ And it is achieved by $pq^{T}=0$ matrix, which deviates from what
 we expect to recover.
 
 
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Simulation }
 
 
+%------------------------------------------------------------------------------
 \subsubsection{Comparison between Robust PCA and $L_{1}$ heuristics}
 
 We simulate the Robust PCA scheme and $L_{1}$ heuristics using the
@@ -311,5 +322,6 @@ plot the graph of different degree of sparsity and the corresponding
 effectiveness of the optimization heuristic in extracting the original
 $pq^{T}$. The result is as follows.
 
-\includegraphics[width=8cm]{\string"C:/Users/kk/Desktop/EE227A/project/matlab experiments/compare\string".jpg}
-\end{document}
+
+%TODO: add file to the figures folder
+%\includegraphics[width=8cm]{\string"C:/Users/kk/Desktop/EE227A/project/matlab experiments/compare\string".jpg}
