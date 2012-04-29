@@ -1,0 +1,3 @@
+- please cite the sources of the theorems, facts etc used in the report. No need to be super anal about this, but at least indicate where this stuff is from. The bibtex file is quite comprehensive already, so most of the references should already be in there. 
+
+- some sections consist mostly of bullet points, please be more verbose in those. 
