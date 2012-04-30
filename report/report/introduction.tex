@@ -2,9 +2,9 @@
 %============================================================================================
 \section*{Introduction}
 
-Over the past decade there has been an explosion in terms of the massive amounts of high-dimensional data in science, engineering, and the social sciences. This presents a challenge as well as an opportunity to many areas such as web data analysis, search, biomedical imaging, bioinformatics, image, video and multimedia processing and many others. In such applications, researches today routinely deal with data that lie in thousands or even billions of dimensions, with a number of samples sometimes of the same order of magnitude.
+Over the past decade there has been an explosion in terms of the massive amounts of high-dimensional data in almost all fields of science and engineering. This situation presents a challenge as well as an opportunity to many areas such as web data analysis, search, biomedical imaging, bioinformatics, (social) network analysis, image, video and multimedia processing and many others. In such applications, researches today routinely deal with data that lie in thousands or even billions of dimensions, with a number of samples sometimes of the same order of magnitude.
 
-Often, in order to be able to even make sense of data in such high dimensionality and scale, one has to leverage on the fact that such data often have low intrinsic dimensionality. One reasonable (but not the only) approach which is well justified in many practical situations is to assume that the data all lie near some low-dimensional subspace. In mathematical terms, this amounts to saying that if all the data points are stacked as column vectors of a matrix $M$, the matrix should (approximately) have low rank. Specifically, a common model is to assume that 
+Often, in order to be able to even make sense of data in such high dimensionality and scale, one has to leverage on the fact that such data often have low intrinsic dimensionality. One reasonable (but not the only) approach that is well justified in many practical situations is to assume that the data all lie near some low-dimensional subspace. In mathematical terms, this amounts to saying that if all the data points are stacked as column vectors of a matrix $M$, the matrix should (approximately) have low rank. Specifically, a common model is to assume that 
 %
 \begin{align}
 M=L_0+N_0
@@ -18,45 +18,9 @@ where~$\L_0$ is of low rank and~$N_0$ is a small perturbation matrix (i.e. the n
 \label{IntroMot:ClassicPCA}
 \end{align}
 %
-This approach, known as Principal Component Analysis (PCA)~\cite{Eckart:1936uq,Hotelling:1933fk}, has been studied for almost a century and is used extensively for data analysis and dimensionality reduction in many areas. It is easy to show that this problem can be efficiently solved using the singular value decomposition (SVD) of the data matrix~$M$. It also enjoys a number of optimality properties when the noise~$N_0$ is small and i.i.d. Gaussian. However, PCA in general may fail spectacularly when the assumption on the noise matrix is not satisfied: Even a single grossly corrupted entry in~$M$ could render the estimated~$\Lhat$ arbitrarily far from the true~$L_0$. 
+This approach, known as Principal Component Analysis (PCA)~\cite{Eckart:1936uq,Hotelling:1933fk}, has been studied for almost a century and is used extensively for data analysis and dimensionality reduction in many areas. It is easy to show that this problem can be efficiently solved using the singular value decomposition (SVD) of the data matrix~$M$. It also enjoys a number of optimality properties when the noise~$N_0$ is small and i.i.d. Gaussian. However, PCA in general may fail spectacularly when the assumption on the noise matrix is not satisfied: Even a single grossly corrupted entry in~$M$ could render the estimated~$\Lhat$ arbitrarily far from the true~$L_0$. Unfortunately, these kinds of gross errors are very common in applications, arising for example from corrupted data, sensor failures or corrupted samples in repetitive measurement tasks in biology applications. 
 
+We would therefore like a method that is able to extract the principal components (the low rank structure) of measurement data even in the presence of such gross but sparse corruptions. The recently proposed Robust PCA framework~\cite{Candes:2011fk} is a very promising candidate for this task. Robust PCA combines the two popular heuristics of nuclear norm minimization (used to encourage low-rankness) and $\ell_1$-norm minimization (used to encourage sparsity) and casts the problem of separating a low-rank ``data'' component from a sparse ``noise'' component into a convex optimization problem. The surprising fact is that one can show that, under certain reasonable conditions, the recovered solution is exact. 
 
-%
-%
-%Unfortunately, gross errors are now ubiquitous in modern applications such as image processing, web data analysis, and bioinformatics, where some measurements may be arbitrarily cor- rupted (due to occlusions, malicious tampering, or sensor failures) or simply irrelevant to the low-dimensional structure we seek to identify. A number of natural approaches to robustifying PCA have been explored and proposed in the literature over several decades. The representative approaches include influence function techniques [Huber 1981; Torre and Black 2003], multivariate trimming [Gnanadesikan and Kettenring 1972], alternating minimization [Ke and Kanade 2005], and random sampling tech- niques [Fischler and Bolles 1981]. Unfortunately, none of these approaches yields a
-%
-%
-%%
-%
-%Classical Principal Component Analysis (PCA) [Hotelling 1933; Eckart and Young 1936; Jolliffe 1986] seeks the best (in an l2 sense) rank-k estimate of L0 by solving
-%
-
-%minimize ∥M − L∥ subject to rank(L) ≤ k.
-%
-%
-%
-%
-%
-%
-% for example, that they lie on some low-dimensional subspace, are sparse in some basis, or lie on some low-dimensional manifold. One reason
-%
-%
-%
-%Perhaps the simplest and most useful assumption is that the data all lie near some low-dimensional subspace. More precisely, this says that if we stack all the data points as column vectors of a matrix M, the matrix should (approximately) have low rank: mathematically,%M = L0 + N0,%where L0 has low-rank and N0 is a small perturbation matrix. Classical Principal Component Analysis (PCA) [Hotelling 1933; Eckart and Young 1936; Jolliffe 1986] seeks the best (in an l2 sense) rank-k estimate of L0 by solving%minimize ∥M − L∥ subject to rank(L) ≤ k.
-%
-%
-%
-%
-%
-%
-%where L0 has low rank and S0 is sparse; here, both components are of arbitrary magni- tude. We do not know the low-dimensional column and row space of L0, not even their dimension. Similarly, we do not know the locations of the nonzero entries of S0, not even how many there are. Can we hope to recover the low-rank and sparse components both accurately (perhaps even exactly) and efficiently?%A provably correct and scalable solution to the above problem would presumably have an impact on today’s data-intensive process of scientific discovery.1 
-%
-%
-%
-%The recent explosion of massive amounts of high-dimensional data in science, engineering, and society presents a challenge as well as an opportunity to many areas such as image, video, multimedia processing, web relevancy data analysis, search, biomedical imaging and bioinformatics. In such application domains, data now routinely lie in thousands or even billions of dimensions, with a number of samples sometimes of the same order of magnitude.
-%
-%
-%%To alleviate the curse of dimensionality and scale,2 we must leverage on the fact that such data have low intrinsic dimensionality, for example, that they lie on some low-dimensional subspace [Eckart and Young 1936], are sparse in some basis [Chen et al. 2001], or lie on some low-dimensional manifold [Tenenbaum et al. 2000; Belkin and Niyogi 2003]. Perhaps the simplest and most useful assumption is that the data all lie near some low-dimensional subspace. More precisely, this says that if we stack all the data points as column vectors of a matrix M, the matrix should (approximately) have low rank: mathematically,%M = L0 + N0,%where L0 has low-rank and N0 is a small perturbation matrix. Classical Principal Component Analysis (PCA) [Hotelling 1933; Eckart and Young 1936; Jolliffe 1986] seeks the best (in an l2 sense) rank-k estimate of L0 by solving%minimize ∥M − L∥ subject to rank(L) ≤ k.%(Throughout this article, ∥M∥ denotes the 2-norm; that is, the largest singular value of M.) This problem can be efficiently solved via the singular value decomposition (SVD) and enjoys a number of optimality properties when the noise N0 is small and independent and identically distributed Gaussian.%Robust PCA. PCA is arguably the most widely used statistical tool for data analysis and dimensionality reduction today. However, its brittleness with respect to grossly corrupted observations often puts its validity in jeopardy—a single grossly corrupted entry in M could render the estimated Lˆ arbitrarily far from the true L0. Unfortunately, gross errors are now ubiquitous in modern applications such as image processing, web data analysis, and bioinformatics, where some measurements may be arbitrarily cor- rupted (due to occlusions, malicious tampering, or sensor failures) or simply irrelevant to the low-dimensional structure we seek to identify. A number of natural approaches to robustifying PCA have been explored and proposed in the literature over several decades. The representative approaches include influence function techniques [Huber 1981; Torre and Black 2003], multivariate trimming [Gnanadesikan and Kettenring 1972], alternating minimization [Ke and Kanade 2005], and random sampling tech- niques [Fischler and Bolles 1981]. Unfortunately, none of these approaches yields a
-%
-%
+The objective of this project is threefold: First, we survey the recent results on Robust PCA and related extensions and use the theory of convex optimization to develop an understanding of how the main theoretical results are proven. Second, we discuss efficient algorithms for Robust PCA that allow the application of the framework to large-scale problems. Finally, we apply the Robust PCA framework to a number of different problems in order to illustrate its potential practical relevance. 
 
