@@ -216,6 +216,28 @@ J_{i} \leftarrow \frac{\partial}{\partial\zeta}(M_{i}\circ\zeta)|_{\zeta = \tau_
 \label{alg:RASL}
 \end{algorithm}
 
+The authors in ~\cite{Peng:2010} have shown that the RASL algorithm can in fact be viewed as a Gauss-Newton method for minimizing the composition of a nonsmooth covex function with a smooth, nonlinear mapping. The convergence behavior of such algorithm was extensively studied in the late 1970's and early 1980's ~\cite{Jittorntrum:1980qy}. Although they claimed that the result of ~\cite{Jittorntrum:1980qy} implies that RASL converges quadratically in the neighborhood of any strongly unique local minimum, a complete convergence theory would still be verified and they delay it to future work.
+
+Another remark is that the inner loop (Step 2) in RASL algorithm is another convex optimization problem, this problem can be solved by Augmented Lagrange Multiplier (ALM) algorithm ~\cite{Candes:2011fk}, ~\cite{Lin:2009kx}. We do not derive this algorithm here, but the  derivation is similar to the ALM algorithm in Robust PCA framework that we will discuss in Algorithm Chapter. Similarly, although the algorithm always converges to the optimal solution in Step 2 in experiment, a rigorous proof of convergence remains further discussion. As in every iteration in RASL, a PCP problem in inner loop should be solved, the computational time of RASL will be longer than a standard PCP problem depending on how many iterations it needs. The authors observed that in their experiments, only a few iterations, typically less than 20, are required for the algorithm to converge due to the quadratic convergence property of the problem. 
+
+RASL can be used for long-standing batch image alignment problem: given many images of an object or objects of interest, align them to a fixed canonical template. The images may subject to different illumination variation, partial occlusion, as well as poor or even no alignment. Finally, we show an example of how RASL performs in image alignment problem:
+
+\begin{figure}[h]
+  \centering
+  \subfloat[Original images $M$]{\label{fig:rasl:original}\includegraphics[width=0.5\textwidth]{../figures/rasl_original.jpg}}
+  ~ 
+  \subfloat[Aligned images $M\circ\tau$]{\label{fig:rasl:aligned}\includegraphics[width=0.5\textwidth]{../figures/rasl_aligned.jpg}}
+  ~ 
+  \\ \subfloat[Low-rank component $L$]{\label{fig:rasl:lowrank}\includegraphics[width=0.5\textwidth]{../figures/rasl_low_rank.jpg}}
+  ~
+  \subfloat[Sparse component $S$]{\label{fig:rasl:sparse}\includegraphics[width=0.5\textwidth]{../figures/rasl_sparse.jpg}}
+
+  \caption{Aligning face images.}
+  \label{fig:rasl:example}
+\end{figure}
+
+
+
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Robust Matrix Decomposition With Sparse Corruptions: D Hsu et. al.}
 
