@@ -15,21 +15,21 @@ This section will review some applications using Robust PCA. Currently, most of 
 
 Video is a natural candidate for low-rank modeling, due to the correlation between frames. One of the most basic algorithmic tasks in video surveillance is to estimate a good model for the background variations in a scene. This task is complicated by the presence of foreground objects: in busy scenes, every frame may contain some anomaly. The background model needs to be flexible enough to accommodate changes in the scene, for example due to varying illumination In such situations, it is natural to model the background variations as approximately low rank. Foreground objects, such as cars or pedestrians, generally occupy only a fraction of the image pixels and hence can be treated as sparse errors.
 
-\begin{figure}[hb]
+\begin{figure}[h]
   \centering
   \includegraphics[width=1\textwidth]{../figures/SwitchLight_original.jpg}
   \caption{Original video frames}
   \label{fig:video:original}
 \end{figure}
 
-\begin{figure}[hb]
+\begin{figure}[h]
   \centering
   \includegraphics[width=1\textwidth]{../figures/SwitchLight_low_rank.jpg}
   \caption{Low-rank components}
   \label{fig:video:low_rank}
 \end{figure}
 
-\begin{figure}[hb]
+\begin{figure}[h]
   \centering
   \includegraphics[width=1\textwidth]{../figures/SwitchLight_sparse.jpg}
   \caption{Sparse components}
@@ -38,11 +38,22 @@ Video is a natural candidate for low-rank modeling, due to the correlation betwe
 
 We consider five frames from an original video, as shown in fig.~\ref{fig:video:original}, which is a scenario that  one man passes by. The resolution of each frame is $176\times144$. We first separate them into three channels (RGB). For each channel, we stack each frame as a column  of our matrix $M\in\mathbb{R}^{25344\times5}$. We decompose $M$ into low-rank components $L$ and sparse components $S$ by Robust PCA. Then we combine the three channels again to form images with low-rank component and sparse components respectively. We are using a 2GHz qual core laptop and it takes 0.92s to finish decomposition for three channels. We can find that the $L$, as shown in fig.~\ref{fig:video:low_rank}, correctly recovers the background, while $S$, as shown in fig.~\ref{fig:video:sparse}, correctly identifies the moving person.
 
+The same setting is used into our own video that we took in UC Berkeley. The resolution in our video is $480\times640$, which is consistent with the resolution of most of the cell phone camera. Figure ~\ref{fig:video:campus:capture1} shows the result that we use 5 images which are taken every one second. It takes 15 seconds to finish. We can see that even though there are more than one person there, as long as the noise (here is the foreground) is sparse, the Robust PCA can still separate background and foreground. Since it does not consume too much time, this scenario can be considered as an application that removing wandering people when someone takes a picture.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\textwidth]{../figures/campus_capture1.jpg}
+  \caption{Campus video frames}
+  \label{fig:video:campus:capture1}
+\end{figure}
+
+
+
 %%%%%%%
 \subsection{Using Robust PCA in speech recognition}
 Intuitively, a consistent sound would be of low-rank structure. If someone is speaking with background noise which is consistent, we would believe that we can separate a clearer speech (the sparse component) from background noise (low-rank component) via Robust PCA framework. If we get a clearer speech signal, the accuracy of speech recognition with current standard technique will increase. According to this thought, we did an experiment and try to see whether Robust PCA works in such case.
 
-\begin{figure}[hb]
+\begin{figure}[h]
   \centering
   \subfloat[clean]{\label{fig:speech:clean}\includegraphics[width=0.5\textwidth]{../figures/speech_clean.jpg}}
   ~ %add desired spacing between images, e. g. ~, \quad, \qquad etc. (or a blank line to force the subfig onto a new line)
@@ -61,7 +72,7 @@ Figure~\ref{fig:speech:clean} shows the features of a clean speech signal, where
 %%%%%%
 %%%%%%
 \subsection{Senators voting data analysis}
-We have used Robust PCA to analyze voting data of the US senators. The data involves 100 senators voting at 542 bills around 2005 to 2008. The original data matrix is a $542\times100$ matrix with elements \{-1, 0, 1\}, representing voting for, against the bill and abstention. We first form a $100\times100$ covariant matrix and then run Robust PCA to this covariant matrix. We choose $\lambda = 1/\sqrt{10} = 0.1$ as general. The rank of the low-rank component is 58 and the number of non-zero entries in sparse component is 6222. The results is shown in the following fig.~\ref{fig:vote:covariant}:
+We have used Robust PCA to analyze voting data of the US senators. The data involves 100 senators voting at 542 bills around 2005 to 2008. The original data matrix is a $542\times100$ matrix with elements \{-1, 0, 1\}, representing voting for, against the bill and abstention. We first form a $100\times100$ covariant matrix and then run Robust PCA to this covariant matrix. We choose $\lambda = 1/\sqrt{10}$ as general. The rank of the low-rank component is 58 and the number of non-zero entries in sparse component is 6222. The results is shown in the following fig.~\ref{fig:vote:covariant}:
 
 
 \begin{figure}[h]
