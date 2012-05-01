@@ -43,10 +43,79 @@ The same setting is used into our own video that we took in UC Berkeley. The res
 \begin{figure}[h]
   \centering
   \includegraphics[width=1\textwidth]{../figures/campus_capture1.jpg}
-  \caption{Campus video frames}
+  \caption{Perfect decomposition from campus video frames}
   \label{fig:video:campus:capture1}
 \end{figure}
 
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\textwidth]{../figures/campus_capture2.jpg}
+  \caption{Imperfect decomposition from campus video frames}
+  \label{fig:video:campus:capture2}
+\end{figure}
+
+Finally, we used all the frames from the 30 seconds video to run Robust PCA. We first down-sample them into $160\times214$ resolution in order to reduce the running time. We capture some frames from the resulting video. Most frames are good, but some are imperfect in terms of separating the foreground and background. We can find that in fig.~\ref{fig:video:campus:capture2}, when the foreground objects are dense, there are some "ghost" foreground people appearing in background video frames. To explain this result, we consider the following matrix:
+\[
+ M =
+ \begin{bmatrix}
+  100 & 100 & 100 & 100 & 100 \\
+  100 & 100 & 100 & 100 & 100 \\
+  0 & 0 & 100 & 100 & 100 \\
+  100 & 100 & 100 & 100 & 100 \\
+ \end{bmatrix}
+\]
+We can seperate $M$ into low-rank component and sparse component by Robust PCA. However, Robust PCA will favor a decomposition as:
+\[
+ M =
+ \begin{bmatrix}
+  100  & 100  & 100  & 100  & 100 \\
+  100  & 100  & 100  & 100  & 100 \\
+  0     &  0      & 100  & 100  & 100 \\
+  100  & 100  & 100  & 100  & 100 \\
+ \end{bmatrix}
+ =
+ \begin{bmatrix}
+  100  & 100  & 100  & 100  & 100 \\
+  100  & 100  & 100  & 100  & 100 \\
+   34.0   & 34.0   & 36.8   & 36.8   & 36.8   \\
+  100  & 100  & 100  & 100  & 100 \\
+ \end{bmatrix}
+ +
+ \begin{bmatrix}
+          0    &      0   &       0     &     0    &      0 \\
+         0    &      0    &      0    &      0    &      0 \\
+  -34.0  & -34.0   & 63.2   & 63.2   & 63.2 \\
+         0    &      0   &       0     &     0     &     0 \\
+ \end{bmatrix}
+\]
+such that $||L||_{*} + \lambda||S||_{1}  = 513.64$ 
+rather than 
+\[
+ M =
+ \begin{bmatrix}
+  100  & 100  & 100  & 100  & 100 \\
+  100  & 100  & 100  & 100  & 100 \\
+  0     &  0      & 100  & 100  & 100 \\
+  100  & 100  & 100  & 100  & 100 \\
+ \end{bmatrix}
+ =
+ \begin{bmatrix}
+  100  & 100  & 100  & 100  & 100 \\
+  100  & 100  & 100  & 100  & 100 \\
+  100  & 100  & 100  & 100  & 100 \\
+  100  & 100  & 100  & 100  & 100 \\
+ \end{bmatrix}
+ +
+ \begin{bmatrix}
+          0    &      0   &       0     &     0    &      0 \\
+         0    &      0    &      0    &      0    &      0 \\
+  -100  & -100   & 0   & 0   & 0 \\
+         0    &      0   &       0     &     0     &     0 \\
+ \end{bmatrix}
+\]
+such that $||L||_{*} + \lambda||S||_{1}  = 536.66$ \\
+
+From the above example, we can see that if most of the frames are corrupted in given pixels, Robust PCA hardly separates the background and foreground at those pixels perfectly. One way to solve it is to adjust the value of $\lambda$, but it is generally hard to choose a $\lambda$ that fits the entire video. Despite that, Robust PCA is still good for separating background and sparse foreground moving objects.
 
 
 %%%%%%%
@@ -77,7 +146,7 @@ We have used Robust PCA to analyze voting data of the US senators. The data invo
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=1.1\textwidth]{../figures/vote_cov.jpg}
+  \includegraphics[width=1\textwidth]{../figures/vote_cov.jpg}
   \caption{Covariant matrix and its low-rank component and sparse component}
   \label{fig:vote:covariant}
 \end{figure}
