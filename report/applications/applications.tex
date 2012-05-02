@@ -136,7 +136,7 @@ Intuitively, a consistent sound would be of low-rank structure. If someone is sp
   \label{fig:speech}
 \end{figure}
 
-Figure~\ref{fig:speech:clean} shows the features of a clean speech signal, where the x-axis denotes indices of small time frames and the y-axis denote the features vectors at each frame. These features are computed by a standard method refering to \cite{}. Figure~\ref{fig:speech:noisy} shows the features domain of the same speech signal subjecting to noise with $SNR = 0$ in this case. We apply Robust PCA to decouple these features into low-rank component, as shown in fig.~\ref{fig:speech:low_rank}, and sparse component, as shown in fig.~\ref{fig:speech:sparse}. Technically, we would believe that sparse component is corresponding to our speech signal whereas low-rank component is corresponding to noise. Then we use the sparse component as new features and train a classifier via method in \cite{}. Unfortunately, comparing to the original method without  Robust PCA, we only got improvement in data set with subway noise, which we consider as the most consistent noise among the data set. In this data set, Robust PCA improve the accuracy rate with 3\% comparing to original method. For other noise, such as street noise and car noise, we both got decrease about 7\% in accuracy. One possible reason is that in the real world, most of the noise is not low-rank and they are not consistent. However, speech signal could be low-rank sometimes because there are only a limited vowels and consonants in a language, which makes Robust PCA not so suitable for de-noising.  
+Figure~\ref{fig:speech:clean} shows the features of a clean speech signal, where the x-axis denotes indices of small time frames and the y-axis denote the features vectors at each frame. These features are computed by a standard method refering to \cite{Kim:2009}. Figure~\ref{fig:speech:noisy} shows the features domain of the same speech signal subjecting to noise with $SNR = 0$ in this case. We apply Robust PCA to decouple these features into low-rank component, as shown in fig.~\ref{fig:speech:low_rank}, and sparse component, as shown in fig.~\ref{fig:speech:sparse}. Technically, we would believe that sparse component is corresponding to our speech signal whereas low-rank component is corresponding to noise. Then we use the sparse component as new features and train a classifier via method in \cite{Young:2006fj}. Unfortunately, comparing to the original method without  Robust PCA, we only got improvement in data set with subway noise, which we consider as the most consistent noise among the data set. In this data set, Robust PCA improve the accuracy rate with 3\% comparing to original method. For other noise, such as street noise and car noise, we both got decrease about 7\% in accuracy. One possible reason is that in the real world, most of the noise is not low-rank and they are not consistent. However, speech signal could be low-rank sometimes because there are only a limited vowels and consonants in a language, which makes Robust PCA not so suitable for de-noising.  
 
 %%%%%%
 %%%%%%
@@ -157,15 +157,15 @@ As shown is fig.~\ref{fig:vote:covariant:pca} and fig.~\ref{fig:vote:covariant:l
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.85\textwidth]{../figures/vote_cov_mat_pca.jpg}
-  \caption{General PCA with first two principal components in original covariant matrix}
+  \includegraphics[width=0.85\textwidth]{../figures/vote_cov_mat_pca.png}
+  \caption{Standard PCA with first two principal components in original covariant matrix}
   \label{fig:vote:covariant:pca}
 \end{figure}
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.85\textwidth]{../figures/vote_cov_lr_pca.jpg}
-  \caption{General PCA with first two principal components in low-rank component of covariant matrix}
+  \includegraphics[width=0.85\textwidth]{../figures/vote_cov_lr_pca.png}
+  \caption{Standard PCA with first two principal components in low-rank component of covariant matrix}
   \label{fig:vote:covariant:lr:pca}
 \end{figure}
 
@@ -221,14 +221,12 @@ Based on the difference in neurons firing patterns between different tasks one c
 \section{Discussion}
 Robust PCA framework is a powerful tool to separate low-rank components and sparse components if we are given a combination of these two structures. However, generally most of the real world data is not directly a combination of these two structures unless the data is subjected to some kinds of transformation. One example is the data set of human faces with different expressions and illuminations. In this case, some researches have proposed some methods, RASL~\cite{Peng:2010} and TILT~\cite{Zhang:2011}, based on the original convex optimization problem in Robust PCA. They introduce transformation parameters to the original framework and by linearizing with respect to the transformation parameters, we got a new but not difficult convex problem. As long as the data is within a certain degree of transformation, the algorithms can still recover the low-rank structure and sparse structure.
 
-We can also observe that is image data, the sparse noise is always presented as blocks. For example, the person in fig.~\ref{fig:video:sparse} appears in connected pixels, so the noise is not distributed randomly in pixels. A possible direction that can improve the separation in image data is that we can introduce a penalty term in the original optimization problem:
+We can also observe that in image data, the sparse noise is always presented as blocks. For example, the person in fig.~\ref{fig:video:sparse} appears in connected pixels, so the noise is not distributed randomly in pixels. A possible direction that can improve the separation in image data is that we can introduce a penalty term in the original optimization problem:
 \begin{align}
 \begin{split}
-p^* = \min_{L,S} \; &||L||_{*} + \lambda \||S||_{1} + \beta\sum_{i, j\in\mathcal{N}(i)}^{} (S_{i} - S_{j})^2\\
+p^* = \min_{L,S} \; &||L||_{*} + \lambda \||S||_{1} + \beta\sum_{(i, j), (k, l)\in\mathcal{N}(i, j)}^{} (S_{ij} - S_{kl})^2\\
 \text{s.t.} \quad &M = L+S
 \end{split}
 \label{applications:discussion}
 \end{align}
-where $\mathcal{N}(i)$ means all the entries next to $i$ in matrix $S$. This problem is still convex so we can solve it via existing algorithm for convex optimization problems.
-
-
+where $\mathcal{N}(i,j)$ means all the entries neighbor to $(i,j)$ in matrix $S$ and $\beta$ is an constant. This problem is still convex so we can solve it via existing algorithms for convex optimization problems theoretically. However, we are not able to directly applying ALM which we discussed in Robust PCA problem because $S_{ij}$ and $S_{kl}$ are now coupled with each other that $\argmin_{S} \; \Lcal(L,S,Y,\mu)$ cannot be solved efficiently. If the scale of the problem becomes larger, an efficient algorithm to solve the problem is still needed to be developed. 
