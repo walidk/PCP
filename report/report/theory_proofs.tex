@@ -18,6 +18,7 @@ The golfing scheme involves creating a $W^{L}$ according to the following method
 \end{enumerate}
 
 We first list a number of facts that will be used in the proof of Lemma (\ref{wl}).
+
 \begin{fact}
 \label{fact2}
 If we fix $Z\in T$, $\Omega_{0}\sim Bern(\rho_{0})$, and $\rho_{0}\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{n}$ , then with high probability, we will have,
@@ -61,14 +62,14 @@ i) Note that
 Z_{j}=(P_{T}-\frac{1}{q}P_{T}P_{\Omega_{j}}P_{T})Z_{j-1}. \label{wlp1}
 \end{equation}
 The reason is as follows.
-\begin{eqnarray*}
- & Z_{j}\\
- & = & UV^{*}-P_{T}(Y_{j-1}+\frac{1}{q}P_{\Omega_{j}}P_{T}(UV^{*}-Y_{j-1})) \text{because of construction of } Y_j \\
- & = & UV^{*}-P_{T}(Y_{j-1})-\frac{1}{q}P_{T}P_{\Omega_{j}}P_{T}(UV^{*}-Y_{j-1}) \text{because of linearity of }P_{T}\\
- & = & Z_{j-1}-q^{-1}(P_{T}P_{\Omega_{j}}(UV^{*}-P_{T}(Y_{j-1})))\text{ because }P_{T}(UV^{*})=UV^{*}\\
- & = & P_{T}(Z_{j-1})-q^{-1}(P_{T}P_{\Omega_{j}}P_{T}Z_{j-1})\text{ because }Z_{j-1}\in T\\
- & = & (P_{T}-q^{-1}P_{T}P_{\Omega_{j}}P_{T})Z_{j-1}\text{because of linearity }
-\end{eqnarray*}
+\begin{align*}
+Z_{j}
+ & = UV^{*}-P_{T}(Y_{j-1}+\frac{1}{q}P_{\Omega_{j}}P_{T}(UV^{*}-Y_{j-1})) &\text{by construction of } Y_j \\
+ & = UV^{*}-P_{T}(Y_{j-1})-\frac{1}{q}P_{T}P_{\Omega_{j}}P_{T}(UV^{*}-Y_{j-1}) &\text{by of linearity of }P_{T}\\
+ & = Z_{j-1}-q^{-1}(P_{T}P_{\Omega_{j}}(UV^{*}-P_{T}(Y_{j-1}))) &\text{ since }P_{T}(UV^{*})=UV^{*}\\
+ & = P_{T}(Z_{j-1})-q^{-1}(P_{T}P_{\Omega_{j}}P_{T}Z_{j-1}) &\text{ since }Z_{j-1}\in T\\
+ & = (P_{T}-q^{-1}P_{T}P_{\Omega_{j}}P_{T})Z_{j-1} &\text{by linearity }
+\end{align*}
 
 
 ii) If $q\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{n}$, then  with high probability, 

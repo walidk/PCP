@@ -18,9 +18,9 @@ Robust Principal Component Analysis \cite{Candes:2011fk} is the problem of recov
 
 Principal component pursuit minimizes a linear combination of the nuclear norm of a matrix $L$ and the $\ell_1$ norm of $M-L$. Minimizing the $\ell_1$ norm is known to favor sparsity, while minimizing the nuclear norm $\|L\|_* = \sum_{\sigma \in \sigma(L)} \sigma$ is known to favour low-rank matrices (intuitively, favors sparsity of the vector of singular values).
 
-The low-rank component $S_0$ is viewed as a noise matrix, that can represent measurement noise, failure in some sensors that will result in completely corrupting a fraction of the observed entries, or missing data (which translates to having a fraction of the entries equal to zero). In this setting, one would like to be able to recover the original data $L_0$, without making assumptions on the magnitude $\|S_0\|_\infty$ of the sparse component. PCP achieves recovery with high probability in this setting, under alternate assumptions on the structure of $L_0$ and sparsity pattern of $S_0$.
+The low-rank component $S_0$ is viewed as a noise matrix, that can represent measurement noise, failure in some sensors that will result in completely corrupting a fraction of the observed entries, or missing data (which translates to having a fraction of the entries equal to zero). In this setting, one would like to be able to recover the original data $L_0$, without making assumptions on the magnitude $\|S_0\|_\infty$ of the sparse component, where $\|S\|_\infty = \max_{i,j} |S_{ij}|$. PCP achieves recovery with high probability in this setting, under alternate assumptions on the structure of $L_0$ and sparsity pattern of $S_0$.
 
-One cannot expect to recover the components exactly in the most general case. Assume for example that $L_0$ is such that $(L_0)_{ij} = \delta_i^1\delta_j^1$, and $S_0 = -L_0$. Both matrices are sparse and low-rank, and clearly one cannot expect to recover the components in this case, since the observed matrix is $M = 0$. Therefore assumptions are made on the incoherence of $L_0$ and the support of $S_0$.
+One cannot expect to recover the components exactly in the most general case. Assume for example that $L_0$ is such that $(L_0)_{ij} = \delta_i^1\delta_j^1$, and $S_0 = -L_0$. Both matrices are sparse and low-rank, and clearly one cannot expect to recover the components in this case, since the observed matrix is $M = 0$. Therefore assumptions need to be made on the incoherence of $L_0$ and the support of $S_0$.
 
 
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -68,7 +68,7 @@ These conditions require the singular vectors to be ``spread'' enough with respe
 
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Support of the sparse component $S_0$}
-The cardinality of the support of $S_0$ is denoted $m$. Guaranteeing exact recovery requires $m$ to be small enough, in a sense that will be defined in the next section. Proving exact recovery will rely on a probabilistic argument on the distribution of sparse matrices $S_0$ on the set of matrices $\{ S \in \Rbb^{n_1 \times n_2} | \text{card}(\text{Supp}(S)) = m \}$ assuming a uniform sampling model. The proof of the main result will use a different sampling model, and prove equivalence with the uniform model.
+The cardinality of the support of $S_0$ is denoted $m$. Guaranteeing exact recovery requires $m$ to be small enough, in a sense that will be defined in the next section. Proving exact recovery will rely on a probabilistic argument which assumes the sparse matrix $S_0$ is drawn from a uniform distribution on the set of matrices with support of a fixed cardinality $m$, i.e. $\{ S \in \Rbb^{n_1 \times n_2} | \mathbf{card}(\mathbf{supp}(S)) = m \}$. Here $\mathbf{card}$ denotes the cardinality, and $\mathbf{supp}$ denotes the set of non zero elements, or support. The proof of the main result will use a different sampling model, and prove equivalence with the uniform model.
 
 
 %============================================================================================
@@ -106,8 +106,9 @@ Then using the random sign Bernoulli sampling model, it is shown that a dual cer
 \subsection{Preliminaries}
 \begin{itemize}
 \item The subgradient of of the $\ell_1$ norm at $S_0$ supported on $\Omega$ is of the form $\sgn(S_0)+F$ where $P_\Omega F = 0$ and $\|F\|_\infty \leq 1$.
-\item The subgradient of the nuclear norm (For details see Sec. \ref{sub:nuclearnorm}) at $L_0 = U\Sigma V^*$ where $U, V \in \Rbb^{n \times r}$ and $\Sigma \in \Rbb^{r \times r}$, is of the form $U V^* + W$, where
+\item The subgradient of the nuclear norm (for details see Section~\ref{sub:nuclearnorm}) at $L_0 = U\Sigma V^*$ where $U, V \in \Rbb^{n \times r}$ and $\Sigma \in \Rbb^{r \times r}$, is of the form $U V^* + W$, where
 \begin{equation}
+\label{eq:nuc_norm_subg_cond_1}
 \begin{aligned}
 &U^*W = 0 \\
 & WV = 0\\
@@ -115,7 +116,7 @@ Then using the random sign Bernoulli sampling model, it is shown that a dual cer
 \end{aligned}
 \end{equation}
 
-or equivalently
+where $\|W\|$ denotes the operator norm of matrix $W$, i.e. $\|W\| = \underset{\|u\|_2 = 1}{\max} \|Wu\|_2 = \sigma_{\max}(W)$. Conditions~(\ref{eq:nuc_norm_subg_cond_1}) are equivalent to
 
 \begin{equation}
 \begin{aligned}
@@ -125,9 +126,10 @@ or equivalently
 \end{equation}
 
 where $T$ is the linear space of matrices defined by
-\[
+\begin{equation}
+\label{eq:T_subspace}
 T = \{UX^* + YV^*, \  X, Y \in \mathbb{R}^{n \times r}\}
-\]
+\end{equation}
 
 Indeed, we have
 \begin{align*}
@@ -252,7 +254,7 @@ In the setting of Theorem~\ref{thm:pcp}, the non-zero entries of the sparse comp
 \begin{theorem}
 Suppose $L_0$ satisfies conditions of Theorem~\ref{thm:pcp}, and that the support of $S_0$ is sampled from a Bernoulli model with parameter $2\rho_s$, and the signs of $S_0$ are i.i.d. Bernoulli $\pm 1$ with parameter $\frac{1}{2}$, and independent from the support. Then:
 
-If the PCP solution is exact with high probability, then it is exact with at least the same probability for the model in which values of $S_0$ are fixed and the support is sampled from a Bernoulli distribution with parameter $\rho_s$.
+If the PCP solution is exact with high probability, then it is exact with at least the same probability for the model in which signs of $S_0$ are fixed and the support is sampled from a Bernoulli distribution with parameter $\rho_s$.
 \end{theorem}
 
 \begin{proof}
@@ -308,7 +310,7 @@ P(S_0 = S_{ij}) = \rho_s
 Finally, since, by assumption, PCP recovers $|S| \circ E$ with high probability, then by the elimination theorem, it also recovers $\Delta \circ |S| \circ E$ with at least the same probability. The result follows since $S'_0$ and $S_0$ have the same distribution.
 \end{proof}
 
-We remark that the uniform sampling and the iid Bernoulli sampling model are indeed equivalent and the justification is given in Section (\ref{sub:bernoullisampling}).
+We remark that the uniform sampling and the iid Bernoulli sampling model are indeed equivalent and the justification is given in Section~\ref{sub:bernoullisampling}.
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Dual certificate}
 The following lemma gives a simple sufficient condition for the pair $(L_0,S_0)$ to be the unique optimal solution to PCP.
@@ -389,7 +391,9 @@ The proof of the main theorem will use a slightly different result, given by the
 \begin{lemma}
 \label{lem:dual_cert}
 Assume that $\|P_\Omega P_T \| \leq 1/2$. Then $(L_0,S_0)$ is the unique solution to PCP if $\exists (W, F)$ such that
+
 \begin{equation}
+\label{eq:dual_cert_cond}
 \begin{aligned}
 & UV^* + W = \lambda(\text{sign}(S_0) + F + P_\Omega D) \\
 & P_T W = 0 \\
@@ -469,19 +473,14 @@ Suppose $\Omega_0$ is sampled from the Bernoulli model with parameter $\rho_0$. 
 provided that $\rho_0 \geq C_0 \epsilon^{-2} \frac{\mu r \log n}{n}$ where $\mu$ is the incoherence parameter and $C_0$ is a numerical constant.
 \end{theorem}
 
-As a consequence, $\|P\Omega P_T\|$ can be bounded, and if $|\Omega|$ is not too large, then the desired bound $\|P_\Omega P_T\| \leq 1/2$ holds.
+As a consequence, $\|P_\Omega P_T\|$ can be bounded, and if $|\Omega|$ is not too large, then the desired bound $\|P_\Omega P_T\| \leq 1/2$ holds.
 
 \subsection{Probabilistic Guarantee via Dual Certification}
 
-We now present the proof that, under the assumptions of Robust PCA,
-then , with high probability, we can find a dual certificate $(W,F,D)$
-such that it can satisfy Lemma (?) . This can then finish the proof
-of the probabilistic guarantee of recovery of $(L_{0},S_{0})$.
+We now present the proof that, under the assumptions of Robust PCA, then with high probability, we can find a dual certificate $(W,F,D)$ that satisfies the conditions~(\ref{eq:dual_cert_cond}) of Lemma~\ref{lem:dual_cert}. This will achieve the proof of the probabilistic guarantee of recovery of $(L_0, S_0)$.
 
-In order to accomplish that, we construct $W$ by $W=W^{L}+W^{S}$
-where the constructed $W^{L}$ and $W^{S}$ will satisfy the following
-properties. First , $P_{\Omega}(W^{S})=\lambda sign(S_{0})$. Then
-it also need to satisfies the followings.
+In order to construct a dual certificate $(W, F, D)$, we define $W = W^{L}+W^{S}$ where $W^{L}$ and $W^{S}$ are constructed to satisfy the following
+properties. First, $P_{\Omega}(W^{S}) = \lambda \sign(S_0)$. Then it also need to satisfies the following.
 
 \begin{lemma} \label{wl} Let $S_0\sim Bern(\rho)$ iid for each entry with $\Omega$
 as its support set. Set $j_{0}=2\log n$. With the assumptions in
@@ -506,17 +505,17 @@ $W^{S}$ satisfies the following with high probability.
 After having these two lemmas, we are ready to show that they help to justify the probabilistic guarantee. We note that
 \begin{eqnarray*}
 UV^{*}+W & = & W^{L}+W^{S}+UV^{*}\\
- & = & \lambda[P_{\Omega}(\frac{UV^{*}+W^{L}}{\lambda})+sign(S_{0})+P_{\Omega^{\bot}}(\frac{W^{L}+W^{S}+UV^{*}}{\lambda})]
+ & = & \lambda \left[ P_{\Omega} \left( \frac{UV^{*}+W^{L}}{\lambda} \right) + sign(S_{0}) + P_{\Omega^{\bot}} \left( \frac{W^{L}+W^{S}+UV^{*}}{\lambda} \right) \right]
 \end{eqnarray*}
 Thus we take
 \begin{eqnarray*}
 D & = & \frac{UV^{*}+W^{L}}{\lambda}\\
 W & = & W^{L}+W^{S}\\
-F & = & P_{\Omega}(\frac{W^{L}+W^{S}+UV^{*}}{\lambda})
+F & = & P_{\Omega} \left( \frac{W^{L}+W^{S}+UV^{*}}{\lambda} \right)
 \end{eqnarray*}
 
 
-From Lemma (\ref{wl}) and Lemma (\ref{ws}), we can check that $(W,F,D)$
+From Lemma~(\ref{wl}) and Lemma (\ref{ws}), we can check that $(W,F,D)$
 satisfies the conditions of Lemma (\ref{lem:dual_cert}), thus establishing the probabilistic
 guarantee.
 
