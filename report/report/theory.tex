@@ -199,7 +199,7 @@ equivalently, using the fact that $\|P_{T^\perp} e_ie_j^*\|_F^2 + \|P_{T} e_ie_j
 
 \begin{align*}
 \|P_{T} e_ie_j^*\|_F^2
-&\leq 1 - (1 - \frac{\mu r}{n})^2 \\
+&\leq 1 - \left(1 - \frac{\mu r}{n} \right)^2 \\
 &= \frac{2\mu r}{n} - \left( \frac{\mu r}{n} \right)^2 \\
 &\leq \frac{2\mu r}{n}
 \end{align*}
@@ -237,7 +237,7 @@ we observe that $(\hat{L}, \hat{S} + P_{\Omega_0^\perp} S_0)$ is feasible for th
 \[
 \begin{aligned}
 &\hat{L} = L_0 \\
-&P_{\Omega_0^\perp} S_0 = S_0
+&\hat{S} + P_{\Omega_0^\perp} S_0 = S_0
 \end{aligned}
 \]
 
@@ -297,8 +297,8 @@ where $\circ$ is the component wise product. Then $S_0$ and $S'_0$ have the same
 
 \begin{align*}
 P((S'_0)_{ij} = S_{ij})
-&= P(\Delta_{ij} = 1 \text{ and } E_{ij} = \sgn S_{ij}) \\
-&= P(E_{ij}S_{ij} \geq 0 \text{ and } E_{ij} = \sgn S_{ij}) \\
+&= P(\Delta_{ij} = 1 \text{ and } E_{ij} = \sgn(S_{ij}) ) \\
+&= P(E_{ij}S_{ij} \geq 0 \text{ and } E_{ij} = \sgn(S_{ij})) \\
 &= P(E_{ij} = \sgn S_{ij}) \\
 &= \rho_s
 \end{align*}
@@ -319,7 +319,7 @@ The following lemma gives a simple sufficient condition for the pair $(L_0,S_0)$
 Assume that $\|P_\Omega P_T \| < 1$. Then $(L_0,S_0)$ is the unique solution to PCP if $\exists (W, F)$ such that
 \begin{equation}
 \begin{aligned}
-& UV^* + W = \lambda(\text{sign}(S_0) + F) \\
+& UV^* + W = \lambda(\sgn(S_0) + F) \\
 & P_T W = 0 \\
 & \|W\|<1 \\
 & P_\Omega F = 0 \\
@@ -333,7 +333,7 @@ Assume that $\|P_\Omega P_T \| < 1$. Then $(L_0,S_0)$ is the unique solution to 
 \begin{proof}
 We first prove that the condition $\|P_\Omega P_T\| < 1$ is equivalent to $\Omega \cap T = \{0\}$.
 
-First, if $\Omega \cap T \neq \{0\}$, then let $M_0 \in \Omega \cap T$, $M_0 \neq 0$. We have $\| P_\Omega P_T M_0\| = \|M_0\|$, thus $\| P_\Omega P_T\| = \max_{M \neq 0} \frac{\| P_\Omega P_T M\|}{\|M\|} \geq 1$.
+First, if $\Omega \cap T \neq \{0\}$, then let $M_0 \in \Omega \cap T$, $M_0 \neq 0$. We have $\| P_\Omega P_T M_0\| = \|M_0\|$, thus $\| P_\Omega P_T\| = \underset{M \neq 0}{\max} \frac{\| P_\Omega P_T M\|}{\|M\|} \geq 1$.
 
 Conversely, if $\| P_\Omega P_T\| \geq 1$, then $\exists M_0 \neq 0$ such that $\|M_0\| \leq \| P_\Omega P_T M_0\|$. But since $P_\Omega$ and $P_T$ are orthogonal projections, we have $\|M_0\| \leq \| P_\Omega P_T\| \leq \|P_T M_0\| \leq \|M_0\|$, where inequalities must hold with equality. In particular, we have $\|P_T M_0\| = \|M_0\|$, which implies $P_T M_0 = M_0$ (to prove this, decompose $\|M_0\|$ into the orthogonal components $\|M_0\|^2 = \|M_0 - P_TM_0\|^2 + \|P_TM_0\|^2$, thus $\|P_TM_0\| = \|M_0\| \Rightarrow \|M_0 - P_TM_0\| = 0 \Rightarrow M_0 = P_T M_0$), then similarly, $\|P_\Omega M_0\| = \|M_0\|$, which implies $P_\Omega M_0 = M_0$. Therefore $M_0 \in \Omega \cap T$. This proves the equivalence $\|P_\Omega P_T\| < 1 \Leftrightarrow \Omega \cap T = \{0\}$.
 
@@ -365,7 +365,7 @@ we can bound the inner product using the definition of $W$ and $F$,
 
 \begin{align*}
 |\langle UV^* - \lambda  \sgn(S_0), H\rangle|
-& = |\langle \lambda F - W, H\rangle|  & \text{since } UV^* + W = \lambda(\text{sign}(S_0) + F) \\
+& = |\langle \lambda F - W, H\rangle|  & \text{since } UV^* + W = \lambda(\sgn(S_0) + F) \\
 &\leq |\langle W, H \rangle| + \lambda |\langle F, H \rangle| & \text{by the triangular inequality} \\
 &\leq \beta (\|P_{T^\perp} H\|_* + \lambda \|P_{\Omega^\perp} H\|_1)
 \end{align*}
