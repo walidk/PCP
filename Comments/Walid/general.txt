@@ -1,0 +1,9 @@
+-Formatting:
+-use \left( and \right) where necessary (adapts size of parentheses/brackets to whats inside)
+-use ~ for space when referencing an equation, lemma, section, etc. 
+Example: from Equation~(\ref{eq:some_equation})
+
+
+-Style:
+-when justifying a statement, prefer 'by this fact' or 'since equation' to 'because this fact' or 'because equation'
+
