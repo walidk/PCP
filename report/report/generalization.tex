@@ -22,11 +22,12 @@ satisfy the Robust PCA assumptions. Then with high probability, the
 following problems are equivalent:
 
 \begin{eqnarray}
-J_{1} & =\min_{L,S} & ||L||_{*}+\lambda||S||_{1}\label{eq:general}\\
+J_{1} & =\min_{L,S} & \|L\|_{*}+\lambda\|S\|_{1}\label{eq:general}\\
  & s.t. & M=L+S\nonumber
 \end{eqnarray}
+
 \begin{eqnarray}
-J_{2} & =\min_{L,S} & ||L||_{*}+\lambda||S||_{1}\label{eq:restricted}\\
+J_{2} & =\min_{L,S} & \|L\|_{*}+\lambda\|S\|_{1}\label{eq:restricted}\\
  & s.t. & M=L+S\nonumber \\
  &  & \text{and }T(L,S)\text{ holds}\nonumber
 \end{eqnarray}
@@ -48,16 +49,16 @@ when the rank information is known and derive a block coordinate descent
 framework for future algorithm design.
 
 \begin{eqnarray}
-J_{3} & = & \min_{M=L+S,rank(L)\le r}||L||_{*}+\lambda||S||_{1}\nonumber \\
- & = & \min_{L,S,\mu_{i},p_{i}q_{i}}||L||_{*}+\lambda||S||_{1}\nonumber \\
- & s.t. & S=M-L,L=\sum_{i=1}^{r}\mu_{i}p_{i}q_{i}^{T}\nonumber \\
- &  & ||p_{i}||_{2}=1,||q_{i}||_{2}=1,\mu_{i}\ge0\nonumber \\
+J_{3} & = & \min_{M=L+S,rank(L)\le r}\|L\|_{*}+\lambda\|S\|_{1}\nonumber \\
+ & = & \min_{L,S,\mu_{i},p_{i}q_{i}}\|L\|_{*}+\lambda\|S\|_{1}\nonumber \\
+ && s.t. S=M-L,L=\sum_{i=1}^{r}\mu_{i}p_{i}q_{i}^{T}\nonumber \\
+ &  & \|p_{i}\|_{2}=1,\|q_{i}\|_{2}=1,\mu_{i}\ge0\nonumber \\
 \nonumber \\
- & = & \min_{\mu_{i},p_{i}q_{i}}\sum_{i=1}^{r}\mu_{i}+\lambda||M-\sum_{i=1}^{r}\mu_{i}p_{i}q_{i}^{T}||_{1}\nonumber \\
- & s.t. & ||p_{i}||_{2}=1,||q_{i}||_{2}=1,\mu_{i}\ge0\nonumber \\
+ & = & \min_{\mu_{i},p_{i}q_{i}}\sum_{i=1}^{r}\mu_{i}+\lambda\|M-\sum_{i=1}^{r}\mu_{i}p_{i}q_{i}^{T}\|_{1}\nonumber \\
+ && s.t. \|p_{i}\|_{2}=1,\|q_{i}\|_{2}=1,\mu_{i}\ge0\nonumber \\
 \nonumber \\
- & = & \min_{\mu_{i},p_{i}q_{i}}\sum_{i=1}^{r}|\mu_{i}-0|+\lambda||M-\sum_{i=1}^{r}\mu_{i}p_{i}q_{i}^{T}||_{1}\label{eq:rank form}\\
- & s.t. & ||p_{i}||_{2}=1,||q_{i}||_{2}=1,\mu_{i}\ge0\nonumber
+ & = & \min_{\mu_{i},p_{i}q_{i}}\sum_{i=1}^{r}|\mu_{i}-0|+\lambda\|M-\sum_{i=1}^{r}\mu_{i}p_{i}q_{i}^{T}\|_{1}\label{eq:rank form}\\
+ && s.t. \|p_{i}\|_{2}=1,\|q_{i}\|_{2}=1,\mu_{i}\ge0\nonumber
 \end{eqnarray}
 
 
@@ -83,7 +84,7 @@ from the data set that we know precisely what the rank of the matrix
 are. Therefore, it is natural to introduce the following heuristics.
 
 \begin{eqnarray}
-E^{*} & = & \min_{\{p_{j}\}\{q_{j}\},1\le j\le r}||M-\sum_{j=1}^{r}p_{j}q_{j}^{T}||_{1}\label{heu}
+E^{*} & = & \min_{\{p_{j}\}\{q_{j}\},1\le j\le r}\|M-\sum_{j=1}^{r}p_{j}q_{j}^{T}\|_{1}\label{heu}
 \end{eqnarray}
 
 
@@ -95,25 +96,25 @@ For this new heuristic, we provide some performance guarantee for the case
 when the noise is bounded. One is a result for deterministic case
 and the other is for the random case. They are as follows.
 \begin{prop}
-Let $M=S+\sum_{i=1}^{r}p_{i}q_{i}^{T}$, $\frac{2}{\epsilon}||S||_{1}\le||\sum_{i=1}^{r}p_{i}q_{i}^{T}||_{1}$,
+Let $M=S+\sum_{i=1}^{r}p_{i}q_{i}^{T}$, $\frac{2}{\epsilon}\|S\|_{1}\le\|\sum_{i=1}^{r}p_{i}q_{i}^{T}\|_{1}$,
 then, for the recovered $(\hat{L},\hat{S})$ from (\ref{heu}) , it
 will satisfy
 \begin{eqnarray*}
-\frac{||\sum_{i=1}^{r}p_{i}q_{i}^{T}-\hat{L}||_{1}}{||\sum_{i=1}^{r}p_{i}q_{i}^{T}||_{1}} & \le & \epsilon
+\frac{\|\sum_{i=1}^{r}p_{i}q_{i}^{T}-\hat{L}\|_{1}}{\|\sum_{i=1}^{r}p_{i}q_{i}^{T}\|_{1}} & \le & \epsilon
 \end{eqnarray*}
 \end{prop}
 \begin{proof}
 Assume not, then
 \begin{eqnarray*}
-||S||_{1} & \ge & ||\sum_{i=1}^{r}p_{i}q_{i}^{T}+S-\hat{L}||_{1}\\
- & \ge & ||\sum_{i=1}^{r}p_{i}q_{i}^{T}-\hat{L}||_{1}-||S||_{1}\\
- & > & \epsilon||\sum_{i=1}^{r}p_{i}q_{i}^{T}||_{1}-||S||_{1}
+\|S\|_{1} & \ge & \|\sum_{i=1}^{r}p_{i}q_{i}^{T}+S-\hat{L}\|_{1}\\
+ & \ge & \|\sum_{i=1}^{r}p_{i}q_{i}^{T}-\hat{L}\|_{1}-\|S\|_{1}\\
+ & > & \epsilon\|\sum_{i=1}^{r}p_{i}q_{i}^{T}\|_{1}-\|S\|_{1}
 \end{eqnarray*}
 
 \end{proof}
 This gives a contradition, which is,
 \begin{eqnarray*}
-\frac{2}{\epsilon}||S||_{1} & > & ||\sum_{i=1}^{r}p_{i}q_{i}^{T}||
+\frac{2}{\epsilon}\|S\|_{1} & > & \|\sum_{i=1}^{r}p_{i}q_{i}^{T}\|
 \end{eqnarray*}
 
 \begin{prop}
@@ -122,26 +123,26 @@ $(p_{i})_{j}\sim Uniform(-x_{p},x_{p})$, $(q_{i})_{j}\sim Uniform(-x_{q},x_{q})$
 all of the random variables being independent. With $|S|=k$ such that
 $\lim_{n\to\infty}\frac{k^{2}}{n}$, then we have,
 \begin{eqnarray*}
-\lim_{n\to\infty}P(\frac{||\sum_{i=1}^{r}p_{i}q_{i}^{T}-\hat{L}||_{1}}{||\sum_{i=1}^{r}p_{i}q_{i}^{T}||_{1}}>\epsilon) & = & 0
+\lim_{n\to\infty}P(\frac{\|\sum_{i=1}^{r}p_{i}q_{i}^{T}-\hat{L}\|_{1}}{\|\sum_{i=1}^{r}p_{i}q_{i}^{T}\|_{1}}>\epsilon) & = & 0
 \end{eqnarray*}
 \end{prop}
 \begin{proof}
-Let $E$ be the error event that $\frac{||\sum_{i=1}^{r}p_{i}q_{i}^{T}-\hat{L}||_{1}}{||\sum_{i=1}^{r}p_{i}q_{i}^{T}||_{1}}>\epsilon$.
+Let $E$ be the error event that $\frac{\|\sum_{i=1}^{r}p_{i}q_{i}^{T}-\hat{L}\|_{1}}{\|\sum_{i=1}^{r}p_{i}q_{i}^{T}\|_{1}}>\epsilon$.
 If error occurs,
 \begin{eqnarray*}
-kx_{s} & \ge & ||\sum_{i=1}^{r}p_{i}q_{i}^{T}+S-\hat{L}||_{1}\\
- & \ge & ||\sum_{i=1}^{r}p_{i}q_{i}^{T}-\hat{L}||_{1}-||S||_{1}\\
- & \ge & \epsilon||\sum_{i=1}^{r}p_{i}q_{i}^{T}||_{1}-kx_{s}\\
+kx_{s} & \ge & \|\sum_{i=1}^{r}p_{i}q_{i}^{T}+S-\hat{L}\|_{1}\\
+ & \ge & \|\sum_{i=1}^{r}p_{i}q_{i}^{T}-\hat{L}\|_{1}-\|S\|_{1}\\
+ & \ge & \epsilon\|\sum_{i=1}^{r}p_{i}q_{i}^{T}\|_{1}-kx_{s}\\
  & \ge & \epsilon\sqrt{\sum_{l_{1}l_{2}}(\sum_{i=1}^{r}(p_{i})_{l_{1}}(q_{i})_{l_{2}})^{2}}-k_{s}
 \end{eqnarray*}
 
 
 Thus,
 \begin{eqnarray*}
- & Pr(E)\\
-\le & Pr((\frac{2kx_{s}}{\epsilon})^{2}\ge\sum_{l_{1}l_{2}}(\sum_{i=1}^{r}(p_{i})_{l_{1}}(q_{i})_{l_{2}})^{2})\\
-\le & Pr((\frac{2kx_{s}}{\epsilon})^{2}\ge\sum_{l_{1}=1}^{n}(\sum_{i=1}^{r}(p_{i})_{l_{1}}(q_{i})_{l_{1}})^{2})\\
-= & Pr(\frac{1}{n}(\frac{2kx_{s}}{\epsilon})^{2}\ge\frac{1}{n}\sum_{l_{1}=1}^{n}(\sum_{i=1}^{r}(p_{i})_{l_{1}}(q_{i})_{l_{1}})^{2})
+Pr(E)
+&\le & Pr((\frac{2kx_{s}}{\epsilon})^{2}\ge\sum_{l_{1}l_{2}}(\sum_{i=1}^{r}(p_{i})_{l_{1}}(q_{i})_{l_{2}})^{2})\\
+&\le & Pr((\frac{2kx_{s}}{\epsilon})^{2}\ge\sum_{l_{1}=1}^{n}(\sum_{i=1}^{r}(p_{i})_{l_{1}}(q_{i})_{l_{1}})^{2})\\
+&= & Pr(\frac{1}{n}(\frac{2kx_{s}}{\epsilon})^{2}\ge\frac{1}{n}\sum_{l_{1}=1}^{n}(\sum_{i=1}^{r}(p_{i})_{l_{1}}(q_{i})_{l_{1}})^{2})
 \end{eqnarray*}
 
 
@@ -196,12 +197,12 @@ Let $M=(a_{i,j})\in R^{mXn}$. We now employ the block-coordinate
 descent approach to solve this problem. Note that
 
 \begin{eqnarray}
-\min_{p} & ||M-pq^{T}||_{1} & =\sum_{i=1}^{m}\min_{t}(\sum_{j=1}^{n}|a_{i,j}-tq_{j}|)\\
- &  & =\sum_{i=1}^{m}\min_{t}(\sum_{j=1}^{n}|q_{j}||t-\frac{a_{i,j}}{q_{j}}|)\nonumber
+\min_{p} & \|M-pq^{T}\|_{1} & =\sum_{i=1}^{m}\min_{t}(\sum_{j=1}^{n}|a_{i,j}-tq_{j}|)\\
+ &  & =\sum_{i=1}^{m}\min_{t}(\sum_{j=1}^{n}|q_{j}\|t-\frac{a_{i,j}}{q_{j}}|)\nonumber
 \end{eqnarray}
 \begin{eqnarray}
-\min_{q} & ||M-pq^{T}||_{1} & =\sum_{j=1}^{n}\min_{t}(\sum_{i=1}^{m}|a_{i,j}-tp_{i}|)\\
- &  & =\sum_{j=1}^{n}\min_{t}(\sum_{j=1}^{n}|p_{i}||t-\frac{a_{i,j}}{p_{i}}|)\nonumber
+\min_{q} & \|M-pq^{T}\|_{1} & =\sum_{j=1}^{n}\min_{t}(\sum_{i=1}^{m}|a_{i,j}-tp_{i}|)\\
+ &  & =\sum_{j=1}^{n}\min_{t}(\sum_{j=1}^{n}|p_{i}\|t-\frac{a_{i,j}}{p_{i}}|)\nonumber
 \end{eqnarray}
 
 
@@ -229,7 +230,7 @@ mostly on sorting the sequence. We call it WMH.
 
 
 This algorithm is optimal in finding $t$. This is justified by using
-the property of sub-differential of $||\cdot||_{1}$ and note that
+the property of sub-differential of $\|\cdot\|_{1}$ and note that
 $0\in\partial(\sum_{k=1}^{k_{0}}c_{i}|t^{*}-d_{i}|)$.
 
 Now we are ready to state the power iteration method to solve the
@@ -265,36 +266,37 @@ as follows.
 
 Recall that if we directly apply robust PCA , we will get,
 
-\begin{eqnarray*}
- &  & \min_{M=L+S,rank(L)\le1}||L||_{*}+\lambda||S||_{1}\\
- & = & \min_{S=M-pq^{T},L=pq^{T}}||L||_{*}+\lambda||S||_{1}\\
- & = & \min_{S=M-pq^{T},L=pq^{T}}||pq^{T}||_{*}+\lambda||M-pq^{T}||_{1}\\
- & = & \min_{p,q:||p||_{2}=1}||pq^{T}||_{*}+\lambda||M-pq^{T}||_{1}\\
- & = & \min_{p,q:||p||_{2}=1}||q||_{2}+\lambda||M-pq^{T}||_{1}\\
- & = & \min_{p:||p||_{2}=1}\min_{q}||q||_{2}+\lambda||M-pq^{T}||_{1}
-\end{eqnarray*}
+\begin{align*}
+ \min_{M=L+S,rank(L)\le1}\|L\|_{*}+\lambda\|S\|_{1}
+ & = \min_{S=M-pq^{T},L=pq^{T}}\|L\|_{*}+\lambda\|S\|_{1} \\
+ & = \min_{S=M-pq^{T},L=pq^{T}}\|pq^{T}\|_{*}+\lambda\|M-pq^{T}\|_{1} \\
+ & = \min_{p,q:\|p\|_{2}=1}\|pq^{T}\|_{*}+\lambda\|M-pq^{T}\|_{1} \\
+ & = \min_{p,q:\|p\|_{2}=1}\|q\|_{2}+\lambda\|M-pq^{T}\|_{1} \\
+ & = \min_{p:\|p\|_{2}=1}\min_{q}\|q\|_{2}+\lambda\|M-pq^{T}\|_{1}
+\end{align*}
 
 
 Now, for every fixed $p$, we consider the subproblem, if we directly
 apply the Robust PCA with $\lambda\le\frac{1}{n}$,
-\begin{eqnarray*}
- &  & \min_{q}||q||_{2}+\lambda||M-pq^{T}||_{1}\\
- & = & \min_{q}\max_{||u||_{2}\le1,||V||_{\infty\le1}}u^{T}q+\lambda Tr(V^{T}(M-pq^{T}))\\
- & = & \max_{||u||_{2}\le1,||V||_{\infty\le1}}\min_{q}u^{T}q+\lambda Tr(V^{T}(M-pq^{T}))\\
- & = & \max_{||u||_{2}\le1,||V||_{\infty\le1},u=\lambda V^{T}p}Tr(V^{T}M)\\
- & = & \max_{||\lambda V^{T}p||_{2}\le1,||V||_{\infty\le1}}Tr(V^{T}M)\\
- & = & \max_{||V^{T}p||_{2}\le n,||V||_{\infty\le1}}Tr(V^{T}M)
-\end{eqnarray*}
+
+\begin{align*}
+\min_{q}\|q\|_{2}+\lambda\|M-pq^{T}\|_{1}
+& = \min_{q}\max_{\|u\|_{2}\le1,\|V\|_{\infty\le1}}u^{T}q+\lambda Tr(V^{T}(M-pq^{T})) \\
+& = \max_{\|u\|_{2}\le1,\|V\|_{\infty\le1}}\min_{q}u^{T}q+\lambda Tr(V^{T}(M-pq^{T})) \\
+& = \max_{\|u\|_{2}\le1,\|V\|_{\infty\le1},u=\lambda V^{T}p}Tr(V^{T}M) \\
+& = \max_{\|\lambda V^{T}p\|_{2}\le1,\|V\|_{\infty\le1}}Tr(V^{T}M) \\
+& = \max_{\|V^{T}p\|_{2}\le n,\|V\|_{\infty\le1}}Tr(V^{T}M)
+\end{align*}
 
 
-Now note that, since $||p||_{2}\le1$, we have $||V^{T}p||_{2}\le\sqrt{\sum_{i=1}^{n}\sigma_{i}(V^{T}V)}=\sqrt{Tr(V^{T}V)}\le\sqrt{n^{2}||V||_{\infty}}$.
+Now note that, since $\|p\|_{2}\le1$, we have $\|V^{T}p\|_{2}\le\sqrt{\sum_{i=1}^{n}\sigma_{i}(V^{T}V)}=\sqrt{Tr(V^{T}V)}\le\sqrt{n^{2}\|V\|_{\infty}}$.
 Thus, the optimal value is
-\begin{eqnarray*}
- &  & \min_{p,q:||p||_{2}=1}||pq^{T}||_{*}+\lambda||M-pq^{T}||_{1}\\
- & = & \min_{p:||p||_{2}=1}\max_{||V||_{\infty\le1}}Tr(V^{T}M)\\
- & = & \min_{p:||p||_{2}=1}||M||_{1}\\
- & = & ||M||_{1}
-\end{eqnarray*}
+\begin{align*}
+\min_{p,q:\|p\|_{2}=1}\|pq^{T}\|_{*}+\lambda\|M-pq^{T}\|_{1}
+& = \min_{p:\|p\|_{2}=1}\max_{\|V\|_{\infty\le1}}Tr(V^{T}M)\\
+& = \min_{p:\|p\|_{2}=1}\|M\|_{1}\\
+& = \|M\|_{1}
+\end{align*}
 
 
 And it is achieved by $pq^{T}=0$ matrix, which deviates from what
@@ -323,10 +325,7 @@ plot the graph of different degree of sparsity and the corresponding
 effectiveness of the optimization heuristic in extracting the original
 $pq^{T}$. The result is as follows.
 
-
-%TODO: add file to the figures folder
-
-\begin{figure}
+\begin{figure}[h!]
 \label{fig:comparison}
 \centering
 \includegraphics[width=16cm]{../figures/compare.jpg}

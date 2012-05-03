@@ -123,19 +123,19 @@ One issue with Robust PCA that limits its practical applicability is the assumpt
 %-----------------------------------------------------------------------------
 \subsubsection{Main result}
 
-The paper~\cite{Zhou:2010vn} consider a matrix $M\in\mathbb{R}^{n_1\times n_2}$ of the from $M = L_0+S_0+Z_0$, where~$L_0$ is (non-sparse) low rank, $S_0$ is sparse (modeling gross errors) and $Z_0$ is ``small'' (modeling a small noisy perturbation). The assumption on~$Z_0$ is simply that $||Z_0||_F \leq \delta$ for some small known~$\delta$. Hence at least for the theory part of the paper the authors do not assume anything about the distribution of the noise other than it is bounded (however they will gloss over this in their algorithm).
+The paper~\cite{Zhou:2010vn} consider a matrix $M\in\mathbb{R}^{n_1\times n_2}$ of the from $M = L_0+S_0+Z_0$, where~$L_0$ is (non-sparse) low rank, $S_0$ is sparse (modeling gross errors) and $Z_0$ is ``small'' (modeling a small noisy perturbation). The assumption on~$Z_0$ is simply that $\|Z_0\|_F \leq \delta$ for some small known~$\delta$. Hence at least for the theory part of the paper the authors do not assume anything about the distribution of the noise other than it is bounded (however they will gloss over this in their algorithm).
 
 The convex program to be solved is a slight modification of the standard Robust PCA problem and given by
 \begin{align}
 \begin{split}
-\min_{L,S} \; &||L||_* + \lambda ||S||_1 \\
-\text{s.t.} \quad &||M-L-S||_F \leq \delta
+\min_{L,S} \; &\|L\|_* + \lambda \|S\|_1 \\
+\text{s.t.} \quad &\|M-L-S\|_F \leq \delta
 \end{split}
 \label{mainresult:optproblem}
 \end{align}
-where $\lambda = 1/\sqrt{n_1}$. Under a standard incoherence assumption on~$L_0$ (which essentially means that $L_0$ should not be sparse) and a uniformity assumption on the sparsity pattern of~$S_0$ (which means that the support of~$S_0$ should not be too concentrated) the main result states that, with high probability in the support of~$S_0$, for any~$Z_0$ with $||Z_0||_F \leq \delta$, the solution $(\hat{L},\hat{S})$ to~\eqref{mainresult:optproblem} satisfies
+where $\lambda = 1/\sqrt{n_1}$. Under a standard incoherence assumption on~$L_0$ (which essentially means that $L_0$ should not be sparse) and a uniformity assumption on the sparsity pattern of~$S_0$ (which means that the support of~$S_0$ should not be too concentrated) the main result states that, with high probability in the support of~$S_0$, for any~$Z_0$ with $\|Z_0\|_F \leq \delta$, the solution $(\hat{L},\hat{S})$ to~\eqref{mainresult:optproblem} satisfies
 \begin{align*}
-||\hat{L}-L_0||_F^2 + ||\hat{S}-S_0||_F^2 \leq C n_1n_2\delta^2
+\|\hat{L}-L_0\|_F^2 + \|\hat{S}-S_0\|_F^2 \leq C n_1n_2\delta^2
 \end{align*}
 where~$C$ is a numerical constant. The above claim essentially states that the recovered low-rank matrix~$\hat{L}$ is stable with respect to non-sparse but small noise acting on all entries of the matrix.
 
@@ -156,7 +156,7 @@ Conceptually, the work presented in the paper is similar to the development of r
 
 For the case of a noise matrix~$Z_0$ whose entries are i.i.d. $\Ncal(0,\sigma^2)$, the paper suggests to use an Accelerated Proximal Gradient (APG) algorithm (see section~\ref{Algorithms:MainAlgs:PGM:Subsec} for details) for solving~\eqref{mainresult:optproblem}. Note that for~$\delta =0$ the problem reduces to the standard Robust PCA problem with an equality constraint on the matrices. For this case the APG algorithm proposed in~\cite{Lin:2009kx} solves an approximation of the form
 \begin{align*}
-\min_{L,S} \; &||L||_* + \lambda ||S||_1 + \frac{1}{2\mu} ||M-L-S||_F
+\min_{L,S} \; &\|L\|_* + \lambda \|S\|_1 + \frac{1}{2\mu} \|M-L-S\|_F
 \end{align*}
 For the Stable PCP problem where~$\delta>0$ the authors advocate using the same algorithm with fixed but carefully chosen parameter~$\mu$ (similar to~\cite{Candes:2010fk}). In particular, they point out\footnote{this based on the strong Bai Yin Theorem~\cite{Bai:1988fk}, which implies that for an $n\times n$ real matrix with entries $\xi_{ij} \sim \Ncal(0,1)$ the it holds that $\limsup_{n\rightarrow \infty} \norm{Z_0}{2}{}/\sqrt{n} = 2$ almost surely}
  that for $Z_0 \in\Rbf^{n\times n}$ with~$(Z_0)_{ij} \sim \Ncal(0,\sigma^2)$ i.i.d. it holds that $n^{-1/2}\norm{Z_0}{2}{} \rightarrow \sqrt{2}\sigma$ almost surely as $n\rightarrow\infty$. They then choose the parameter~$\mu$ such that if $M=Z_0$, i.e. if $L_0=S_0=0$, the minimizer of the above problem is likely to be $\hat{L}=\hat{S}=0$. The claim is that this is the case for~$\mu = \sqrt{2n}\sigma$.
@@ -181,7 +181,7 @@ One thing the paper claims is that ``at a cost not so much higher than the class
 The convex optimization framework for low-rank matrix recovery has been employed successfully as seen in the previous discussion of the Robust PCA problem. However, in many cases in practice the data can be viewed as low-rank only after some transformation is applied. The associated recovery problem has been dubbed Robust Alignment by Sparse and Low-rank Decomposition (RASL) and was investigated in~\cite{Peng:2010}. The formulation of this problem is the following:
 %
 \begin{align}
-\min_{L, S, \tau}  ||L||_{*} + \lambda||S||_{1} \quad  \text{s.t.} \;  M\circ\tau = L+S
+\min_{L, S, \tau}  \|L\|_{*} + \lambda\|S\|_{1} \quad  \text{s.t.} \;  M\circ\tau = L+S
 \label{eq:rasl:original}
 \end{align}
 %
@@ -190,7 +190,7 @@ Here $L \in\mathbb{R}^{m\times n}$ is the low-rank matrix, $S\in\mathbb{R}^{m\ti
 The main difficulty in solving ~\eqref{eq:rasl:original} is the nonlinearity of the equality constraint $M\circ\tau = L+S$. When the change induced by $\tau$ is small, one can approximate this constraint by linearizing about the current estimate of the transformation $\tau$. Suppose now that $\mathbb{G}$ is some $p$-parameter group and identify $\tau=[\;\tau_{1} \;|\;\tau_{2} \;|\; \dots \;|\; \tau_{n}\;] \in \mathbb{R}^{p\times n}$ with the parameterizations of all of the transformations. For $\Delta\tau = [\;\Delta\tau_{1} \;|\; \Delta\tau_{2} \;|\; \dots \;|\; \Delta\tau_{n}\;]$, write $M\circ(\tau+\Delta\tau) \approx M\circ\tau + \sum_{i=1}^n J_{i}\Delta\tau_{i}e_{i}$, where $J_{i} \doteq \frac{\partial}{\partial\zeta}(M_{i}\circ\zeta)|_{\zeta = \tau_{i}}$ is the Jacobian of the $i$-th measurement with respect to the parameters $\tau_{i}$ and $\{e_{i}\}$ denotes the standard basis for $\mathbb{R}^n$. This leads to a convex optimization problem involving the variables $L, S, \Delta\tau$:
 %
 \begin{align}
-\min_{L, S, \Delta\tau}  ||L||_{*} + \lambda||S||_{1}  \quad \text{s.t.} \;  M\circ\tau + \sum_{i=1}^n J_{i}\Delta\tau e_{i}e_{i}^{T}= L+S
+\min_{L, S, \Delta\tau}  \|L\|_{*} + \lambda\|S\|_{1}  \quad \text{s.t.} \;  M\circ\tau + \sum_{i=1}^n J_{i}\Delta\tau e_{i}e_{i}^{T}= L+S
 \label{eq:rasl:linearized}
 \end{align}
 
@@ -207,7 +207,7 @@ J_{i} \leftarrow \frac{\partial}{\partial\zeta}(M_{i}\circ\zeta)|_{\zeta = \tau_
 \end{equation}
 \textbf{Step 2 (inner loop):} solve the linearized convex optimization:
 \begin{equation}
-(L^{*}, S^{*}, \Delta\tau^{*}) \leftarrow \argmin_{L, S, \Delta\tau}  ||L||_{*} + \lambda||S||_{1}  \quad \text{s.t.} \;  M\circ\tau + \sum_{i=1}^n J_{i}\Delta\tau e_{i}e_{i}^{T}= L+S  \nonumber
+(L^{*}, S^{*}, \Delta\tau^{*}) \leftarrow \argmin_{L, S, \Delta\tau}  \|L\|_{*} + \lambda\|S\|_{1}  \quad \text{s.t.} \;  M\circ\tau + \sum_{i=1}^n J_{i}\Delta\tau e_{i}e_{i}^{T}= L+S  \nonumber
 \end{equation}
 \textbf{Step 3:} update the transformation: $\tau \leftarrow \tau + \Delta\tau^{*}$
 \newline
@@ -222,7 +222,7 @@ Another remark is that the inner loop (Step 2) in RASL algorithm is another conv
 
 RASL can be used for long-standing batch image alignment problem: given many images of an object or objects of interest, align them to a fixed canonical template. The images may subject to different illumination variation, partial occlusion, as well as poor or even no alignment. Finally, we show an example of how RASL performs in image alignment problem:
 
-\begin{figure}[h]
+\begin{figure}[h!]
   \centering
   \subfloat[Original images $M$]{\label{fig:rasl:original}\includegraphics[width=0.5\textwidth]{../figures/rasl_original.jpg}}
   ~ 
@@ -253,15 +253,15 @@ Under deterministic setting, it studies how much sparsity is allowed for accurat
 Given $M$ as the observed matrix, it analyze the following two optimization problems. With arguments as $(L,S)$,
 
 \begin{eqnarray}
-\min_{(L,S)} & ||L||_{*}+\lambda||S||_{1}\nonumber \\
-s.t. & ||L+S-M||_{1}\le\epsilon_{1}\\
- & ||L+S-M||_{*}\le\epsilon_{*}\nonumber
+\min_{(L,S)} & \|L\|_{*}+\lambda\|S\|_{1}\nonumber \\
+s.t. & \|L+S-M\|_{1}\le\epsilon_{1}\\
+ & \|L+S-M\|_{*}\le\epsilon_{*}\nonumber
 \end{eqnarray}
 
 
 and
 \begin{eqnarray}
-\min_{(L,S)} & ||L||_{*}+\lambda||S||_{1}+\frac{1}{2\mu}||L+S-M||_{F}
+\min_{(L,S)} & \|L\|_{*}+\lambda\|S\|_{1}+\frac{1}{2\mu}\|L+S-M\|_{F}
 \end{eqnarray}
 
 
@@ -271,6 +271,6 @@ It is remarked that the $M$ is a perturbed observation outcome of the original $
 %------------------------------------------------------------------------------
 \subsubsection{Contributions}
 \begin{enumerate}
-\item It provides sufficient conditions on sparsity of the original $(L_{0},S_{0})$ pairs that allow accurate recovery in the sense that $||L_{0}-\hat{L}||_{\infty},||S_{0}-\hat{S}||_{\infty}$ is small.
+\item It provides sufficient conditions on sparsity of the original $(L_{0},S_{0})$ pairs that allow accurate recovery in the sense that $\|L_{0}-\hat{L}\|_{\infty},\|S_{0}-\hat{S}\|_{\infty}$ is small.
 \item If the observed matrix $M$ is pertured from $L_{0}+S_{0}$ by a small amount (i.e.$\epsilon$), the optimizer $(\hat{L}, \hat{S})$ will be $\epsilon-$close to the orginal $(L_{0},S_{0})$ pairs.
 \end{enumerate}

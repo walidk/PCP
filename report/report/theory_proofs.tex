@@ -145,21 +145,31 @@ Then, because $P_{\Omega}(Y_{j_{0}})=P_{\Omega}(\sum_{j}P_{\Omega_{j}}Z_{j-1})=0
 
 
 Continuing,
-\begin{eqnarray*}
-\|P_{\Omega}(UV^{*}+W^{L})\|_{F} & = & \|P_{\Omega}(Z_{j_{0}})\|_{F} \text{by definition}\\
- & \le & \|Z_{j_{0}}\|_{F} \text{because of summing over larger set} \\
- & \le & \epsilon^{j_{0}}\sqrt{r} \text{by (\ref{wlp3})} \\
- & \le & \sqrt{r}\frac{1}{n^{2}}\le\frac{\lambda}{4} \text{by the choice of} \lambda \text{and} \epsilon
-\end{eqnarray*}
+\begin{align*}
+\|P_{\Omega}(UV^{*}+W^{L})\|_{F} 
+& = \|P_{\Omega}(Z_{j_{0}})\|_{F} 
+&&\text{by definition}\\
+& \le \|Z_{j_{0}}\|_{F} 
+&&\text{because of summing over larger set} \\
+& \le \epsilon^{j_{0}} \sqrt{r} 
+&&\text{by (\ref{wlp3})} \\
+& \le \sqrt{r}\frac{1}{n^{2}} \le \frac{\lambda}{4} 
+&&\text{by the choice of} \lambda \text{and} \epsilon
+\end{align*}
 
 
 3) Proof of condition (3) :
-\begin{eqnarray*}
-\|P_{\Omega^{\bot}}(UV^{*}+W^{L})\|_{\infty} & = & \|P_{\Omega^{\bot}}(Z_{j_{0}}+Y_{j_{0}})\|_{\infty}\text{by definition}\\
- & \le & \|Z_{j_{0}}\|_{\infty}+\|Y_{j_{0}}\|_{\infty} \text{by triangle inequality and summing over larger set}\\
- & \le & \|Z_{j_{0}}\|_{F}+\|Y_{j_{0}}\|_{\infty} \text{by the properties of Frobenius and infinite norms}\\
- & \le & \frac{\lambda}{8}+\|Y_{j_{0}}\|_{\infty} \text{similar argument as in Proof of condition (2)}
-\end{eqnarray*}
+\begin{align*}
+\|P_{\Omega^{\bot}}(UV^{*}+W^{L})\|_{\infty} 
+& = \|P_{\Omega^{\bot}}(Z_{j_{0}}+Y_{j_{0}})\|_{\infty}
+&&\text{by definition}\\
+& \le \|Z_{j_{0}}\|_{\infty} + \|Y_{j_{0}}\|_{\infty} 
+&&\text{by triangle inequality and summing over larger set}\\
+& \le \|Z_{j_{0}}\|_{F} + \|Y_{j_{0}}\|_{\infty} 
+&&\text{by the properties of Frobenius and infinite norms}\\
+& \le \frac{\lambda}{8} + \|Y_{j_{0}}\|_{\infty} 
+&&\text{similar argument as in Proof of condition (2)}
+\end{align*}
 
 
 Moreover, we have
@@ -220,23 +230,25 @@ II) Then, we have
 
 where the last inequality uses the fact that for the entry-wise distribution of $sign(S_{0}$) , we can have $\|sign(S_{0})\|\le4\sqrt{n\rho}$ holds with high probability.
 
-III) Now, for the other part, $\lambda P_{T^{\bot}}(\sum_{k\ge1}(P_{\Omega}P_{T}P_{\Omega})^{k}(sign(S_{0})))$, we bound it by first expressing it in the form of $<X,sign(S_{0})>$ and then claim that with high probability, this term is bounded above as desired. Let $R=\sum_{k\ge1}(P_{\Omega}P_{T}P_{\Omega})^{k}$ ,
+III) Now, for the other part, $\lambda P_{T^{\bot}}(\sum_{k\ge1}(P_{\Omega}P_{T}P_{\Omega})^{k}(sign(S_{0})))$, we bound it by first expressing it in the form of $<X,sign(S_{0})\rangle$ and then claim that with high probability, this term is bounded above as desired. Let $R=\sum_{k\ge1}(P_{\Omega}P_{T}P_{\Omega})^{k}$ ,
 then we have,
 \begin{eqnarray*}
 \|P_{T^{\bot}}(R(sign(S_{0})))\| & \le & \|R(sign(S_{0}))\|\\
- & \le & 4\sup_{x,y\in N}<y,R(sign(S_{0})x)>
+ & \le & 4\sup_{x,y\in N}<y,R(sign(S_{0})x)\rangle
 \end{eqnarray*}
 
 
 where the last inequality uses the fact that there exists a $\frac{1}{2}-net$ of the Eucledean ball and it has at most $6^{n}$ elements. Continuing, we have
-\begin{eqnarray} 
-\|P_{T^{\bot}}(R(sign(S_{0})))\| & \le & 4\sup_{x,y\in N}<y,R(sign(S_{0})x)>\\
- & = & 4\sup_{x,y\in N}<yx^{*},R(sign(S_{0}))>\\
- & = & 4\sup_{x,y\in N}<R(yx^{*}),sign(S_{0})>\label{net}
-\end{eqnarray}
+\begin{align} 
+\|P_{T^{\bot}}(R(sign(S_{0})))\| 
+& \le 4\sup_{x,y \in N} \langle y,R(sign(S_{0})x) \rangle \nonumber \\
+& = 4\sup_{x,y \in N} \langle yx^{*},R(sign(S_{0})) \rangle \nonumber \\
+& = 4\sup_{x,y \in N} \langle R(yx^{*}),sign(S_{0}) \rangle 
+\label{net}
+\end{align}
 
 
-and that we denote $X(x,y)=<R(yx^{*}),sign(S_{0})>$ afterwards.
+and that we denote $X(x,y)= \langle R(yx^{*}),sign(S_{0}) \rangle$ afterwards.
 
 Note that, by Hoeffding's inequality, we have,
 \begin{eqnarray*}
@@ -245,25 +257,28 @@ Pr(|X(x,y)|>t\mid\Omega) & \le & 2exp(-\frac{t^{2}}{2\|R(xy^{*})\|_{F}^{2}})
 
 
 This gives,
-\begin{eqnarray*}
-Pr(\|P_{T^{\bot}}(R(sign(S_{0})))\|>4t\mid\Omega) & \le & Pr(\|R(sign(S_{0}))\|>4t\mid\Omega)\\
- & \le & Pr(\sup_{x,y}|X(x,y)|>t\mid\Omega) \text{ by (\ref{net})}\\
- & \le & 2N^{2}exp(-\frac{t^{2}}{2\|R\|_{F}^{2}})\text{because }\|yx^{*}\|_{F}\le1
-\end{eqnarray*}
+\begin{align*}
+Pr(\|P_{T^{\bot}}(R(sign(S_{0})))\| > 4t\mid\Omega) 
+& \le Pr(\|R(sign(S_{0}))\| > 4t\mid\Omega)\\
+& \le Pr(\sup_{x,y}|X(x,y)|>t\mid\Omega) 
+&& \text{ by (\ref{net})}\\
+& \le 2N^{2}\exp \left( -\frac{t^{2}}{2\|R\|_{F}^{2}} \right)
+&& \text{since } \|yx^{*}\|_{F} \le 1
+\end{align*}
 
 
 Now, we proceed to bound the probability without the condition on $\Omega$.
 
 First, note that the event of $\|P_{\Omega}P_{T}\|\le\sigma=\rho+\epsilon$, implies that $\|R\|\le(\frac{\sigma^{2}}{1-\sigma^{2}})^{2}$. Thus, unconditionally, we have
 \begin{eqnarray*}
-Pr(\|R(sign(S_{0}))\|>4t) & \le & 2|N|^{2}exp(\frac{-t^{2}}{2(\frac{\sigma^{2}}{1-\sigma^{2}})^{2}})+Pr(\|P_{\Omega}P_{T}\|>\sigma)\\
- & \le & 2\cdot6^{2n}exp(\frac{-t^{2}}{2(\frac{\sigma^{2}}{1-\sigma^{2}})^{2}})+Pr(\|P_{\Omega}P_{T}\|>\sigma)
+Pr(\|R(sign(S_{0}))\|>4t) & \le & 2|N|^{2} \exp \left( \frac{-t^{2}}{2(\frac{\sigma^{2}}{1-\sigma^{2}})^{2}} \right) + Pr(\|P_{\Omega}P_{T}\|>\sigma)\\
+ & \le & 2\cdot6^{2n} \exp \left( \frac{-t^{2}}{2(\frac{\sigma^{2}}{1-\sigma^{2}})^{2}} \right) + Pr(\|P_{\Omega}P_{T}\|>\sigma)
 \end{eqnarray*}
 
 
 Thus, where we finally put $t=\frac{1}{16}$
 \begin{eqnarray*}
-Pr(\lambda\|R(sign(S_{0}))\|>4t) & \le & 2\cdot6^{2n}exp(\frac{-\frac{t^{2}}{\lambda^{2}}}{2(\frac{\sigma^{2}}{1-\sigma^{2}})^{2}})+Pr(\|P_{\Omega}P_{T}\|>\sigma)
+Pr(\lambda\|R(sign(S_{0}))\|>4t) & \le & 2\cdot6^{2n} \exp \left( \frac{-\frac{t^{2}}{\lambda^{2}}}{2(\frac{\sigma^{2}}{1-\sigma^{2}})^{2}} \right) + Pr(\|P_{\Omega}P_{T}\| > \sigma)
 \end{eqnarray*}
 
 
@@ -289,22 +304,22 @@ For $(i,j)\in\Omega^{C}$, we have
 \[
 \begin{aligned}
 e_{i}^{*}W^{S}e_{j} 
-& = <e_{i}e_{j}^{*},W_{S}> 
+& = \langle e_{i}e_{j}^{*},W_{S} \rangle
 &&\text{ by property of trace}\\
-& = <e_{i}e_{j}^{*},-\lambda P_{\Omega^{\bot}}P_{T}(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}sign(S_{0})> 
+& = \langle e_{i}e_{j}^{*},-\lambda P_{\Omega^{\bot}}P_{T}(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1} \sign(S_{0}) \rangle
 &&\text{ by (\ref{wsp1})}\\
-& = -\lambda<e_{i}e_{j}^{*},P_{T}(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}sign(S_{0})> 
+& = -\lambda \langle e_{i}e_{j}^{*},P_{T}(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1} \sign(S_{0}) \rangle
 &&\text{ by rearranging terms}\\
-& = -\lambda<e_{i}e_{j}^{*},P_{T}P_{\Omega}(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}sign(S_{0})> 
+& = -\lambda \langle e_{i}e_{j}^{*},P_{T}P_{\Omega}(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1} \sign(S_{0}) \rangle
 &&\text{ by the property of the inverse }\\
-& = -\lambda<e_{i}e_{j}^{*},P_{T}\sum_{k\ge0}(P_{\Omega}P_{T}P_{\Omega})^{k}sign(S_{0})> 
+& = -\lambda \langle e_{i}e_{j}^{*},P_{T}\sum_{k\ge0}(P_{\Omega}P_{T}P_{\Omega})^{k} \sign(S_{0}) \rangle 
 &&\text{ by infinite sum representation}
 \end{aligned}
 \]
 
 Noting that $P_{\Omega},P_{T}$ are self-adjoint, thus, we have
 \begin{eqnarray}
-e_{i}^{*}W^{S}e_{j} & = & \lambda<-(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}P_{\Omega}P_{T}(e_{i}e_{j}^{*}), \sgn(S_{0})>
+e_{i}^{*}W^{S}e_{j} & = & \lambda \langle-(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}P_{\Omega}P_{T}(e_{i}e_{j}^{*}), \sgn(S_{0}) \rangle
 \label{wsp2}
 \end{eqnarray}
 
@@ -319,7 +334,7 @@ Pr(\|P_{\Omega^{\bot}}(W^{S})\|_{\infty}>t\lambda\mid\Omega)
 &&\text{by union bound}\\
 & \le n^{2}Pr(|e_{i}^{*}W^{S}e_{j}|>t\lambda|\Omega)\text{ for some (i,j)} 
 &&\text{by taking the maximum}\\
-& = n^{2}Pr(|<X(i,j),sign(S_{0})>|>t|\Omega) 
+& = n^{2}Pr(| \langle X(i,j),sign(S_{0}) \rangle|>t|\Omega) 
 &&\text{ by (\ref{wsp2})}\\
 & \le 2n^{2}\exp \left( -\frac{2t^{2}}{4\|X(i,j)\|_{F}} \right)
 &&\text{by Hoeffding's inequality}
