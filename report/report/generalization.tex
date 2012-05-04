@@ -5,16 +5,16 @@
 
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Motivation}
-In some application, we normally have some prior information about the low rank component of an observed matrix. For examples, in computer vision, if we are to extract the background from different frames of a video, then it is natural to consider each video frame as a long vector. The background that we are recovering is then a long vector, which is of rank 1. Therefore, it is natural to see if we can utilize this additional rank information to derive faster algorithms while retaining the performance guarantee.
+In some application, we normally have some prior information about the low rank component of an observed matrix. For example, in computer vision, if we are to extract the background from different frames of a video, then it is natural to consider each video frame as a long vector. The background that we are recovering is then one vector, which is of rank 1. Therefore, it is natural to see if we can utilize this additional rank information to derive faster algorithms while retaining the performance guarantee.
 
 
 
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-\subsection{Equivalence formulation of Robust PCA with rank information}
+\subsection{Equivalent formulation of Robust PCA with rank information}
 
 We first shows that in the robust PCA framework, the same probability
 guarantee will still hold when extra information is given. Then we
-derive a block-coordinate descent formulation for the case when rank
+derive a block-coordinate descent algorithm for the case when rank
 information is known.
 \begin{prop}
 \label{prop:restriction prob}Let $M=L_{0}+S_{0}$ , $rank(L_{0})\le r$ and $(L_0,S_0)$
@@ -39,8 +39,8 @@ satisfies.\end{prop}
 We use subscript to denote the optimizer for $J_{1}$ and $J_{2}$ respectively.
 With high probability, $(L_{1},S_{1})=(L_{0},S_{0})$. Now, over the
 event of $(L_{1},S_{1})=(L_{0},S_{0})$, $(L_{1},S_{1})$ is also
-a feasible solution for (\ref{eq:restricted} ). Since $J_{1}\le J_{2}$ always,
-now $(L_{1},S_{1})$ achieve the bound for (\ref{eq:restricted} ).
+a feasible solution for (\ref{eq:restricted}). Since $J_{1}\le J_{2}$ always,
+now $(L_{1},S_{1})$ achieve the bound for (\ref{eq:restricted}).
 Note that it should also be unique because otherwise it would contradict with
 the recovery of (\ref{eq:general}).
 \end{proof}
@@ -76,12 +76,7 @@ can recover the orginal $(L_{0},S_{0})$ with high probability.
 %------------------------------------------------------------------------------
 \subsubsection{Introduction}
 
-Recall that the nuclear norm introduced in the PCP scheme is resulted
-because we would like to extract the low rank component from gross
-random noise. Nuclear norm is used because it is a heuristic for penalizing
-high rank matrix. Now, we consider the case when we have extra information/guess
-from the data set that we know precisely what the rank of the matrix
-are. Therefore, it is natural to introduce the following heuristics.
+Recall that the nuclear norm is used in the PCP scheme because we would like as a heuristic to recover the low rank component from gross random noise. Nuclear norm is used because it is a heuristic for penalizing high rank matrices (the nuclear norm encourages sparsity of the vector of singular values). Now, we consider the case when we have extra information/guess from the data set about the rank of the matrix. Assume the rank of the matrix is known. Therefore, it is natural to introduce the following heuristic.
 
 \begin{eqnarray}
 E^{*} & = & \min_{\{p_{j}\}\{q_{j}\},1\le j\le r}\|M-\sum_{j=1}^{r}p_{j}q_{j}^{T}\|_{1}\label{heu}
@@ -122,10 +117,11 @@ Let $M=\sum_{i=1}^{r}p_{i}q_{i}^{T}+S$, where $S_{i,j}\sim Uniform(-x_{s},x_{s})
 $(p_{i})_{j}\sim Uniform(-x_{p},x_{p})$, $(q_{i})_{j}\sim Uniform(-x_{q},x_{q})$
 all of the random variables being independent. With $|S|=k$ such that
 $\lim_{n\to\infty}\frac{k^{2}}{n}$, then we have,
-\begin{eqnarray*}
-\lim_{n\to\infty}P(\frac{\|\sum_{i=1}^{r}p_{i}q_{i}^{T}-\hat{L}\|_{1}}{\|\sum_{i=1}^{r}p_{i}q_{i}^{T}\|_{1}}>\epsilon) & = & 0
-\end{eqnarray*}
+\[
+\lim_{n \to \infty} P \left( \frac{ \|\sum_{i=1}^{r} p_{i} q_{i}^{T} - \hat{L} \|_{1} }{ \| \sum_{i=1}^{r} p_{i} q_{i}^{T} \|_{1} } > \epsilon \right) = 0
+\]
 \end{prop}
+
 \begin{proof}
 Let $E$ be the error event that $\frac{\|\sum_{i=1}^{r}p_{i}q_{i}^{T}-\hat{L}\|_{1}}{\|\sum_{i=1}^{r}p_{i}q_{i}^{T}\|_{1}}>\epsilon$.
 If error occurs,
@@ -140,9 +136,9 @@ kx_{s} & \ge & \|\sum_{i=1}^{r}p_{i}q_{i}^{T}+S-\hat{L}\|_{1}\\
 Thus,
 \begin{eqnarray*}
 Pr(E)
-&\le & Pr((\frac{2kx_{s}}{\epsilon})^{2}\ge\sum_{l_{1}l_{2}}(\sum_{i=1}^{r}(p_{i})_{l_{1}}(q_{i})_{l_{2}})^{2})\\
-&\le & Pr((\frac{2kx_{s}}{\epsilon})^{2}\ge\sum_{l_{1}=1}^{n}(\sum_{i=1}^{r}(p_{i})_{l_{1}}(q_{i})_{l_{1}})^{2})\\
-&= & Pr(\frac{1}{n}(\frac{2kx_{s}}{\epsilon})^{2}\ge\frac{1}{n}\sum_{l_{1}=1}^{n}(\sum_{i=1}^{r}(p_{i})_{l_{1}}(q_{i})_{l_{1}})^{2})
+&\le & Pr \left( \left( \frac{2kx_{s}}{\epsilon} \right)^{2} \ge \sum_{l_{1}l_{2}} \left( \sum_{i=1}^{r}(p_{i})_{l_{1}}(q_{i})_{l_{2}} \right)^{2} \right)\\
+&\le & Pr \left( \left( \frac{2kx_{s}}{\epsilon} \right)^{2} \ge \sum_{l_{1}=1}^{n} \left( \sum_{i=1}^{r}(p_{i})_{l_{1}}(q_{i})_{l_{1}} \right)^{2} \right)\\
+&= & Pr \left( \frac{1}{n} \left( \frac{2kx_{s}}{\epsilon} \right)^{2} \ge \frac{1}{n} \sum_{l_{1}=1}^{n} \left( \sum_{i=1}^{r}(p_{i})_{l_{1}}(q_{i})_{l_{1}} \right)^{2} \right)
 \end{eqnarray*}
 
 
@@ -193,7 +189,7 @@ are similar. Indeed, one can generalize the method for $r=1$ in (\ref{heu})
 to higher dimensions for both (\ref{eq:rank form}) and (\ref{heu}).
 Therefore, we restrict our discussion to $r=1$ in (\ref{heu}).
 
-Let $M=(a_{i,j})\in R^{mXn}$. We now employ the block-coordinate
+Let $M=(a_{i,j})\in R^{m \times n}$. We now employ the block-coordinate
 descent approach to solve this problem. Note that
 
 \begin{eqnarray}
@@ -310,20 +306,9 @@ we expect to recover.
 %------------------------------------------------------------------------------
 \subsubsection{Comparison between Robust PCA and $L_{1}$ heuristics}
 
-We simulate the Robust PCA scheme and $L_{1}$ heuristics using the
-power method. Note that in using the power iteration method for Robust
-PCA, we would not update $\mu$ if the value of that iteration is
-0 because this will make the algorithm to converge to the wrong value(as
-observed from simulation, this happens quite frequently so this conditioning
-is needed).
+We simulate the Robust PCA scheme and $L_{1}$ heuristics using the power method. Note that in using the power iteration method for Robust PCA, we would not update $\mu$ if the value of that iteration is 0 because this will make the algorithm to converge to the wrong value (as observed from simulation, this happens quite frequently so this conditioning is needed).
 
-In the simulation, we use randomly generated the entries of $p$ and
-$q$ as $N(0,1)$ iid. And then we randomly generate sparse matrix
-with sparse support uniformly distributed across the nXn matrix. And
-each sparse entry has a value with distribution of $N(0,1)$. We then
-plot the graph of different degree of sparsity and the corresponding
-effectiveness of the optimization heuristic in extracting the original
-$pq^{T}$. The result is as follows.
+In the simulation, we use randomly generated the entries of $p$ and $q$ as $N(0,1)$ iid. And then we randomly generate sparse matrix with sparse support uniformly distributed across the $n \times n$ matrix. And each sparse entry has a value with distribution of $N(0,1)$. We then plot the graph of different degree of sparsity and the corresponding effectiveness of the optimization heuristic in extracting the original $pq^{T}$. The result is as follows.
 
 \begin{figure}[h!]
 \label{fig:comparison}

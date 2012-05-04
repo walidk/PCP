@@ -17,7 +17,7 @@ The golfing scheme involves creating a $W^{L}$ according to the following method
 
 \end{enumerate}
 
-We first list a number of facts that will be used in the proof of Lemma (\ref{wl}).
+We first list a number of facts that will be used in the proof of Lemma~(\ref{wl}).
 
 \begin{fact}
 \label{fact2}
@@ -221,11 +221,12 @@ W^{S} & = & \lambda P_{T^{\bot}}(sign(S_{0}))+\lambda P_{T^{\bot}}(\sum_{k\ge1}(
 
 
 II) Then, we have
-\begin{eqnarray*}
-\lambda \| P_{T^{\bot}}(sign(S_{0})) \| & \le & \lambda\|sign(S_{0})\| \text{ by (\ref{property: p2})}\\
- & = & \frac{1}{\sqrt{n}}\|sign(S_{0})\| \text{ by the choice of}  \lambda\\
- & \le & 4\sqrt{\rho}\text{with high probability}
-\end{eqnarray*}
+\begin{align*}
+\lambda \| P_{T^{\bot}}(sign(S_{0})) \| 
+& \le \lambda\| \sign(S_{0}) \|  &&\text{ by (\ref{property: p2})}\\
+& = \frac{1}{\sqrt{n}}\|sign(S_{0})\| &&\text{ by the choice of }  \lambda\\
+& \le 4\sqrt{\rho} &&\text{with high probability}
+\end{align*}
 
 
 where the last inequality uses the fact that for the entry-wise distribution of $sign(S_{0}$) , we can have $\|sign(S_{0})\|\le4\sqrt{n\rho}$ holds with high probability.
@@ -319,7 +320,7 @@ e_{i}^{*}W^{S}e_{j}
 
 Noting that $P_{\Omega},P_{T}$ are self-adjoint, thus, we have
 \begin{eqnarray}
-e_{i}^{*}W^{S}e_{j} & = & \lambda \langle-(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}P_{\Omega}P_{T}(e_{i}e_{j}^{*}), \sgn(S_{0}) \rangle
+e_{i}^{*}W^{S}e_{j} & = & \lambda \langle-(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}P_{\Omega}P_{T}(e_{i}e_{j}^{*}), \sign(S_{0}) \rangle
 \label{wsp2}
 \end{eqnarray}
 
@@ -334,7 +335,7 @@ Pr(\|P_{\Omega^{\bot}}(W^{S})\|_{\infty}>t\lambda\mid\Omega)
 &&\text{by union bound}\\
 & \le n^{2}Pr(|e_{i}^{*}W^{S}e_{j}|>t\lambda|\Omega)\text{ for some (i,j)} 
 &&\text{by taking the maximum}\\
-& = n^{2}Pr(| \langle X(i,j),sign(S_{0}) \rangle|>t|\Omega) 
+& = n^{2}Pr(| \langle X(i,j), \sign(S_{0}) \rangle|>t|\Omega) 
 &&\text{ by (\ref{wsp2})}\\
 & \le 2n^{2}\exp \left( -\frac{2t^{2}}{4\|X(i,j)\|_{F}} \right)
 &&\text{by Hoeffding's inequality}
@@ -446,10 +447,13 @@ gauge function $\phi$, the sub-differential is given by
 \end{definition}
 
 \begin{thm}
-Let $A=U^{(1)}\Sigma{V^{(1)}}^{T}$ then $\partial\|A\|_{*}=\{U^{(1)}{V^{(1)}}^{T}+W:\|W\|\le1,{U^{(1)}}^{T}W=0,WV^{(1)}=0\}$
+Let $A=U^{(1)}\Sigma{V^{(1)}}^{T}$. Then 
+\[
+\partial\|A\|_{*}=\{U^{(1)}{V^{(1)}}^{T}+W:\|W\|\le1,{U^{(1)}}^{T}W=0,WV^{(1)}=0\}
+\]
 \end{thm}
 
 \begin{proof}
-We take the symmetric gauge function as $\|\cdot\|_{1}$and then apply the Fact (\ref{fact10}) and will obtain desired.
+We take the symmetric gauge function as $\|\cdot\|_{1}$ and then apply the Fact (\ref{fact10}) and will obtain the desired result.
 \end{proof}
 
