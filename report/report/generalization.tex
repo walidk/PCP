@@ -34,39 +34,30 @@ J_{2} & =\min_{L,S} & \|L\|_{*}+\lambda\|S\|_{1}\label{eq:restricted}\\
 
 
 where $T(L,S)$ are conditions on $(L,S)$ that $(L_{0},S_{0})$ also
-satisfies.\end{prop}
+satisfies.
+\end{prop}
+
 \begin{proof}
 We use subscript to denote the optimizer for $J_{1}$ and $J_{2}$ respectively.
-With high probability, $(L_{1},S_{1})=(L_{0},S_{0})$. Now, over the
-event of $(L_{1},S_{1})=(L_{0},S_{0})$, $(L_{1},S_{1})$ is also
-a feasible solution for (\ref{eq:restricted}). Since $J_{1}\le J_{2}$ always,
-now $(L_{1},S_{1})$ achieve the bound for (\ref{eq:restricted}).
-Note that it should also be unique because otherwise it would contradict with
-the recovery of (\ref{eq:general}).
+With high probability, $(L_{1},S_{1})=(L_{0},S_{0})$. Now, over the event of $(L_{1},S_{1})=(L_{0},S_{0})$, $(L_{1},S_{1})$ is also a feasible solution for (\ref{eq:restricted}). Since $J_{1}\le J_{2}$ always, now $(L_{1},S_{1})$ achieve the bound for (\ref{eq:restricted}).
+Note that it should also be unique because otherwise it would contradict with the recovery of (\ref{eq:general}).
 \end{proof}
-Now we apply Proposition (\ref{prop:restriction prob}) to the case
-when the rank information is known and derive a block coordinate descent
-framework for future algorithm design.
 
-\begin{eqnarray}
-J_{3} & = & \min_{M=L+S,rank(L)\le r}\|L\|_{*}+\lambda\|S\|_{1}\nonumber \\
- & = & \min_{L,S,\mu_{i},p_{i}q_{i}}\|L\|_{*}+\lambda\|S\|_{1}\nonumber \\
- && s.t. S=M-L,L=\sum_{i=1}^{r}\mu_{i}p_{i}q_{i}^{T}\nonumber \\
- &  & \|p_{i}\|_{2}=1,\|q_{i}\|_{2}=1,\mu_{i}\ge0\nonumber \\
-\nonumber \\
- & = & \min_{\mu_{i},p_{i}q_{i}}\sum_{i=1}^{r}\mu_{i}+\lambda\|M-\sum_{i=1}^{r}\mu_{i}p_{i}q_{i}^{T}\|_{1}\nonumber \\
- && s.t. \|p_{i}\|_{2}=1,\|q_{i}\|_{2}=1,\mu_{i}\ge0\nonumber \\
-\nonumber \\
- & = & \min_{\mu_{i},p_{i}q_{i}}\sum_{i=1}^{r}|\mu_{i}-0|+\lambda\|M-\sum_{i=1}^{r}\mu_{i}p_{i}q_{i}^{T}\|_{1}\label{eq:rank form}\\
- && s.t. \|p_{i}\|_{2}=1,\|q_{i}\|_{2}=1,\mu_{i}\ge0\nonumber
-\end{eqnarray}
+Now we apply Proposition (\ref{prop:restriction prob}) to the case when the rank information is known and derive a block coordinate descent framework for future algorithm design.
 
+\begin{alignat}{3}
+J_{3} 
+&= &&\min_{L, S}  && \|L\|_{*} + \lambda \|S\|_{1} \notag \\
+&&&\text{s.t.} && M=L+S, \ \text{rank}(L)\le r \notag \\
+&= &&\min_{L, S, p_i, q_i, \mu_i} && \|L\|_{*} + \lambda\| M - L \|_{1} \notag \\
+&&& \text{s.t.} && L = \sum_{i=1}^{r} \mu_{i}p_{i}q_{i}^{T}, \  \|p_{i}\|_{2}=1, \ \|q_{i}\|_{2}=1, \ \mu_{i}\ge0 \notag \\
+&= && \min_{\mu_{i}, p_{i}, q_{i}} && \sum_{i=1}^{r} \mu_{i} + \lambda \|M - \sum_{i=1}^{r} \mu_{i}p_{i}q_{i}^{T}\|_{1} \notag \\
+&&& \text{s.t.} && \|p_{i}\|_{2} = 1, \ \|q_{i}\|_{2} = 1, \mu_{i} \ge 0 \notag \\
+& = && \min_{\mu_{i}, p_{i}, q_{i}} && \sum_{i=1}^{r} |\mu_{i}-0| + \lambda \|M - \sum_{i=1}^{r} \mu_{i} p_{i} q_{i}^{T}\|_{1} \label{eq:rank form} \\
+&&& \text{s.t.} && \|p_{i}\|_{2} = 1, \ \|q_{i}\|_{2} = 1, \ \mu_{i} \ge 0 \notag
+\end{alignat}
 
-Note that this formulation allows us to optimize over $\mu_{i},p_{i}q_{i}$
-sequentially and for each step of optimization, the problem is a weighted
-median problem where efficient algorithm is known. And by the Proposition
-(\ref{prop:restriction prob}), we know that the formulation of (\ref{eq:rank form})
-can recover the orginal $(L_{0},S_{0})$ with high probability.
+Note that this formulation allows us to optimize over $\mu_{i},p_{i}q_{i}$ sequentially and for each step of optimization, the problem is a weighted median problem where efficient algorithm is known. And by the Proposition (\ref{prop:restriction prob}), we know that the formulation of (\ref{eq:rank form}) can recover the original $(L_{0},S_{0})$ with high probability.
 
 
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -107,7 +98,7 @@ Assume not, then
 \end{eqnarray*}
 
 \end{proof}
-This gives a contradition, which is,
+This gives a contraditcion, which is,
 \begin{eqnarray*}
 \frac{2}{\epsilon}\|S\|_{1} & > & \|\sum_{i=1}^{r}p_{i}q_{i}^{T}\|
 \end{eqnarray*}
@@ -153,32 +144,34 @@ However, we know that the $L_1$ heuristic cannot work well in the case of unboun
 Say , for $n=100$, $L_{0}=\left[\begin{array}{c}
 1\\
 1\\
-.\\
-.\\
+\vdots \\
 1
 \end{array}\right]
-[\begin{array}{ccccc}
-1 & 1 & . & . & 1\end{array}],S_{0}=\left[ \begin{array}{ccccc}
-10^{9} & 0 & 0 & ... & 0\\
-0 & 0 & 0 & ... & 0\\
-. & . & . & ... & .\\
-. & . & . & ... & .\\
-0 & 0 & 0 & ... & 0
-\end{array}\right]$, then by the $L_{1}$ heuristics, we would get $\hat{L_{0}}\sim \left[ \begin{array}{c}
+[\begin{array}{cccc}
+1 & 1 & \dots & 1
+\end{array}], 
+S_{0} = 
+\left[ \begin{array}{cccc}
+10^{9} & 0 & \dots & 0\\
+0 & 0 & \dots & 0\\
+\vdots & \vdots &  & \vdots\\
+0 & 0 & \dots & 0
+\end{array}\right]$, 
+then by the $L_{1}$ heuristics, we would get $\hat{L}_{0}\sim \left[ \begin{array}{c}
 10^{9}\\
 1\\
-.\\
-.\\
+\vdots \\
 1
 \end{array} \right]
 \left[\begin{array}{ccccc}
-1 & 10^{-9} & . & . & 10^{-9}
-\end{array}\right], \hat{S_{0}} \sim \left[\begin{array}{ccccc}
-1 & 0 & 0 & ... & 0\\
-0 & 1 & 1 & ... & 1\\
-. & . & . & ... & .\\
-. & . & . & ... & .\\
-0 & 1 & 1 & ... & 1
+1 & 10^{-9} & \dots & 10^{-9}
+\end{array}\right], 
+\hat{S}_{0} \sim 
+\left[\begin{array}{cccc}
+1 & 0 & \dots & 0\\
+0 & 1 & \dots & 1\\
+\vdots & \vdots &  & \vdots \\
+0 & 1 & \dots & 1
 \end{array}\right]$, which deviates from what we expect. However, the robust PCA can recover even for this case because it penalize the nuclear norm of L.
 
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -260,7 +253,7 @@ the robust PCA framework to hold. In particular, we specialize to
 the rank 1 case, and it turns out that it cannot be done, as demonstrated
 as follows.
 
-Recall that if we directly apply robust PCA , we will get,
+Recall that if we directly apply robust PCA, we will get,
 
 \begin{align*}
  \min_{M=L+S,rank(L)\le1}\|L\|_{*}+\lambda\|S\|_{1}
