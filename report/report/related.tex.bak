@@ -2,13 +2,13 @@
 
 \section{Related Problems and Extensions}
 
-In this section we discuss a number of problems and extensions related to the Robust PCA framework. We will much briefer in our discussion than for the classic case and mainly provide an outlook on where the field going and what the most important references are.
+In this section we discuss a number of problems and extensions related to the Robust PCA framework. We will much briefer in our discussion than for the classic case and mainly provide an outlook on where the field going and what the most important references are. 
 
 
 
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Exact Matrix completion}
-Robust PCA is an extension of the exact matrix completion problem that was introduced in~\cite{Candes:2009uq}, where one seeks to recover a low-rank matrix $L_0$ from a small fraction of its entries. More precisely, assume one is given $\{(L_0)_{ij}, (i,j)\in \Omega\}$ where $\Omega$ is a subset of $[n]\times [n]$. The observed matrix in this case is
+Robust PCA is an extension of the exact matrix completion problem that was introduced in~\cite{Candes:2009uq}, where one seeks to recover a low-rank matrix $L_0$ from a small fraction of its entries. More precisely, assume one is given $\{(L_0)_{ij}, (i,j)\in \Omega\}$ where $\Omega$ is a subset of $[n]\times [n]$. The observed matrix in this case is 
 \[
 M = P_\Omega L_0
 \]
@@ -139,7 +139,7 @@ where $\lambda = 1/\sqrt{n_1}$. Under a standard incoherence assumption on~$L_0$
 \end{align*}
 where~$C$ is a numerical constant. The above claim essentially states that the recovered low-rank matrix~$\hat{L}$ is stable with respect to non-sparse but small noise acting on all entries of the matrix.
 
-In order to experimentally verify the predicted performance to their formulation, the authors provide a comparison with an oracle. This oracle is assumed to provide information about the support of~$S_0$ and the row and column spaces of~$L_0$, which allows the computation of the MMSE estimator which otherwise would be computationally intractable (strictly speaking it of course is not really the MMSE, since it uses additional information from the oracle). Simulation results that show that the RMS error of the solution obtained through~\eqref{mainresult:optproblem} in the non-breakdown regime (that is, for the support of~$S_0$ sufficiently small) is only about twice as large as that of the oracle-based MMSE. This suggests that the proposed algorithm works quite well in practice. But since efficient algorithms that are practical also for large-scale problems have been proposed only recently, there does not seem to have been much work on applications yet.
+In order to experimentally verify the predicted performance to their formulation, the authors provide a comparison with an oracle. This oracle is assumed to provide information about the support of~$S_0$ and the row and column spaces of~$L_0$, which allows the computation of the MMSE estimator which otherwise would be computationally intractable (strictly speaking it of course is not really the MMSE, since it uses additional information from the oracle). Simulation results that show that the RMS error of the solution obtained through~\eqref{mainresult:optproblem} in the non-breakdown regime (that is, for the support of~$S_0$ sufficiently small) is only about twice as large as that of the oracle-based MMSE. This suggests that the proposed algorithm works quite well in practice. But since efficient algorithms that are practical also for large-scale problems have been proposed only recently, there does not seem to have been much work on applications yet. 
 
 
 
@@ -218,16 +218,16 @@ J_{i} \leftarrow \frac{\partial}{\partial\zeta}(M_{i}\circ\zeta)|_{\zeta = \tau_
 
 The authors in ~\cite{Peng:2010} have shown that the RASL algorithm can in fact be viewed as a Gauss-Newton method for minimizing the composition of a nonsmooth covex function with a smooth, nonlinear mapping. The convergence behavior of such algorithm was extensively studied in the late 1970's and early 1980's ~\cite{Jittorntrum:1980qy}. Although they claimed that the result of ~\cite{Jittorntrum:1980qy} implies that RASL converges quadratically in the neighborhood of any strongly unique local minimum, a complete convergence theory would still be verified and they delay it to future work.
 
-Another remark is that the inner loop (Step 2) in RASL algorithm is another convex optimization problem, this problem can be solved by Augmented Lagrange Multiplier (ALM) algorithm ~\cite{Candes:2011fk}, ~\cite{Lin:2009kx}. We do not derive this algorithm here, but the  derivation is similar to the ALM algorithm in Robust PCA framework that we will discuss in Algorithm Chapter. Similarly, although the algorithm always converges to the optimal solution in Step 2 in experiment, a rigorous proof of convergence remains further discussion. As in every iteration in RASL, a PCP problem in inner loop should be solved, the computational time of RASL will be longer than a standard PCP problem depending on how many iterations it needs. The authors observed that in their experiments, only a few iterations, typically less than 20, are required for the algorithm to converge due to the quadratic convergence property of the problem.
+Another remark is that the inner loop (Step 2) in RASL algorithm is another convex optimization problem, this problem can be solved by Augmented Lagrange Multiplier (ALM) algorithm ~\cite{Candes:2011fk}, ~\cite{Lin:2009kx}. We do not derive this algorithm here, but the  derivation is similar to the ALM algorithm in Robust PCA framework that we will discuss in Algorithm Chapter. Similarly, although the algorithm always converges to the optimal solution in Step 2 in experiment, a rigorous proof of convergence remains further discussion. As in every iteration in RASL, a PCP problem in inner loop should be solved, the computational time of RASL will be longer than a standard PCP problem depending on how many iterations it needs. The authors observed that in their experiments, only a few iterations, typically less than 20, are required for the algorithm to converge due to the quadratic convergence property of the problem. 
 
 RASL can be used for long-standing batch image alignment problem: given many images of an object or objects of interest, align them to a fixed canonical template. The images may subject to different illumination variation, partial occlusion, as well as poor or even no alignment. Finally, we show an example of how RASL performs in image alignment problem:
 
 \begin{figure}[h!]
   \centering
   \subfloat[Original images $M$]{\label{fig:rasl:original}\includegraphics[width=0.5\textwidth]{../figures/rasl_original.jpg}}
-  ~
+  ~ 
   \subfloat[Aligned images $M\circ\tau$]{\label{fig:rasl:aligned}\includegraphics[width=0.5\textwidth]{../figures/rasl_aligned.jpg}}
-  ~
+  ~ 
   \\ \subfloat[Low-rank component $L$]{\label{fig:rasl:lowrank}\includegraphics[width=0.5\textwidth]{../figures/rasl_low_rank.jpg}}
   ~
   \subfloat[Sparse component $S$]{\label{fig:rasl:sparse}\includegraphics[width=0.5\textwidth]{../figures/rasl_sparse.jpg}}
@@ -247,15 +247,15 @@ of $L_{1}$norm and nuclear norm is possible with high probability
 if the sparse noise is evenly spread out. However, in some applications,
 the sparse noise may not be evenly spread out and we are satisfied
 as long as the recovered matrix is sufficiently close with the original
-matrix. Therefore, the authors \cite{Hsu:2011ys} analyze the robust PCA
+matrix. Therefore, in this paper, the authors analyze the robust PCA
 problem in a deterministic setting without assuming the sparsity pattern
 of the noise. They give sufficient conditions on how much sparsity
-is allowed for a tolerable recovery of the sparse-lowrank pairs.
+is allowed for a tolerable recovery of the sparse-lowrank pairs. 
 
 
 \subsubsection{Main ideas and contributions}
 
-Similar to the prior study of Robust PCA, the authors \cite{Hsu:2011ys} study a minimization
+Similar to the prior study of Robust PCA, the authors study a minimization
 of a combination of $L_{1}$norm and nuclear norm . However, in the
 constraints , they introduce some tolerance on perturbation. In particular,
 given $M$ as the observed matrix( which is a perturbed observation
@@ -265,11 +265,11 @@ following two optimization problems. With arguments as $(L,S)$,
 \begin{eqnarray}
 \min_{(L,S)} & ||L||_{*}+\lambda||S||_{1}\nonumber \\
 s.t. & ||L+S-M||_{1}\le\epsilon_{1}\\
- & ||L+S-M||_{*}\le\epsilon_{*}\nonumber
+ & ||L+S-M||_{*}\le\epsilon_{*}\nonumber 
 \end{eqnarray}
 
 
-and the regularized version
+and the regularized version 
 \begin{eqnarray}
 \min_{(L,S)} & ||L||_{*}+\lambda||S||_{1}+\frac{1}{2\mu}||L+S-M||_{F}
 \end{eqnarray}
@@ -277,11 +277,8 @@ and the regularized version
 
 They provide sufficient conditions on the original $(L_{0},S_{0})$
 pairs that allow accurate recovery in the sense that $||L_{0}-\hat{L}||_{\infty},||S_{0}-\hat{S}||_{\infty}$
-is small. Moreover, if the observed matrix $M$ is perturbed from $L_{0}+S_{0}$
+is small. Moreover, if the observed matrix $M$ is pertured from $L_{0}+S_{0}$
 by a small amount (i.e.$\epsilon$), the optimizer $(\hat{L},\hat{S})$
-will still be $\epsilon-$close to the original $(L_{0},S_{0})$ pairs.
+will still be $\epsilon-$close to the orginal $(L_{0},S_{0})$ pairs.
 The key ideas of the analysis of performance guarantee is based on
 the the properties of constructed dual certificate.
-
-\subsubsection{Discussion and applications}
-The work \cite{Hsu:2011ys} parallels to the work of \cite{Candes:2011fk} but gives the guarantee under a deterministic setting but with a weaker guarantee. Although not pointed out by the authors, we believe that the performance guarantee in this \cite{Hsu:2011ys} and related work is also useful in many applications. For example, in computer vision, the noise  is normally clustered at some portion of the image and it is not natural to assume the noise to be uniformly distributed. Moreover, in many real world applications, we are more interested in approximated recovery instead of exact recovery, so the study of perturbed version is needed. For example, in many analysis of large data set(say consumer ranking in Netflix), we are normally interested in the general idea of the pattern but not the very fine details. However, it is still not clear whether the sufficient conditions provided for the perturbed problem is also necessary. It would be nice if there is any progress towards this end. 

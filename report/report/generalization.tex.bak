@@ -12,8 +12,8 @@ In some application, we normally have some prior information about the low rank 
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Equivalent formulation of Robust PCA with rank information}
 
-We first show the intuitive fact that in the robust PCA framework, the same probability
-guarantee will still hold when additional information on the problem is incorporated into the optimization problem. . Then we
+We first shows that in the robust PCA framework, the same probability
+guarantee will still hold when extra information is given. Then we
 derive a block-coordinate descent algorithm for the case when rank
 information is known.
 \begin{prop}
@@ -148,7 +148,7 @@ Thus, since $\frac{1}{n}(\frac{2kx_{s}}{\epsilon})^{2}\to0$. This
 gives $Pr(E)\to0$ as $n\to\infty$.
 \end{proof}
 
-However, we know that the $L_1$ heuristic cannot work well in the case of unbounded noise. In particular, we consider the following example.
+However, we know that the $L_1$ heuristic cannot work well in the case of unbounded noise. In particular, we consider the following example. 
 
 Say , for $n=100$, $L_{0}=\left[\begin{array}{c}
 1\\
@@ -179,7 +179,7 @@ Say , for $n=100$, $L_{0}=\left[\begin{array}{c}
 . & . & . & ... & .\\
 . & . & . & ... & .\\
 0 & 1 & 1 & ... & 1
-\end{array}\right]$, which deviates from what we expect. However, the robust PCA can recover even for this case because it penalize the nuclear norm of L.
+\end{array}\right]$, which deviates from what we expect. However, the robust PCA can recover even for this case because it penalize the nuclear norm of L. 
 
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Algorithms derivation}
@@ -279,9 +279,9 @@ apply the Robust PCA with $\lambda\le\frac{1}{n}$,
 \min_{q}\|q\|_{2}+\lambda\|M-pq^{T}\|_{1}
 & = \min_{q}\max_{\|u\|_{2}\le1,\|V\|_{\infty\le1}}u^{T}q+\lambda Tr(V^{T}(M-pq^{T})) \\
 & = \max_{\|u\|_{2}\le1,\|V\|_{\infty\le1}}\min_{q}u^{T}q+\lambda Tr(V^{T}(M-pq^{T})) \\
-& = \max_{\|u\|_{2}\le1,\|V\|_{\infty\le1},u=\lambda V^{T}p} \lambda Tr(V^{T}M) \\
-& = \max_{\|\lambda V^{T}p\|_{2}\le1,\|V\|_{\infty\le1}} \lambda Tr(V^{T}M) \\
-& = \max_{\|V^{T}p\|_{2}\le n,\|V\|_{\infty\le1}} \lambda Tr(V^{T}M)
+& = \max_{\|u\|_{2}\le1,\|V\|_{\infty\le1},u=\lambda V^{T}p}Tr(V^{T}M) \\
+& = \max_{\|\lambda V^{T}p\|_{2}\le1,\|V\|_{\infty\le1}}Tr(V^{T}M) \\
+& = \max_{\|V^{T}p\|_{2}\le n,\|V\|_{\infty\le1}}Tr(V^{T}M)
 \end{align*}
 
 
@@ -289,9 +289,9 @@ Now note that, since $\|p\|_{2}\le1$, we have $\|V^{T}p\|_{2}\le\sqrt{\sum_{i=1}
 Thus, the optimal value is
 \begin{align*}
 \min_{p,q:\|p\|_{2}=1}\|pq^{T}\|_{*}+\lambda\|M-pq^{T}\|_{1}
-& = \min_{p:\|p\|_{2}=1}\max_{\|V\|_{\infty\le1}}\lambda Tr(V^{T}M)\\
-& = \lambda \min_{p:\|p\|_{2}=1}\|M\|_{1}\\
-& = \lambda \|M\|_{1}
+& = \min_{p:\|p\|_{2}=1}\max_{\|V\|_{\infty\le1}}Tr(V^{T}M)\\
+& = \min_{p:\|p\|_{2}=1}\|M\|_{1}\\
+& = \|M\|_{1}
 \end{align*}
 
 
