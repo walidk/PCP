@@ -46,7 +46,7 @@ Note that it should also be unique because otherwise it would contradict with th
 Now we apply Proposition (\ref{prop:restriction prob}) to the case when the rank information is known and derive a block coordinate descent framework for future algorithm design.
 
 \begin{alignat}{3}
-J_{3} 
+J_{3}
 &= &&\min_{L, S}  && \|L\|_{*} + \lambda \|S\|_{1} \notag \\
 &&&\text{s.t.} && M=L+S, \ \text{rank}(L)\le r \notag \\
 &= &&\min_{L, S, p_i, q_i, \mu_i} && \|L\|_{*} + \lambda\| M - L \|_{1} \notag \\
@@ -149,14 +149,14 @@ Say , for $n=100$, $L_{0}=\left[\begin{array}{c}
 \end{array}\right]
 [\begin{array}{cccc}
 1 & 1 & \dots & 1
-\end{array}], 
-S_{0} = 
+\end{array}],
+S_{0} =
 \left[ \begin{array}{cccc}
 10^{9} & 0 & \dots & 0\\
 0 & 0 & \dots & 0\\
 \vdots & \vdots &  & \vdots\\
 0 & 0 & \dots & 0
-\end{array}\right]$, 
+\end{array}\right]$,
 then by the $L_{1}$ heuristics, we would get $\hat{L}_{0}\sim \left[ \begin{array}{c}
 10^{9}\\
 1\\
@@ -165,8 +165,8 @@ then by the $L_{1}$ heuristics, we would get $\hat{L}_{0}\sim \left[ \begin{arra
 \end{array} \right]
 \left[\begin{array}{ccccc}
 1 & 10^{-9} & \dots & 10^{-9}
-\end{array}\right], 
-\hat{S}_{0} \sim 
+\end{array}\right],
+\hat{S}_{0} \sim
 \left[\begin{array}{cccc}
 1 & 0 & \dots & 0\\
 0 & 1 & \dots & 1\\
@@ -301,7 +301,7 @@ we expect to recover.
 
 We simulate the Robust PCA scheme and $L_{1}$ heuristics using the power method. Note that in using the power iteration method for Robust PCA, we would not update $\mu$ if the value of that iteration is 0 because this will make the algorithm to converge to the wrong value (as observed from simulation, this happens quite frequently so this conditioning is needed).
 
-In the simulation, we use randomly generated the entries of $p$ and $q$ as $N(0,1)$ iid. And then we randomly generate sparse matrix with sparse support uniformly distributed across the $n \times n$ matrix. And each sparse entry has a value with distribution of $N(0,1)$. We then plot the graph of different degree of sparsity and the corresponding effectiveness of the optimization heuristic in extracting the original $pq^{T}$. The result is as follows.
+In the simulation, we use randomly generated the entries of $p$ and $q$ as $N(0,1)$ iid. And then we randomly generate sparse matrix with sparse support uniformly distributed across the $n \times n$ matrix. And each sparse entry has a value with distribution of $N(0,1)$. We then plot the graph of different degree of sparsity and the corresponding effectiveness of the optimization heuristic in extracting the original $pq^{T}$. We run the experiment 10 times and take the average in obtaining the graphs. Moreover, a recovery is consider to be correct if the relative error of the low rank matrix and the recovered low rank matrix is with $10^{-3}$. We remark that we only use 20 number of iteration in the power iteration method where one iteration means updating all the entries of p and q once. The result is as follows.
 
 \begin{figure}[h!]
 \label{fig:comparison}
@@ -309,3 +309,10 @@ In the simulation, we use randomly generated the entries of $p$ and $q$ as $N(0,
 \includegraphics[width=16cm]{../figures/compare.jpg}
 \end{figure}
 
+\subsubsection{$L_{1}$ heuristics in higher dimension}
+Moreover, we also experiment the $L_1$ heuristic to cases with higher rank. In particular, we simulate the low rank matrix to be of rank 2 and try to recover it by $L_1$ heuristic using the power iteration method. The results show that we do have a good performance when the noise is sparse enough. However, it takes more number of iteration to produce accurate result, in particular, we use 200 steps iteration when compared to 20 iteration in the case for rank 1 simulation, to obtain the a comparable correctness. And intuitively this result makes sense because in the power iteration method, the more variables we have, the more likely that each sub-optimization will deviate from the global optimal. And it should then take more steps for it to converge back to the global optimal if it has deviated.
+\begin{figure}[h!]
+\label{fig:rank2}
+\centering
+\includegraphics[width=16cm]{../figures/rank2case.jpg}
+\end{figure}
