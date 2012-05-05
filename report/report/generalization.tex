@@ -307,6 +307,7 @@ In the simulation, we use randomly generated the entries of $p$ and $q$ as $N(0,
 \label{fig:comparison}
 \centering
 \includegraphics[width=16cm]{../figures/compare.jpg}
+\caption{A plot of the comparison of Robust PCA and the $L_1$ heuristic in solving rank-1 matrix recovery}
 \end{figure}
 
 \subsubsection{$L_{1}$ heuristics in higher dimension}
@@ -315,4 +316,14 @@ Moreover, we also experiment the $L_1$ heuristic to cases with higher rank. In p
 \label{fig:rank2}
 \centering
 \includegraphics[width=16cm]{../figures/rank2case.jpg}
+\caption{A plot of the performance of $L_1$ heuristic in recovering rank-2 matrix using power iteration approach}
+\end{figure}
+
+Moreover, we also compare it to solving the Robust PCA problem using the original framework of $L_1$ norm and nuclear norm. The results are as follows.
+
+\begin{figure}[h!]
+\label{fig:rank2}
+\centering
+\includegraphics[width=16cm]{../figures/comparisonwithrank2.jpg}
+\caption{A plot of the comparison of Robust PCA and the $L_1$ heuristic in solving rank-2 matrix recovery}
 \end{figure}
