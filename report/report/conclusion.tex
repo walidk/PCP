@@ -1,13 +1,13 @@
 % !TEX root = report.tex
 %============================================================================================
-\section*{Conclusion}
+\section*{Summary}
 
-In this report, we study Robust PCA with respect to its theory, algorithms and applications.
+In this report, we studied the recently proposed Robust Principal Component Analysis framework in terms of its underlying theory, algorithms and applications.
 
-In the theory part, we focus our discussion on the the details of the proof of the probabilistic guarantee of recovery of a low rank matrix corrupted from sparse noise via a convex optimization involving a heuristic of minimizing~$\ell_1$-norm and nuclear norm. Then, we  survey different existing variants and generalization of Robust PCA. Finally, we extend and analyze the robust PCA framework on problems where the rank of the low rank component is known.   
+Regarding the theory, we focused our discussion on the proof of the probabilistic guarantees for recovery of a low rank matrix corrupted by sparse noise via a convex optimization techniques based on the a heuristic of minimizing~$\ell_1$-norm and nuclear norm. We recalled the results from several papers containing the initial contributions and discussed and derived proofs for details that were left out in the original discussion. In addition, we surveyed different existing variants and generalization of Robust PCA. Finally, we extended the Robust PCA framework to problems in which a bound on the rank of the low rank component is known. In this setting, we discussed an $\ell_{1}$~heuristic for this  problem which is applicable also to very large scale problems.
 
-In the algorithm part, we survey different algorithms to implement the Robust PCA. Then we compare their theoretical complexity and convergence rate on synthetic data. We remark that the bottleneck to the algorithm lies on the computation of SVD of matrix. Regarding this, we have studied various methods to alleviate this bottleneck. 
+In the algorithms part, we surveyed different algorithms for the Robust PCA problem. We compared their theoretical complexity and convergence rates and performed numerical experiments on synthetic data. Our main finding was that the bottleneck of essentially all efficient algorithms is the computation of the Singular Value Decomposition of large but unfortunately non-sparse matrices. We have also discussed potential methods that could alleviate this bottleneck. Despite these shortcomings, we have found Robust PCA to work well on standard computers, even on large scale data involving matrices with tens of millions of entries.
 
-In the application part, we apply Robust PCA to several problem domains. We apply it to extract the background from video frames, to extract a speech corrupted by background noise, to analyze correlation of votes for candidates in senator voting and to separate sparse noise in neural spike data. 
+We applied Robust PCA to several different problem domains. We used it to extract moving objects from a sequence video frames and to extract speech from recordings corrupted by background noise. In addition, we analyzed the correlation of votes by candidates in senate voting data and used the framework to extract the low-rank component corresponding to particular movements from neural spike data. 
 
-To summarize, Robust PCA is a powerful tool to recover low-rank matrix from sparse noise. It has strong performance guarantee, can be implemented by efficient algorithms, and can be applied to solve many real life problems. 
+To summarize, we have found Robust PCA to be a powerful tool to recover a low-rank matrix that is grossly corrupted by sparse noise. The framework provides strong performance guarantees, it can be implemented easily using efficient algorithms and has to potential to be applied to many practical problems. 
