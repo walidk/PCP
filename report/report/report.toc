@@ -34,12 +34,12 @@
 \contentsline {subsection}{\numberline {1.5.2}Equivalent formulation of Robust PCA with rank information}{30}{subsection.1.5.2}
 \contentsline {subsection}{\numberline {1.5.3}Simplification using $\ell _{1}$ heuristic}{31}{subsection.1.5.3}
 \contentsline {subsubsection}{Introduction}{31}{section*.16}
-\contentsline {subsubsection}{Performance guarantee for the $L_1$ heuristic}{31}{section*.17}
+\contentsline {subsubsection}{Performance guarantee for the $\ell _1$ heuristic}{31}{section*.17}
 \contentsline {subsection}{\numberline {1.5.4}Algorithms derivation}{33}{subsection.1.5.4}
 \contentsline {subsection}{\numberline {1.5.5}Sensitivity to $\lambda $}{34}{subsection.1.5.5}
 \contentsline {subsection}{\numberline {1.5.6}Simulation }{35}{subsection.1.5.6}
 \contentsline {subsubsection}{Comparison between Robust PCA and $L_{1}$ heuristics}{35}{section*.20}
-\contentsline {subsubsection}{$L_{1}$ heuristics in higher dimension}{36}{section*.22}
+\contentsline {subsubsection}{$\ell _{1}$ heuristic in higher dimension}{36}{section*.22}
 \contentsline {chapter}{\numberline {2}Algorithms}{38}{chapter.2}
 \contentsline {section}{\numberline {2.1}Overview}{38}{section.2.1}
 \contentsline {section}{\numberline {2.2}Main algorithms for Robust PCA}{38}{section.2.2}

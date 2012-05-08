@@ -5,34 +5,30 @@
 
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Motivation}
-In some application, we normally have some prior information about the low rank component of an observed matrix. For example, in computer vision, if we are to extract the background from different frames of a video, then it is natural to consider each video frame as a long vector. The background that we are recovering is then one vector, which is of rank 1. Therefore, it is natural to see if we can utilize this additional rank information to derive faster algorithms while retaining the performance guarantee.
+In some applications we may have some prior information about the low rank component of an observed matrix. For example, in computer vision, if we were to extract the background from different frames of a video, then it is natural to consider each video frame as a long vector (by stacking its columns). The background that we are recovering is then a single vector, which means that the associated component in the matrix collecting the frames is of rank 1. Therefore, it is a very natural question to ask whether we can utilize this additional rank information to derive faster or more scalable algorithms while retaining the performance guarantees of Robust PCA.
 
 
 
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Equivalent formulation of Robust PCA with rank information}
 
-We first show the intuitive fact that in the robust PCA framework, the same probability
-guarantee will still hold when additional information on the problem is incorporated into the optimization problem. . Then we
-derive a block-coordinate descent algorithm for the case when rank
-information is known.
+We first show the intuitive fact that within the robust PCA framework, the same probability guarantee will still hold when additional information on the problem is incorporated as constraints the optimization problem. Then we derive a block-coordinate descent algorithm for the case when rank information is known.
 \begin{prop}
 \label{prop:restriction prob}Let $M=L_{0}+S_{0}$ , $rank(L_{0})\le r$ and $(L_0,S_0)$
 satisfy the Robust PCA assumptions. Then with high probability, the
 following problems are equivalent:
-
+%
 \begin{eqnarray}
 J_{1} & =\min_{L,S} & \|L\|_{*}+\lambda\|S\|_{1}\label{eq:general}\\
  & s.t. & M=L+S\nonumber
 \end{eqnarray}
-
+%
 \begin{eqnarray}
 J_{2} & =\min_{L,S} & \|L\|_{*}+\lambda\|S\|_{1}\label{eq:restricted}\\
  & s.t. & M=L+S\nonumber \\
- &  & \text{and }T(L,S)\text{ holds}\nonumber
+ &  & \text{and }\;T(L,S)\text{ holds}\nonumber
 \end{eqnarray}
-
-
+%
 where $T(L,S)$ are conditions on $(L,S)$ that $(L_{0},S_{0})$ also
 satisfies.
 \end{prop}
@@ -43,8 +39,9 @@ With high probability, $(L_{1},S_{1})=(L_{0},S_{0})$. Now, over the event of $(L
 Note that it should also be unique because otherwise it would contradict with the recovery of (\ref{eq:general}).
 \end{proof}
 
-Now we apply Proposition (\ref{prop:restriction prob}) to the case when the rank information is known and derive a block coordinate descent framework for future algorithm design.
+Now we apply Proposition (\ref{prop:restriction prob}) to the case when the rank information is known and derive a block coordinate descent algorithm.
 
+Consider the problem
 \begin{alignat}{3}
 J_{3}
 &= &&\min_{L, S}  && \|L\|_{*} + \lambda \|S\|_{1} \notag \\
@@ -57,7 +54,7 @@ J_{3}
 &&& \text{s.t.} && \|p_{i}\|_{2} = 1, \ \|q_{i}\|_{2} = 1, \ \mu_{i} \ge 0 \notag
 \end{alignat}
 
-Note that this formulation allows us to optimize over $\mu_{i},p_{i}q_{i}$ sequentially and for each step of optimization, the problem is a weighted median problem where efficient algorithm is known. And by the Proposition (\ref{prop:restriction prob}), we know that the formulation of (\ref{eq:rank form}) can recover the original $(L_{0},S_{0})$ with high probability.
+Note that this formulation allows us to optimize over $\mu_{i},p_{i}q_{i}$ sequentially. For each of these steps, the associated problem is a weighted median problem where an efficient algorithm is known. By the Proposition~\ref{prop:restriction prob}, we know that the formulation of~\eqref{eq:rank form} can recover the original pair $(L_{0},S_{0})$ with high probability.
 
 
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -67,8 +64,8 @@ Note that this formulation allows us to optimize over $\mu_{i},p_{i}q_{i}$ seque
 %------------------------------------------------------------------------------
 \subsubsection{Introduction}
 
-Recall that the nuclear norm is used in the PCP scheme because we would like as a heuristic to recover the low rank component from gross random noise. Nuclear norm is used because it is a heuristic for penalizing high rank matrices (the nuclear norm encourages sparsity of the vector of singular values). Now, we consider the case when we have extra information/guess from the data set about the rank of the matrix. Assume the rank of the matrix is known. Therefore, it is natural to introduce the following heuristic.
-
+Recall that the nuclear norm is used in the PCP scheme because we would like as a heuristic to recover the low rank component from gross random noise. The nuclear norm is used because it is a heuristic for penalizing high rank matrices (the nuclear norm encourages sparsity of the vector of singular values). Now, we consider the case when we have additional information about the rank of the low-rank matrix~$L$. Assume the rank of the matrix is known. Therefore, it is natural to introduce the following heuristic.
+%
 \begin{eqnarray}
 E^{*} & = & \min_{\{p_{j}\}\{q_{j}\},1\le j\le r}\|M-\sum_{j=1}^{r}p_{j}q_{j}^{T}\|_{1}\label{heu}
 \end{eqnarray}
@@ -76,37 +73,37 @@ E^{*} & = & \min_{\{p_{j}\}\{q_{j}\},1\le j\le r}\|M-\sum_{j=1}^{r}p_{j}q_{j}^{T
 
 
 %------------------------------------------------------------------------------
-\subsubsection{Performance guarantee for the $L_1$ heuristic}
+\subsubsection{Performance guarantee for the $\ell_1$ heuristic}
 
-For this new heuristic, we provide some performance guarantee for the case
-when the noise is bounded. One is a result for deterministic case
+For this new heuristic, we provide some performance guarantee for the case when the noise is bounded. One is a result for deterministic case
 and the other is for the random case. They are as follows.
+
 \begin{prop}
-Let $M=S+\sum_{i=1}^{r}p_{i}q_{i}^{T}$, $\frac{2}{\epsilon}\|S\|_{1}\le\|\sum_{i=1}^{r}p_{i}q_{i}^{T}\|_{1}$,
-then, for the recovered $(\hat{L},\hat{S})$ from (\ref{heu}) , it
-will satisfy
+Let $M=S+\sum_{i=1}^{r}p_{i}q_{i}^{T}$ and $\frac{2}{\epsilon}\|S\|_{1}\le\|\sum_{i=1}^{r}p_{i}q_{i}^{T}\|_{1}$. Then, the estimate $\hat{L}$ recovered from~\eqref{heu} satisfies
 \begin{eqnarray*}
 \frac{\|\sum_{i=1}^{r}p_{i}q_{i}^{T}-\hat{L}\|_{1}}{\|\sum_{i=1}^{r}p_{i}q_{i}^{T}\|_{1}} & \le & \epsilon
 \end{eqnarray*}
 \end{prop}
 \begin{proof}
-Assume not, then
+Suppose not, then
 \begin{eqnarray*}
 \|S\|_{1} & \ge & \|\sum_{i=1}^{r}p_{i}q_{i}^{T}+S-\hat{L}\|_{1}\\
  & \ge & \|\sum_{i=1}^{r}p_{i}q_{i}^{T}-\hat{L}\|_{1}-\|S\|_{1}\\
  & > & \epsilon\|\sum_{i=1}^{r}p_{i}q_{i}^{T}\|_{1}-\|S\|_{1}
 \end{eqnarray*}
-
-\end{proof}
-This gives a contraditcion, which is,
+which contradicts the assumption that
 \begin{eqnarray*}
 \frac{2}{\epsilon}\|S\|_{1} & > & \|\sum_{i=1}^{r}p_{i}q_{i}^{T}\|
 \end{eqnarray*}
+\end{proof}
+%This gives a contraditcion, which is,
+%\begin{eqnarray*}
+%\frac{2}{\epsilon}\|S\|_{1} & > & \|\sum_{i=1}^{r}p_{i}q_{i}^{T}\|
+%\end{eqnarray*}
 
 \begin{prop}
 Let $M=\sum_{i=1}^{r}p_{i}q_{i}^{T}+S$, where $S_{i,j}\sim Uniform(-x_{s},x_{s})$,
-$(p_{i})_{j}\sim Uniform(-x_{p},x_{p})$, $(q_{i})_{j}\sim Uniform(-x_{q},x_{q})$
-all of the random variables being independent. With $|S|=k$ such that
+$(p_{i})_{j}\sim Uniform(-x_{p},x_{p})$, $(q_{i})_{j}\sim Uniform(-x_{q},x_{q})$, where all random variables are independent. With $|S|=k$ such that
 $\lim_{n\to\infty}\frac{k^{2}}{n}$, then we have,
 \[
 \lim_{n \to \infty} P \left( \frac{ \|\sum_{i=1}^{r} p_{i} q_{i}^{T} - \hat{L} \|_{1} }{ \| \sum_{i=1}^{r} p_{i} q_{i}^{T} \|_{1} } > \epsilon \right) = 0
@@ -134,64 +131,44 @@ Pr(E)
 
 
 Moreover, as $E(\sum_{i=1}^{r}(p_{i})_{l_{1}}(q_{i})_{l_{1}})^{2})=\frac{r}{3}x_{p}^{2}x_{q}^{2}$,
-by law of large number, $\frac{1}{n}\sum_{l_{1}=1}^{n}(\sum_{i=1}^{r}(p_{i})_{l_{1}}(q_{i})_{l_{1}})^{2})\to\frac{r}{3}x_{p}^{2}x_{q}^{2}$.
+by the law of large numbers, $\frac{1}{n}\sum_{l_{1}=1}^{n}(\sum_{i=1}^{r}(p_{i})_{l_{1}}(q_{i})_{l_{1}})^{2})\to\frac{r}{3}x_{p}^{2}x_{q}^{2}$.
 Thus, since $\frac{1}{n}(\frac{2kx_{s}}{\epsilon})^{2}\to0$. This
 gives $Pr(E)\to0$ as $n\to\infty$.
 \end{proof}
 
-However, we know that the $L_1$ heuristic cannot work well in the case of unbounded noise. In particular, we consider the following example.
+However, we know that the $\ell_1$ heuristic cannot work well in the case of unbounded noise. This can be seen from the following example. Say, for $n=100$, 
+\begin{alignat*}{2}
+L_{0}&=\begin{bmatrix} 1\\ 1\\ \vdots \\ 1\end{bmatrix} \begin{bmatrix} 1 & 1 & \dots & 1 \end{bmatrix}, &\qquad \qquad
+S_{0} &= \begin{bmatrix} 10^{9} & 0 & \dots & 0\\  0 & 0 & \dots & 0\\ \vdots & \vdots &  & \vdots\\ 0 & 0 & \dots & 0
+\end{bmatrix}
+\end{alignat*}
+%
+then by the $\ell_{1}$ heuristic, we would get 
+\begin{alignat*}{2}
+\hat{L}_{0}&=\begin{bmatrix} 10^9\\ 1\\ \vdots \\ 1\end{bmatrix} \begin{bmatrix} 1 & 10^{-9} & \dots & 10^{-9} \end{bmatrix}, &\qquad \qquad
+\hat{S}_{0} &= \begin{bmatrix} 1 & 0 & \dots & 0\\  0 & 1 & \dots & 1\\ \vdots & \vdots &  & \vdots\\ 0 & 1 & \dots & 1
+\end{bmatrix}
+\end{alignat*}
+%
+which deviates grossly from the original pair. However, Robust PCA can achieve exact recovery even in this case because it penalize the nuclear norm of~$L$.
 
-Say , for $n=100$, $L_{0}=\left[\begin{array}{c}
-1\\
-1\\
-\vdots \\
-1
-\end{array}\right]
-[\begin{array}{cccc}
-1 & 1 & \dots & 1
-\end{array}],
-S_{0} =
-\left[ \begin{array}{cccc}
-10^{9} & 0 & \dots & 0\\
-0 & 0 & \dots & 0\\
-\vdots & \vdots &  & \vdots\\
-0 & 0 & \dots & 0
-\end{array}\right]$,
-then by the $L_{1}$ heuristics, we would get $\hat{L}_{0}\sim \left[ \begin{array}{c}
-10^{9}\\
-1\\
-\vdots \\
-1
-\end{array} \right]
-\left[\begin{array}{ccccc}
-1 & 10^{-9} & \dots & 10^{-9}
-\end{array}\right],
-\hat{S}_{0} \sim
-\left[\begin{array}{cccc}
-1 & 0 & \dots & 0\\
-0 & 1 & \dots & 1\\
-\vdots & \vdots &  & \vdots \\
-0 & 1 & \dots & 1
-\end{array}\right]$, which deviates from what we expect. However, the robust PCA can recover even for this case because it penalize the nuclear norm of L.
+
 
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Algorithms derivation}
 
-Note that the form for both (\ref{eq:rank form}) and (\ref{heu})
-are similar. Indeed, one can generalize the method for $r=1$ in (\ref{heu})
-to higher dimensions for both (\ref{eq:rank form}) and (\ref{heu}).
-Therefore, we restrict our discussion to $r=1$ in (\ref{heu}).
+Note that the form of~\eqref{eq:rank form} and~\eqref{heu} is similar. One can generalize the method for~$r=1$ in~\eqref{heu}
+to higher dimensions for both~\eqref{eq:rank form} and~\eqref{heu}. For simplicity we restrict our discussion to $r=1$ in~\eqref{heu}.
 
-Let $M=(a_{i,j})\in R^{m \times n}$. We now employ the block-coordinate
-descent approach to solve this problem. Note that
-
+Let $M=(a_{i,j})\in R^{m \times n}$. We now employ the block-coordinate descent approach to solve this problem. Note that
+%
 \begin{eqnarray}
-\min_{p} & \|M-pq^{T}\|_{1} & =\sum_{i=1}^{m}\min_{t}(\sum_{j=1}^{n}|a_{i,j}-tq_{j}|)\\
- &  & =\sum_{i=1}^{m}\min_{t}(\sum_{j=1}^{n}|q_{j}\|t-\frac{a_{i,j}}{q_{j}}|)\nonumber
+\min_{p} & \|M-pq^{T}\|_{1} & =\sum_{i=1}^{m}\min_{t}\biggl(\sum_{j=1}^{n}|a_{i,j}-tq_{j}|\biggr)\\
+ &  & =\sum_{i=1}^{m}\min_{t}\biggl(\sum_{j=1}^{n}|q_{j}\|t-\frac{a_{i,j}}{q_{j}}|\biggr)\nonumber
 \end{eqnarray}
 \begin{eqnarray}
-\min_{q} & \|M-pq^{T}\|_{1} & =\sum_{j=1}^{n}\min_{t}(\sum_{i=1}^{m}|a_{i,j}-tp_{i}|)\\
- &  & =\sum_{j=1}^{n}\min_{t}(\sum_{j=1}^{n}|p_{i}\|t-\frac{a_{i,j}}{p_{i}}|)\nonumber
+\min_{q} & \|M-pq^{T}\|_{1} & =\sum_{j=1}^{n}\min_{t}\biggl(\sum_{i=1}^{m}|a_{i,j}-tp_{i}|\biggr)\\
+ &  & =\sum_{j=1}^{n}\min_{t}\biggl(\sum_{j=1}^{n}|p_{i}\|t-\frac{a_{i,j}}{p_{i}}|\biggr)\nonumber
 \end{eqnarray}
 
 
@@ -199,9 +176,7 @@ And for solving the subproblem of finding
 \[
 \min_{t}\sum_{k=1}^{k_{0}}c_{i}|t-d_{i}|
 \]
-where $c_{i}\ge0$ is basically finding the weighted median and can
-be done by the following method with complexity $O(k_{0}\log k_{0})$
-mostly on sorting the sequence. We call it WMH.
+where $c_{i}\ge0$ is basically finding the weighted median and can be done by the WMH algorithm given in Algorithm~\ref{wmhalgo}, with has a complexity of $O(k_{0}\log k_{0})$, mostly through sorting the sequence.
 
 \begin{algorithm}[h]
 \begin{enumerate}
@@ -211,19 +186,16 @@ mostly on sorting the sequence. We call it WMH.
 \sum_{\theta=1}^{k^{'}-1}c_{i_{\theta}} & \le & \sum_{\theta=k^{'}}^{k_{0}}c_{i_{\theta}}\\
 \sum_{i=1}^{k^{'}}c_{i_{\theta}} & \ge & \sum_{i=k^{'}+1}^{k_{0}}c_{i_{\theta}}
 \end{eqnarray*}
-
 \item We then set $t^{*}$to be $d_{i_{k^{'}}}$
 \end{enumerate}
 \caption{WMH $(k_{0},\vec{c},\vec{d})$}
+\label{wmhalgo}
 \end{algorithm}
+% 
+This WMH algorithm is optimal in finding $t$. This is shown by using the property of sub-differential of $\|\cdot\|_{1}$ and by noting that
+$0\in\partial(\sum_{k=1}^{k_{0}}c_{i}|t^{*}-d_{i}|)$. 
 
-
-This algorithm is optimal in finding $t$. This is justified by using
-the property of sub-differential of $\|\cdot\|_{1}$ and note that
-$0\in\partial(\sum_{k=1}^{k_{0}}c_{i}|t^{*}-d_{i}|)$.
-
-Now we are ready to state the power iteration method to solve the
-rank-1 optimization problem. We call it Poweriteration.
+Now we are ready to state the power iteration method to solve the rank-1 optimization problem through the power iteration heuristic given in Algorithm~\ref{poweritalg}.
 
 \begin{algorithm}[h]
 Repeat
@@ -232,28 +204,20 @@ Repeat
 \item $q_{j}\leftarrow wmh(n,abs(p),M(:,j)./p)$ for each j
 \end{enumerate}
 Until stopping criterion is met
-
 \caption{Poweriteration($M$)}
+\label{poweritalg}
 \end{algorithm}
+
+It is important to point out that while the~$\ell_1$ heuristic enjoys some recovery guarantees, we have no guarantee that the power iteration heuristic will solve the problem. However, we have found that the heuristic performs well in practice, at least for the rank 1 case. 
 
 
 
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Sensitivity to $\lambda$}
 
-Note that in the robust PCA framework, the parameter $\lambda$ is
-explicit stated as $\sqrt{\frac{1}{n}}$ and when the $\lambda$ is
-too large or too small, it would significantly affect the recovery.
-However, in the case that the rank information is explicitly stated.
-The effect of $\lambda$ is different. As we have seen in previous
-section, when the value of $\lambda$is large, it correspond to the
-$L_{1}$ heuristic and there is some guarantee on recovery. Therefore,
-it is natural to ask if we can have very small $\lambda$ and have
-the robust PCA framework to hold. In particular, we specialize to
-the rank 1 case, and it turns out that it cannot be done, as demonstrated
-as follows.
+Note that in the Robust PCA framework, the parameter $\lambda$ is explicit stated as $n^{-1/2}$, and when $\lambda$ is too large or too small, it would significantly affect the recovery. However, in the case that the rank information is explicitly stated, the effect of $\lambda$ is different. As we have seen in previous section, when the value of $\lambda$ is large, it corresponds to the $\ell_{1}$ heuristic and there is some guarantee for recovery. It is natural to ask whether we can have a very small $\lambda$ and have the Robust PCA framework hold. In particular, we specialize to the rank 1 case, and it turns out that it cannot be done, as demonstrated in the following.
 
-Recall that if we directly apply robust PCA, we will get,
+Recall that if we directly apply Robust PCA we will get
 
 \begin{align*}
  \min_{M=L+S,rank(L)\le1}\|L\|_{*}+\lambda\|S\|_{1}
@@ -265,8 +229,8 @@ Recall that if we directly apply robust PCA, we will get,
 \end{align*}
 
 
-Now, for every fixed $p$, we consider the subproblem, if we directly
-apply the Robust PCA with $\lambda\le\frac{1}{n}$,
+Now, for every fixed $p$, consider the subproblem of directly
+applying Robust PCA with $\lambda\le\frac{1}{n}$,
 
 \begin{align*}
 \min_{q}\|q\|_{2}+\lambda\|M-pq^{T}\|_{1}
@@ -299,31 +263,34 @@ we expect to recover.
 %------------------------------------------------------------------------------
 \subsubsection{Comparison between Robust PCA and $L_{1}$ heuristics}
 
-We simulate the Robust PCA scheme and $L_{1}$ heuristics using the power method. Note that in using the power iteration method for Robust PCA, we would not update $\mu$ if the value of that iteration is 0 because this will make the algorithm to converge to the wrong value (as observed from simulation, this happens quite frequently so this conditioning is needed).
+We perform a numerical comparison of the Robust PCA framework and the $\ell_{1}$ heuristic based on the power iteration method. Note that in using the power iteration method for Robust PCA, we would not update $\mu$ if the value of that iteration is 0 because this will make the algorithm to converge to the wrong value (as observed from simulation, this happens quite frequently so this conditioning is needed).
 
-In the simulation, we use randomly generated the entries of $p$ and $q$ as $N(0,1)$ iid. And then we randomly generate sparse matrix with sparse support uniformly distributed across the $n \times n$ matrix. And each sparse entry has a value with distribution of $N(0,1)$. We then plot the graph of different degree of sparsity and the corresponding effectiveness of the optimization heuristic in extracting the original $pq^{T}$. We run the experiment 10 times and take the average in obtaining the graphs. Moreover, a recovery is consider to be correct if the relative error of the low rank matrix and the recovered low rank matrix is with $10^{-3}$. We remark that we only use 20 number of iteration in the power iteration method where one iteration means updating all the entries of p and q once. The result is as follows.
+In the simulation, we randomly generated the entries of $p$ and $q$ as $N(0,1)$ iid. We randomly generate sparse matrix with sparse support uniformly distributed across the $n \times n$ matrix. Each sparse entry is randomly distributed $N(0,1)$. We then plot the graph of different degree of sparsity and the corresponding effectiveness of the optimization heuristic in extracting the original $pq^{T}$. We run the experiment 10 times and show the average. A recovery is consider to be correct if the relative error of the low rank matrix and the recovered low rank matrix is less than $10^{-3}$. We remark that we only use 20 number of iteration in the power iteration method where one iteration means updating all the entries of p and q once (i.e. outer iteration). The result is as follows.
 
 \begin{figure}[h!]
 \label{fig:comparison}
 \centering
-\includegraphics[width=16cm]{../figures/compare.jpg}
-\caption{A plot of the comparison of Robust PCA and the $L_1$ heuristic in solving rank-1 matrix recovery}
+\includegraphics[width=\textwidth]{../figures/compare.jpg}
+\caption{Ccomparison of Robust PCA and the $\ell_1$ heuristic in solving rank-1 matrix recovery}
 \end{figure}
 
-\subsubsection{$L_{1}$ heuristics in higher dimension}
-Moreover, we also experiment the $L_1$ heuristic to cases with higher rank. In particular, we simulate the low rank matrix to be of rank 2 and try to recover it by $L_1$ heuristic using the power iteration method. The results show that we do have a good performance when the noise is sparse enough. However, it takes more number of iteration to produce accurate result, in particular, we use 200 steps iteration when compared to 20 iteration in the case for rank 1 simulation, to obtain the a comparable correctness. And intuitively this result makes sense because in the power iteration method, the more variables we have, the more likely that each sub-optimization will deviate from the global optimal. And it should then take more steps for it to converge back to the global optimal if it has deviated.
+\subsubsection{$\ell_{1}$ heuristic in higher dimension}
+We also try the $\ell_1$ heuristic for cases where~$L$ is known to be of rank higher than one. In particular, we simulate~$L$ to be of rank 2 and try to recover it using the $\ell_1$ heuristic based on the power iteration method. The results show that we do have a good performance when the noise is sparse enough. However, it takes a larger number of iterations to produce accurate results, in particular, we use 200 steps iteration when compared to 20 iteration in the case for rank 1 simulation, to obtain the a comparable accuracy. Intuitively, this result makes sense because the more variables we have in the power iteration method, the more likely it is that each sub-optimization will deviate from the global optimal. And it should then take more steps for it to converge back to the global optimal if it has deviated.
+%
 \begin{figure}[h!]
-\label{fig:rank2}
 \centering
-\includegraphics[width=16cm]{../figures/rank2case.jpg}
-\caption{A plot of the performance of $L_1$ heuristic in recovering rank-2 matrix using power iteration approach}
+\includegraphics[width=\textwidth]{../figures/rank2case.jpg}
+\caption{Performance of $\ell_1$ heuristic in recovering a rank 2 matrix using power iteration}
+\label{fig:rank2}
 \end{figure}
 
-Moreover, we also compare it to solving the Robust PCA problem using the original framework of $L_1$ norm and nuclear norm. The results are as follows.
-
+Finally, in Figure~\ref{fig:rank2s} we also compare the results to those of the Robust PCA framework
+%
 \begin{figure}[h!]
-\label{fig:rank2}
 \centering
-\includegraphics[width=16cm]{../figures/comparisonwithrank2.jpg}
-\caption{A plot of the comparison of Robust PCA and the $L_1$ heuristic in solving rank-2 matrix recovery}
+\includegraphics[width=\textwidth]{../figures/comparisonwithrank2.jpg}
+\caption{Comparison of Robust PCA and the $\ell_1$ heuristic in solving rank 2 matrix recovery}
+\label{fig:rank2s}
 \end{figure}
+
+
