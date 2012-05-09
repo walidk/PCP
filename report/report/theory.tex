@@ -75,7 +75,7 @@ The cardinality of the support of $S_0$ is denoted $m$. Guaranteeing exact recov
 \section{Main Result}
 \begin{theorem}
 \label{thm:pcp}
-Suppose $L_0 \in \mathbb{R}^{n \times n}$ satisfies incoherence conditions~(\ref{eq:incoherence1}) and (\ref{eq:incoherence2}) and that the support of $S_0$ is uniformly distributed among all sets of cardinality $m$. Then $\exists c$ such that with high probability over the choice of support of $S_0$ (at least $1-cn^{-10}$), Principal Component Pursuit with $m = 1/\sqrt{n}$ is exact, i.e. $\hat{L} = L_0$ and $hat{S} = S_0$ provided that
+Suppose $L_0 \in \mathbb{R}^{n \times n}$ satisfies incoherence conditions~(\ref{eq:incoherence1}) and (\ref{eq:incoherence2}) and that the support of $S_0$ is uniformly distributed among all sets of cardinality $m$. Then $\exists c$ such that with high probability over the choice of support of $S_0$ (at least $1-cn^{-10}$), Principal Component Pursuit with $\lambda = 1/\sqrt{n}$ is exact, i.e. $\hat{L} = L_0$ and $\hat{S} = S_0$ provided that
 
 \begin{equation}
 \begin{aligned}
@@ -251,7 +251,7 @@ the second equality is equivalent to $\hat{S} = S_0 - P_{\Omega_0^\perp} S_0 = P
 \subsection{Derandomization}
 Derandomization is used to show equivalence between the problem where the signs of the entries of $S_0$ are random, and the problem where the entries of $S_0$ have fixed signs.
 
-In the setting of Theorem~\ref{thm:pcp}, the non-zero entries of the sparse component $S_0$ are fixed, but the proof will use a stronger assumption: the signs of the non-zero entries are independent Bernoulli variables. The following theorem shows equivalence of the two settings.
+In the setting of Theorem~\ref{thm:pcp}, the non-zero entries of the sparse component $S_0$ are fixed, but the proof will use a stronger assumption: the signs of the non-zero entries are independent Bernoulli variables. The following theorem shows equivalence of the two settings. We remark that we take $\rho_s = \frac{m}{n^2}$ in the robust PCA setting
 
 \begin{theorem}
 Suppose $L_0$ satisfies conditions of Theorem~\ref{thm:pcp}, and that the support of $S_0$ is sampled from a Bernoulli model with parameter $2\rho_s$, and the signs of $S_0$ are i.i.d. Bernoulli $\pm 1$ with parameter $\frac{1}{2}$, and independent from the support. Then:
@@ -482,7 +482,7 @@ As a consequence, $\|P_\Omega P_T\|$ can be bounded, and if $|\Omega|$ is not to
 We now present the proof that, under the assumptions of Robust PCA, then with high probability, we can find a dual certificate $(W,F,D)$ that satisfies the conditions~(\ref{eq:dual_cert_cond}) of Lemma~\ref{lem:dual_cert}. This will achieve the proof of the probabilistic guarantee of recovery of $(L_0, S_0)$.
 
 In order to construct a dual certificate $(W, F, D)$, we define $W = W^{L}+W^{S}$ where $W^{L}$ and $W^{S}$ are constructed to satisfy the following
-properties. First, $P_{\Omega}(W^{S}) = \lambda \sign(S_0)$. Then it also need to satisfies the following.
+properties. First, $P_{\Omega}(W^{S}) = \lambda \sign(S_0)$. Then it also need to satisfies the following. With $\rho = \frac{m}{n^2}$,
 
 \begin{lemma} \label{wl} Let $S_0\sim Bern(\rho)$ iid for each entry with $\Omega$
 as its support set. Set $j_{0}=2\log n$. With the assumptions in

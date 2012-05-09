@@ -45,7 +45,7 @@ If $\Omega_{0}\sim Bern(\rho_{0})$,$\rho_{0}\ge C_{0}\epsilon^{-2}\frac{\mu r\lo
 \]
 
 \begin{fact}[\cite{Candes:2011fk}]
-If $\Omega_{0}\sim Bern(\rho)$ and $1-\rho\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{n}$, then with high probability $\|P_{\Omega}P_{T}\|^{2}\le\rho+\epsilon$
+If $\Omega \sim Bern(\rho)$ and $1-\rho\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{n}$, then with high probability $\|P_{\Omega}P_{T}\|^{2}\le\rho+\epsilon$
 \end{fact}
 \end{fact}
 \end{fact}
@@ -57,7 +57,7 @@ Now we present the proof of Lemma (\ref{wl})
 \begin{proof}
 We define another sequence of matrix $Z_{j}=UV^{*}-P_{T}(Y_{j})$. There are some properties about $Z_{j}$ which allows us to establish the proof. We survey them here and provides the proof of them.
 
-i) Note that 
+i) Note that
 \begin{equation}
 Z_{j} = \left( P_{T}-\frac{1}{q}P_{T}P_{\Omega_{j}}P_{T} \right) Z_{j-1}. \label{wlp1}
 \end{equation}
@@ -66,22 +66,22 @@ The reason is as follows.
 \[
 \begin{aligned}
 Z_{j}
- & = UV^{*} - P_{T} \left( Y_{j-1} + \frac{1}{q}P_{\Omega_{j}} P_{T}(UV^{*}-Y_{j-1}) \right) 
+ & = UV^{*} - P_{T} \left( Y_{j-1} + \frac{1}{q}P_{\Omega_{j}} P_{T}(UV^{*}-Y_{j-1}) \right)
  &&\text{by construction of } Y_j \\
- & = UV^{*} - P_{T} ( Y_{j-1}) - \frac{1}{q}P_{T} P_{\Omega_{j}} P_{T}( UV^{*} - Y_{j-1} ) 
+ & = UV^{*} - P_{T} ( Y_{j-1}) - \frac{1}{q}P_{T} P_{\Omega_{j}} P_{T}( UV^{*} - Y_{j-1} )
  &&\text{by of linearity of } P_{T}\\
- & = Z_{j-1} - q^{-1}(P_{T}P_{\Omega_{j}}(UV^{*}-P_{T}(Y_{j-1}))) 
+ & = Z_{j-1} - q^{-1}(P_{T}P_{\Omega_{j}}(UV^{*}-P_{T}(Y_{j-1})))
  &&\text{since } P_{T}(UV^{*}) = UV^{*}\\
- & = P_{T}(Z_{j-1}) - q^{-1}(P_{T}P_{\Omega_{j}}P_{T}Z_{j-1}) 
+ & = P_{T}(Z_{j-1}) - q^{-1}(P_{T}P_{\Omega_{j}}P_{T}Z_{j-1})
  &&\text{since } Z_{j-1}\in T\\
- & = ( P_{T} - q^{-1} P_{T} P_{\Omega_{j}} P_{T} ) Z_{j-1} 
+ & = ( P_{T} - q^{-1} P_{T} P_{\Omega_{j}} P_{T} ) Z_{j-1}
  &&\text{by linearity}
 \end{aligned}
 \]
 
-ii) If $q\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{n}$, then  with high probability, 
+ii) If $q\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{n}$, then  with high probability,
 
-\begin{equation} 
+\begin{equation}
 \| Z_{j}\|_{\infty}\le\epsilon^{j}\|UV^{*}\|_{\infty} \label{wlp2}
 \end{equation}
 The reason is as follows. By Fact (\ref{fact2}), we have,
@@ -94,10 +94,10 @@ The reason is as follows. By Fact (\ref{fact2}), we have,
 
 Inductively, we get desired.
 
-iii) If $q\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{n}$, then 
-\begin{equation} 
+iii) If $q\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{n}$, then
+\begin{equation}
 \|Z_{j}\|_{F}\le\epsilon^{j}\sqrt{r}  \label{wlp3}
-\end{equation} 
+\end{equation}
 The reason is as follows. By Fact~(\ref{fact4}), we have,
 
 \begin{align*}
@@ -114,21 +114,21 @@ After establishing these properties, we are ready to prove that golfing scheme y
 \[
 \begin{aligned}
 \|W^{L}\| & = \|P_{T^{\bot}}(Y_{j_{0}})\| && \text{by definition}\\
- & \le \sum_{j=1}^{j_{0}}\frac{1}{q}\|P_{T^{\bot}}P_{\Omega_{j}}Z_{j-1}\| 
+ & \le \sum_{j=1}^{j_{0}}\frac{1}{q}\|P_{T^{\bot}}P_{\Omega_{j}}Z_{j-1}\|
  &&\text{since } Y_{j} = Y_{j-1} + q^{-1} P_{\Omega_{j}}(Z_{j-1})\\
- & = \sum_{j=1}^{j_{0}}\|P_{T^{\bot}}(\frac{1}{q}P_{\Omega_{j}}Z_{j-1}-Z_{j-1})\| 
+ & = \sum_{j=1}^{j_{0}}\|P_{T^{\bot}}(\frac{1}{q}P_{\Omega_{j}}Z_{j-1}-Z_{j-1})\|
  &&\text{since }Z_{j}\in T\\
- & \le \sum_{j=1}^{j_{0}}\|(\frac{1}{q}P_{\Omega_{j}}Z_{j-1}-Z_{j-1})\| 
+ & \le \sum_{j=1}^{j_{0}}\|(\frac{1}{q}P_{\Omega_{j}}Z_{j-1}-Z_{j-1})\|
  &&\text{since }\|P_{T^{\bot}}(M)\|\le\|M\|\\
- & \le C_{0}^{'}\sqrt{\frac{n\log n}{q}}\sum_{j=1}^{j_{0}}\|Z_{j-1}\|_{\infty} 
+ & \le C_{0}^{'}\sqrt{\frac{n\log n}{q}}\sum_{j=1}^{j_{0}}\|Z_{j-1}\|_{\infty}
  &&\text{by Fact(\ref{fact3})}\\
- & \le C_{0}^{'}\sqrt{\frac{n\log n}{q}}\sum_{j=1}^{j_{0}}\epsilon^{j}\|UV^{*}\|_{\infty} 
+ & \le C_{0}^{'}\sqrt{\frac{n\log n}{q}}\sum_{j=1}^{j_{0}}\epsilon^{j}\|UV^{*}\|_{\infty}
  &&\text{by (\ref{wlp2})}\\
- & \le C_{0}^{'}\sqrt{\frac{n\log n}{q}}\frac{1}{1-\epsilon}\|UV^{*}\|_{\infty} 
+ & \le C_{0}^{'}\sqrt{\frac{n\log n}{q}}\frac{1}{1-\epsilon}\|UV^{*}\|_{\infty}
  &&\text{by bound on geometric series}\\
- & \le C_{0}^{'}\sqrt{\frac{n\log n}{q}}\frac{1}{1-\epsilon}\frac{\sqrt{\mu r}}{n} 
+ & \le C_{0}^{'}\sqrt{\frac{n\log n}{q}}\frac{1}{1-\epsilon}\frac{\sqrt{\mu r}}{n}
  &&\text{by RPCA assumptions}\\
- & \le C^{''}\epsilon<\frac{1}{4} 
+ & \le C^{''}\epsilon<\frac{1}{4}
  &&\text{for some constant }C^{''}
 \end{aligned}
 \]
@@ -146,28 +146,28 @@ Then, because $P_{\Omega}(Y_{j_{0}})=P_{\Omega}(\sum_{j}P_{\Omega_{j}}Z_{j-1})=0
 
 Continuing,
 \begin{align*}
-\|P_{\Omega}(UV^{*}+W^{L})\|_{F} 
-& = \|P_{\Omega}(Z_{j_{0}})\|_{F} 
+\|P_{\Omega}(UV^{*}+W^{L})\|_{F}
+& = \|P_{\Omega}(Z_{j_{0}})\|_{F}
 &&\text{by definition}\\
-& \le \|Z_{j_{0}}\|_{F} 
+& \le \|Z_{j_{0}}\|_{F}
 &&\text{because of summing over larger set} \\
-& \le \epsilon^{j_{0}} \sqrt{r} 
+& \le \epsilon^{j_{0}} \sqrt{r}
 &&\text{by (\ref{wlp3})} \\
-& \le \sqrt{r}\frac{1}{n^{2}} \le \frac{\lambda}{4} 
-&&\text{by the choice of} \lambda \text{and} \epsilon
+& \le \sqrt{r}\frac{1}{n^{2}} \le \frac{\lambda}{4}
+&&\text{by the choice of } \lambda \text{ and } \epsilon
 \end{align*}
 
 
 3) Proof of condition (3) :
 \begin{align*}
-\|P_{\Omega^{\bot}}(UV^{*}+W^{L})\|_{\infty} 
+\|P_{\Omega^{\bot}}(UV^{*}+W^{L})\|_{\infty}
 & = \|P_{\Omega^{\bot}}(Z_{j_{0}}+Y_{j_{0}})\|_{\infty}
 &&\text{by definition}\\
-& \le \|Z_{j_{0}}\|_{\infty} + \|Y_{j_{0}}\|_{\infty} 
+& \le \|Z_{j_{0}}\|_{\infty} + \|Y_{j_{0}}\|_{\infty}
 &&\text{by triangle inequality and summing over larger set}\\
-& \le \|Z_{j_{0}}\|_{F} + \|Y_{j_{0}}\|_{\infty} 
+& \le \|Z_{j_{0}}\|_{F} + \|Y_{j_{0}}\|_{\infty}
 &&\text{by the properties of Frobenius and infinite norms}\\
-& \le \frac{\lambda}{8} + \|Y_{j_{0}}\|_{\infty} 
+& \le \frac{\lambda}{8} + \|Y_{j_{0}}\|_{\infty}
 &&\text{similar argument as in Proof of condition (2)}
 \end{align*}
 
@@ -175,12 +175,12 @@ Continuing,
 Moreover, we have
 \[
 \begin{aligned}
-\|Y_{j_{0}}\|_{\infty} 
-& \le q^{-1}\sum_{j}\|P_{\Omega_{j}}Z_{j-1}\|_{\infty} 
+\|Y_{j_{0}}\|_{\infty}
+& \le q^{-1}\sum_{j}\|P_{\Omega_{j}}Z_{j-1}\|_{\infty}
 &&\text{ by triangle inequality}\\
-& \le q^{-1}\sum_{j}\|Z_{j-1}\|_{\infty} 
+& \le q^{-1}\sum_{j}\|Z_{j-1}\|_{\infty}
 &&\text{ by summing over a larger set}\\
-& \le q^{-1}\sum_{j}\epsilon^{j}\frac{\sqrt{\mu r}}{n} 
+& \le q^{-1}\sum_{j}\epsilon^{j}\frac{\sqrt{\mu r}}{n}
 &&\text{ by (\ref{wlp2})}\\
 & \le \frac{\lambda}{8}
 &&\text{if } \epsilon \text{ is sufficiently small}
@@ -199,7 +199,7 @@ Construction of $W^{S}$:
 W^{S}=\lambda P_{T^{\bot}}((P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}sign(S_{0}))
 \]
 
-Now we present the proof of Lemma(\ref{ws}). 
+Now we present the proof of Lemma(\ref{ws}).
 \begin{proof}
 We consider the sign of $S_{0}$ to be distrbuted as follows
 \[
@@ -222,7 +222,7 @@ W^{S} & = & \lambda P_{T^{\bot}}(sign(S_{0}))+\lambda P_{T^{\bot}}(\sum_{k\ge1}(
 
 II) Then, we have
 \begin{align*}
-\lambda \| P_{T^{\bot}}(sign(S_{0})) \| 
+\lambda \| P_{T^{\bot}}(sign(S_{0})) \|
 & \le \lambda\| \sign(S_{0}) \|  &&\text{ by (\ref{property: p2})}\\
 & = \frac{1}{\sqrt{n}}\|sign(S_{0})\| &&\text{ by the choice of }  \lambda\\
 & \le 4\sqrt{\rho} &&\text{with high probability}
@@ -240,11 +240,11 @@ then we have,
 
 
 where the last inequality uses the fact that there exists a $\frac{1}{2}-net$ of the Eucledean ball and it has at most $6^{n}$ elements. Continuing, we have
-\begin{align} 
-\|P_{T^{\bot}}(R(sign(S_{0})))\| 
+\begin{align}
+\|P_{T^{\bot}}(R(sign(S_{0})))\|
 & \le 4\sup_{x,y \in N} \langle y,R(sign(S_{0})x) \rangle \nonumber \\
 & = 4\sup_{x,y \in N} \langle yx^{*},R(sign(S_{0})) \rangle \nonumber \\
-& = 4\sup_{x,y \in N} \langle R(yx^{*}),sign(S_{0}) \rangle 
+& = 4\sup_{x,y \in N} \langle R(yx^{*}),sign(S_{0}) \rangle
 \label{net}
 \end{align}
 
@@ -259,9 +259,9 @@ Pr(|X(x,y)|>t\mid\Omega) & \le & 2exp(-\frac{t^{2}}{2\|R(xy^{*})\|_{F}^{2}})
 
 This gives,
 \begin{align*}
-Pr(\|P_{T^{\bot}}(R(sign(S_{0})))\| > 4t\mid\Omega) 
+Pr(\|P_{T^{\bot}}(R(sign(S_{0})))\| > 4t\mid\Omega)
 & \le Pr(\|R(sign(S_{0}))\| > 4t\mid\Omega)\\
-& \le Pr(\sup_{x,y}|X(x,y)|>t\mid\Omega) 
+& \le Pr(\sup_{x,y}|X(x,y)|>t\mid\Omega)
 && \text{ by (\ref{net})}\\
 & \le 2N^{2}\exp \left( -\frac{t^{2}}{2\|R\|_{F}^{2}} \right)
 && \text{since } \|yx^{*}\|_{F} \le 1
@@ -291,11 +291,11 @@ The idea is that we first express $P_{\Omega^{\bot}}(W^{S})$ in the form of $<X,
 
 I) First,
 \begin{align}
-P_{\Omega^{\bot}}(W^{S}) 
-& = P_{\Omega^{\bot}} \left( \lambda(I-P_{T}) \left( \sum_{k\ge0}(P_{\Omega}P_{T}P_{\Omega})^{k} \right) \sign(S_{0}) \right) 
+P_{\Omega^{\bot}}(W^{S})
+& = P_{\Omega^{\bot}} \left( \lambda(I-P_{T}) \left( \sum_{k\ge0}(P_{\Omega}P_{T}P_{\Omega})^{k} \right) \sign(S_{0}) \right)
 && \text{since } P_{T^{\bot}} = I- P_T\\
-& = -\lambda P_{\Omega^{\bot}} P_{T}(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1} \sign(S_{0}) 
-&&\text{by  summing over terms and canceling} 
+& = -\lambda P_{\Omega^{\bot}} P_{T}(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1} \sign(S_{0})
+&&\text{by  summing over terms and canceling}
 \label{wsp1}
 \end{align}
 
@@ -304,7 +304,7 @@ For $(i,j)\in\Omega^{C}$, we have
 
 \[
 \begin{aligned}
-e_{i}^{*}W^{S}e_{j} 
+e_{i}^{*}W^{S}e_{j}
 & = \langle e_{i}e_{j}^{*},W_{S} \rangle
 &&\text{ by property of trace}\\
 & = \langle e_{i}e_{j}^{*},-\lambda P_{\Omega^{\bot}}P_{T}(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1} \sign(S_{0}) \rangle
@@ -313,7 +313,7 @@ e_{i}^{*}W^{S}e_{j}
 &&\text{ by rearranging terms}\\
 & = -\lambda \langle e_{i}e_{j}^{*},P_{T}P_{\Omega}(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1} \sign(S_{0}) \rangle
 &&\text{ by the property of the inverse }\\
-& = -\lambda \langle e_{i}e_{j}^{*},P_{T}\sum_{k\ge0}(P_{\Omega}P_{T}P_{\Omega})^{k} \sign(S_{0}) \rangle 
+& = -\lambda \langle e_{i}e_{j}^{*},P_{T}\sum_{k\ge0}(P_{\Omega}P_{T}P_{\Omega})^{k} \sign(S_{0}) \rangle
 &&\text{ by infinite sum representation}
 \end{aligned}
 \]
@@ -330,12 +330,12 @@ where we now denote $X(i,j)=-(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}P_{\Omeg
 II)We now consider, where we put $t=\frac{1}{4}$,
 \[
 \begin{aligned}
-Pr(\|P_{\Omega^{\bot}}(W^{S})\|_{\infty}>t\lambda\mid\Omega) 
-& \le \sum_{(i,j)\in\Omega^{C}}Pr(|e_{i}^{*}W^{S}e_{j}|>t\lambda|\Omega) 
+Pr(\|P_{\Omega^{\bot}}(W^{S})\|_{\infty}>t\lambda\mid\Omega)
+& \le \sum_{(i,j)\in\Omega^{C}}Pr(|e_{i}^{*}W^{S}e_{j}|>t\lambda|\Omega)
 &&\text{by union bound}\\
-& \le n^{2}Pr(|e_{i}^{*}W^{S}e_{j}|>t\lambda|\Omega)\text{ for some (i,j)} 
+& \le n^{2}Pr(|e_{i}^{*}W^{S}e_{j}|>t\lambda|\Omega)\text{ for some (i,j)}
 &&\text{by taking the maximum}\\
-& = n^{2}Pr(| \langle X(i,j), \sign(S_{0}) \rangle|>t|\Omega) 
+& = n^{2}Pr(| \langle X(i,j), \sign(S_{0}) \rangle|>t|\Omega)
 &&\text{ by (\ref{wsp2})}\\
 & \le 2n^{2}\exp \left( -\frac{2t^{2}}{4\|X(i,j)\|_{F}} \right)
 &&\text{by Hoeffding's inequality}
@@ -346,10 +346,10 @@ III) We then proceed to bound the $\|X(i,j)\|$. On the event of $\{\|P_{\Omega}P
 we have
 \[
 \begin{aligned}
-\|P_{\Omega}P_{T}(e_{i}e_{j}^{*})\|_{F} 
-& \le \|P_{\Omega}P_{T}\|\cdot\|P_{T}(e_{i}e_{j}^{*})\|_{F} 
+\|P_{\Omega}P_{T}(e_{i}e_{j}^{*})\|_{F}
+& \le \|P_{\Omega}P_{T}\|\cdot\|P_{T}(e_{i}e_{j}^{*})\|_{F}
 &&\text{by property of spectral norm}\\
-& \le \sigma\sqrt{\frac{2\mu r}{n}} 
+& \le \sigma\sqrt{\frac{2\mu r}{n}}
 &&\text{ by (\ref{property: p4}) and the bound on } \|P_{\Omega}P_{T}\|
 \end{aligned}
 \]
@@ -358,10 +358,10 @@ we have
 Moreover, we have
 \[
 \begin{aligned}
-\|(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}\| 
-& \le \sum_{k\ge0}\|(P_{\Omega}P_{T}P_{\Omega})^{k}\| 
+\|(P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}\|
+& \le \sum_{k\ge0}\|(P_{\Omega}P_{T}P_{\Omega})^{k}\|
 &&\text{by triangle inequality}\\
-& \le \frac{1}{1-\sigma} 
+& \le \frac{1}{1-\sigma}
 &&\text{by the bound on } \|P_{\Omega}P_{T}\|
 \end{aligned}
 \]
@@ -447,7 +447,7 @@ gauge function $\phi$, the sub-differential is given by
 \end{definition}
 
 \begin{thm}
-Let $A=U^{(1)}\Sigma{V^{(1)}}^{T}$. Then 
+Let $A=U^{(1)}\Sigma{V^{(1)}}^{T}$. Then
 \[
 \partial\|A\|_{*}=\{U^{(1)}{V^{(1)}}^{T}+W:\|W\|\le1,{U^{(1)}}^{T}W=0,WV^{(1)}=0\}
 \]
