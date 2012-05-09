@@ -96,7 +96,7 @@ d^* = \max_{Y} \;\; &\trace Y^T\!M \\
 \label{Algorithms:MainAlgs:IPM:SDPform:DualSimpler}
 \end{align}
 
-Noting that $\norm{Y}{2}{}\leq 1 \; \Longleftrightarrow \; I-X^T(I)^{-1}X \succeq 0$ and using a Schur Complement lemma, the dual problem can be transformed into the following SDP standard form:
+Noting that $\norm{Y}{2}{}\leq 1 \; \Longleftrightarrow \; I-Y^T(I)^{-1}Y \succeq 0$ and using a Schur Complement lemma, the dual problem can be transformed into the following SDP standard form:
 \begin{align}
 \begin{split}
 d^* = \max_{Y} \;\; &\trace M^T\!Y \\ 
@@ -584,8 +584,8 @@ Conversely, suppose that~$L$ in~\eqref{Algorithms:MainAlgs:AugLag:RPCA:SubStep} 
 \begin{align}
 \begin{split}
 S_{k+1} &= \argmin_{S} \; \norm{L}{*}{} + \lambda \norm{S}{1}{} + \langle Y_k, M-L-S \rangle + \frac{\mu_k}{2} \norm{M-L-S}{F}{2} \\
-&= \argmin_{L} \; \lambda \norm{S}{1}{} + \langle Y_k, M-L-S \rangle + \frac{1}{2\mu_k^{-1}} \norm{M-L-S}{F}{2} \\
-&= \argmin_{L} \; \lambda \norm{S}{1}{} + \frac{1}{2\mu_k^{-1}} \norm{S-(M-L+\mu_k^{-1}Y_k)}{F}{2} 
+&= \argmin_{S} \; \lambda \norm{S}{1}{} + \langle Y_k, M-L-S \rangle + \frac{1}{2\mu_k^{-1}} \norm{M-L-S}{F}{2} \\
+&= \argmin_{S} \; \lambda \norm{S}{1}{} + \frac{1}{2\mu_k^{-1}} \norm{S-(M-L+\mu_k^{-1}Y_k)}{F}{2} 
 \end{split}
 \label{Algorithms:MainAlgs:AugLag:RPCA:Lfixed}
 \end{align}
