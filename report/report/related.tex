@@ -117,6 +117,7 @@ Here the original data matrix $L_0$ is assumed to be corrupted with the noise ma
 
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Stable Principal Component Pursuit}
+\label{related:stablePCP}
 
 One issue with Robust PCA that limits its practical applicability is the assumption that, while part of the data may be arbitrarily corrupted, the rest of the data is exact. In most applications, however, there will also be some small but non-sparse noise component present, caused for example by basic measurement inaccuracies, quantization or compression effects and so on. In~\cite{Zhou:2010vn} the authors therefore study the problem of recovering a low-rank matrix (the principal components) from a high-dimensional data matrix despite both small entry-wise noise and gross sparse errors. It proves that the solution to a convex program (a relaxation of classic Robust PCA) gives an estimate of the low-rank matrix that is simultaneously stable to small entry- wise noise and robust to gross sparse errors. The result shows that the proposed convex program recovers the low-rank matrix even though a positive fraction of its entries are arbitrarily corrupted, with an error bound proportional to the noise level.
 

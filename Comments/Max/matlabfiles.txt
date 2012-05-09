@@ -1,0 +1,42 @@
+Folder name: RPCA_algorithms
+Description : Contains implementations of different RPCA algorithms
+Use : numerical experiments throughout the report
+Comment: This is a collection of the PROPACK package and the code freely available from  http://perception.csl.uiuc.edu/matrix-rank/ sample_code.html
+
+Folder name: simulation data
+Description : Contains some simulation data as .mat files
+Use : raw data for the figures in the algorithms chapter
+
+----
+
+File name : bench_intpt.m
+Description : Benchmark interior point algorithms for RPCA
+Use : Fig 2.1. in Sec. 2.2.1 
+
+File name : bench_synthetic.m
+Description : Test different RPCA algrithms on synthetic data
+Use : Figs 2.4, 2.5, 2.6 and 2.7 in Sec. 2.3.2 
+
+File name : BIG_data.m
+Description : Test RPCA for some really big matrices (60000x1000)
+Use : *not used explicitly in the report*
+
+File name : coherence.m
+Description : Computes the coherence parameter mu of a matrix
+Use : *not used explicitly in the report*
+
+File name : compare_svd.m
+Description : Speed comparison of different SVD methods on synthetic data
+Use : Figs 2.2 and 2.4 in Sec. 2.3.1
+
+File name : get_solvers.m
+Description : Extracts info from the options structure
+Use : Auxiliary function used in the bench_synthetic script
+
+File name : keep_statistics.m
+Description : Keeps track of some simulation statistics
+Use : Auxiliary function used in the bench_synthetic script
+
+File name : rpca_wrapper.m
+Description :  wrapper function that bundles the computation of an RPCA problems through different algorithms. 
+Use :  Auxiliary function used in different benchmark scripts
