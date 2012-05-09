@@ -1,6 +1,5 @@
-function [M, L, slim_U, slim_V, sigma] = generate_noisy_low_rank(N1, N2, K, rk, sigma_max, S_max)
-% generate_noisy_low_rank
-% [M, L, slim_U, slim_V, sigma] = generate_noisy_low_rank(N1, N2, K, rank, sigma_max, S_max)
+function [M, L, slim_U, slim_V, sigma] = generate_noisy_low_rank_fast(N1, N2, K, rk, sigma_max, S_max)
+% [M, L, slim_U, slim_V, sigma] = generate_noisy_low_rank_fast(N1, N2, K, rank, sigma_max, S_max)
 % generates a random matrix M = S + L where 
 % L = \sum_{r = 1}^{rank} sigma(r)slim_U(:,r)slim_V(:,r)' is a low rank 
 % matrix of
@@ -15,21 +14,27 @@ function [M, L, slim_U, slim_V, sigma] = generate_noisy_low_rank(N1, N2, K, rk, 
 %   -slim_U: N1 x r matrix of the left singular vectors of L.
 %   -slim_V: N2 x r matrix of the right singular vectors of L.
 %   -sigma: r vector of the sorted (descending) singular values of L.
+% This function should be used only for large matrices, otherwise prefer
+% generate_noisy_low_rank, which will generate singular vectors U and V
+% uniformly on the set of orthogonal matrices.
 
 
 % generate the low rank component =========================================
 L = zeros(N1, N2);
 % sorted vector of singular values, the largest is sigma_max
-sigma = sigma_max * sort([1; rand(rk-1, 1)], 1, 'descend'); 
-
-U = RandOrthMat(N1);
-V = RandOrthMat(N2);
-slim_U = U(:,1:rk);
-slim_V = V(:,1:rk);
+s = rand(rk, 1); 
 
 for r=1:rk
-    L = L + sigma(r)*U(:,r)*V(:,r)';
+    L = L + s(r)*rand(N1,1)*rand(1,N2);
 end
+
+[U, Sigm, V] = svd(L, 0);
+s = diag(Sigm);
+s_max = max(s);
+sigma = sigma_max * s(1:rk) / s_max;
+L = sigma_max * L / s_max;
+slim_U = U(:,1:r);
+slim_V = V(:,1:r);
 
 % add sparse component ====================================================
 S = zeros(N1, N2);

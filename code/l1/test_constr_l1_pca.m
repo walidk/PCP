@@ -3,12 +3,12 @@
 
 N = 10;         % size of the matrix
 K = 0;          % support of the sparse component
-T = 10;        % numebr of test cases
-rk = 2;         % rank of the low rank component
+T = 10;         % number of test cases
+rk = 1;         % rank of the low rank component
 sigma_max = 10; % largest sigular value
 S_max = 10;     % magnitude of the sparse component
 
-[M, L, slim_U, slim_V, sigma] = generate_noisy_low_rank(N, K, rk, sigma_max, S_max);
+[M, L, slim_U, slim_V, sigma] = generate_noisy_low_rank(N ,N, K, rk, sigma_max, S_max);
 S = M - L;
 
 

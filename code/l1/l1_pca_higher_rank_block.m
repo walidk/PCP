@@ -18,15 +18,15 @@ max_iter = 400;
 thresh = 1e-04;
 
 % Init ====================================================================
-[N M] = size(Z);
-L_hat = zeros(N,M);
-P = zeros(N,rk);
-Q = zeros(M,rk);
+[N1 N2] = size(Z);
+L_hat = zeros(N1,N2);
+P = zeros(N1,rk);
+Q = zeros(N2,rk);
 
 if(length(varargin) == 1)
     Q = varargin{1};
 else
-    Q = rand(M, rk);
+    Q = rand(N2, rk);
 end
 
 % Define a function that normalizes a vector ==============================
@@ -49,12 +49,12 @@ while(dist > thresh && i < max_iter)
         Q(:,r) = normalize(Q(:,r));
         q = Q(:,r);
         % solve for p_r
-        P(:,r) = zeros(N,1);
+        P(:,r) = zeros(N1,1);
         p = wmed(Z' - Q*P', q);
         p = normalize(p);
         P(:,r) = p;
         % solve for q_r
-        Q(:,r) = zeros(M,1);
+        Q(:,r) = zeros(N2,1);
         q = wmed(Z - P*Q', p);
         Q(:,r) = q;
     end
@@ -62,6 +62,7 @@ while(dist > thresh && i < max_iter)
     dist = norm(diff(:), 2);
     L_hat = P*Q';
     i = i+1;
+    fprintf('.')
 end
 
 % Display message =========================================================

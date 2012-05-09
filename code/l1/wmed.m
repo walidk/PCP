@@ -9,11 +9,11 @@ function t = wmed(Z, u)
 % This will solve M constrained vector projection probelems.
 
 
-[N M] = size(Z);
+[N1 N2] = size(Z);
 
-t = zeros(M, 1);
+t = zeros(N2, 1);
 
-if(M == 1) % vector case
+if(N2 == 1) % vector case
     supp_u = u~=0;
     u_trunc = u(supp_u);
     card_u = size(u_trunc, 1);
@@ -35,7 +35,7 @@ if(M == 1) % vector case
         t = 1;
     end 
 else % matrix case
-    for m=1:M
+    for m=1:N2
         t(m) = wmed(Z(:,m), u);
     end
 end
