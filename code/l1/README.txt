@@ -17,8 +17,10 @@ Running test_l1_pca.m will compare:
 - RPCA with lambda = 1/sqrt(N) (no information on rank is used in this case)
 
 executing the file will run 
-- a comparison using 100 x 10 matrices, with increasing rank
-- a comparison using 100 x 10 matrices, with increasing size of the support of the noise matrix
+- a comparison using 100 x 10 matrices, with increasing rank (and fixed size of the support, K = 20)
+- a comparison using 100 x 10 matrices, with increasing size of the support of the noise matrix (and fixed rank, rk = 1)
+The fixed parameters can be changed
+
 
 each comparison solves the problem using the different methods, and plots:
 - the recovery error: sum(sum(abs(L - L_hat, 1)))
