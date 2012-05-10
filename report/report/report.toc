@@ -1,89 +1,89 @@
-\contentsline {chapter}{\numberline {1}Theory}{4}{chapter.1}
-\contentsline {section}{\numberline {1.1}Introduction}{4}{section.1.1}
-\contentsline {subsection}{\numberline {1.1.1}Incoherence of the low rank component $L_0$}{5}{subsection.1.1.1}
-\contentsline {subsection}{\numberline {1.1.2}Support of the sparse component $S_0$}{5}{subsection.1.1.2}
-\contentsline {section}{\numberline {1.2}Main Result}{6}{section.1.2}
-\contentsline {section}{\numberline {1.3}Proof of the main result}{6}{section.1.3}
-\contentsline {subsection}{\numberline {1.3.1}Preliminaries}{6}{subsection.1.3.1}
-\contentsline {subsection}{\numberline {1.3.2}Elimination Theorem}{8}{subsection.1.3.2}
-\contentsline {subsection}{\numberline {1.3.3}Derandomization}{9}{subsection.1.3.3}
-\contentsline {subsection}{\numberline {1.3.4}Dual certificate}{10}{subsection.1.3.4}
-\contentsline {subsubsection}{Bounding $\delimiter "026B30D P_\Omega P_T\delimiter "026B30D $}{12}{section*.3}
-\contentsline {subsection}{\numberline {1.3.5}Probabilistic Guarantee via Dual Certification}{12}{subsection.1.3.5}
-\contentsline {subsection}{\numberline {1.3.6}Proof of the Lemma about golfing scheme and dual certificate }{14}{subsection.1.3.6}
-\contentsline {subsection}{\numberline {1.3.7}Proof of the Lemma about least square construction and dual certificate }{17}{subsection.1.3.7}
-\contentsline {subsection}{\numberline {1.3.8}Proof of the equivalence of the Bernoulli sampling and uniform sampling model }{20}{subsection.1.3.8}
-\contentsline {subsection}{\numberline {1.3.9}Proof of the form of sub-differential of nuclear norm }{21}{subsection.1.3.9}
-\contentsline {section}{\numberline {1.4}Related Problems and Extensions}{22}{section.1.4}
-\contentsline {subsection}{\numberline {1.4.1}Exact Matrix completion}{22}{subsection.1.4.1}
-\contentsline {subsubsection}{Incoherence}{22}{section*.4}
-\contentsline {subsubsection}{Main result}{23}{section*.5}
-\contentsline {subsubsection}{Relation to Robust PCA}{23}{section*.6}
-\contentsline {subsection}{\numberline {1.4.2}Stable Principal Component Pursuit}{24}{subsection.1.4.2}
-\contentsline {subsubsection}{Main result}{24}{section*.7}
-\contentsline {subsubsection}{Relations to existing work}{25}{section*.8}
-\contentsline {subsubsection}{Algorithm}{25}{section*.9}
-\contentsline {subsubsection}{Conclusion}{26}{section*.10}
-\contentsline {subsection}{\numberline {1.4.3}Robust Alignment by Sparse and Low-rank Decomposition}{26}{subsection.1.4.3}
-\contentsline {subsection}{\numberline {1.4.4}Robust Matrix Decomposition With Sparse Corruptions}{29}{subsection.1.4.4}
-\contentsline {subsubsection}{Introduction}{29}{section*.13}
-\contentsline {subsubsection}{Main ideas and contributions}{29}{section*.14}
-\contentsline {subsubsection}{Discussion and applications}{29}{section*.15}
-\contentsline {subsection}{\numberline {1.4.5}Structured Sparsity}{30}{subsection.1.4.5}
-\contentsline {subsubsection}{Structured-sparsity-inducing norms}{30}{section*.16}
-\contentsline {paragraph}{Disjoint groups of variables an group Lasso}{30}{section*.17}
-\contentsline {paragraph}{Overlapping groups of variables}{30}{section*.18}
-\contentsline {paragraph}{Proximal method}{30}{section*.19}
-\contentsline {section}{\numberline {1.5}Robust PCA with known rank: a block coordinate descent approach}{32}{section.1.5}
-\contentsline {subsection}{\numberline {1.5.1}Motivation}{32}{subsection.1.5.1}
-\contentsline {subsection}{\numberline {1.5.2}Equivalent formulation of Robust PCA with rank information}{32}{subsection.1.5.2}
-\contentsline {subsection}{\numberline {1.5.3}Simplification using $\ell _{1}$ heuristic}{33}{subsection.1.5.3}
-\contentsline {subsubsection}{Introduction}{33}{section*.20}
-\contentsline {subsubsection}{Performance guarantee for the $\ell _1$ heuristic}{33}{section*.21}
-\contentsline {subsection}{\numberline {1.5.4}A block coordinate descent algorithm}{35}{subsection.1.5.4}
-\contentsline {subsubsection}{$q$-step}{35}{section*.22}
-\contentsline {subsubsection}{Median problem}{36}{section*.23}
-\contentsline {subsubsection}{Weighted median problem}{36}{section*.24}
-\contentsline {subsubsection}{$p$-step}{37}{section*.26}
-\contentsline {subsubsection}{Algorithm for the constrained problem}{38}{section*.28}
-\contentsline {subsubsection}{Algorithm for the unconstrained projected problem}{39}{section*.31}
-\contentsline {subsubsection}{convergence in the rank one case}{40}{section*.33}
-\contentsline {subsection}{\numberline {1.5.5}Sensitivity of the Robust PCA solution to $\lambda $}{40}{subsection.1.5.5}
-\contentsline {subsection}{\numberline {1.5.6}Recovery performance}{41}{subsection.1.5.6}
-\contentsline {subsubsection}{Comparison between Robust PCA and $\ell _{1}$ PCA heuristics}{41}{section*.34}
-\contentsline {subsection}{\numberline {1.5.7}$\ell _{1}$ PCA heuristics for higher ranks}{43}{subsection.1.5.7}
-\contentsline {subsubsection}{Analysis $\ell _1$ PCA}{43}{section*.37}
-\contentsline {subsubsection}{Synthesis $\ell _1$ PCA}{44}{section*.38}
-\contentsline {subsubsection}{Numerical results}{45}{section*.39}
-\contentsline {chapter}{\numberline {2}Algorithms}{48}{chapter.2}
-\contentsline {section}{\numberline {2.1}Overview}{48}{section.2.1}
-\contentsline {section}{\numberline {2.2}Main algorithms for Robust PCA}{48}{section.2.2}
-\contentsline {subsection}{\numberline {2.2.1}Interior Point Methods}{48}{subsection.2.2.1}
-\contentsline {subsubsection}{Formulation of the Dual problem of Robust PCA as an SDP}{49}{section*.43}
-\contentsline {subsubsection}{Using Interior Point Methods to Solve the Dual}{51}{section*.44}
-\contentsline {subsection}{\numberline {2.2.2}Iterative Thresholding Method}{52}{subsection.2.2.2}
-\contentsline {subsection}{\numberline {2.2.3}Accelerated Proximal Gradient Method}{54}{subsection.2.2.3}
-\contentsline {subsubsection}{A General Form of the Accelerated Proximal Gradient Method}{55}{section*.47}
-\contentsline {subsubsection}{Accelerated Proximal Gradient Algorithm Applied to Robust PCA}{56}{section*.49}
-\contentsline {subsection}{\numberline {2.2.4}Gradient Ascent on the Dual}{58}{subsection.2.2.4}
-\contentsline {subsection}{\numberline {2.2.5}Augmented Lagrangian Method}{60}{subsection.2.2.5}
-\contentsline {subsubsection}{The General Case}{60}{section*.52}
-\contentsline {subsubsection}{Alternating Directions ALM for Robust PCA}{60}{section*.54}
-\contentsline {subsubsection}{Inexact ALM for Robust PCA}{62}{section*.56}
-\contentsline {section}{\numberline {2.3}Discussion of the Algorithms}{63}{section.2.3}
-\contentsline {subsection}{\numberline {2.3.1}The Importance of the SVD}{63}{subsection.2.3.1}
-\contentsline {subsubsection}{Comparison of different SVD algorithms}{63}{section*.58}
-\contentsline {subsubsection}{Partial SVD methods}{64}{section*.60}
-\contentsline {subsubsection}{Warm-start methods for SVD}{65}{section*.62}
-\contentsline {subsection}{\numberline {2.3.2}Numerical Comparison of Robust PCA algorithms}{65}{subsection.2.3.2}
-\contentsline {subsubsection}{Numerical Comparison of ALM-based algorithms}{66}{section*.65}
-\contentsline {subsection}{\numberline {2.3.3}Possible Directions for Parallelization}{68}{subsection.2.3.3}
-\contentsline {section}{\numberline {2.4}Outlook: Algorithms for Stable Principal Component Pursuit}{69}{section.2.4}
-\contentsline {chapter}{\numberline {3}Applications}{72}{chapter.3}
-\contentsline {section}{\numberline {3.1}Overview}{72}{section.3.1}
-\contentsline {section}{\numberline {3.2}Robust PCA Applications}{72}{section.3.2}
-\contentsline {subsection}{\numberline {3.2.1}Background modeling from surveillance video}{72}{subsection.3.2.1}
-\contentsline {subsection}{\numberline {3.2.2}Using Robust PCA in speech recognition}{75}{subsection.3.2.2}
-\contentsline {subsection}{\numberline {3.2.3}Senate voting data analysis}{76}{subsection.3.2.3}
-\contentsline {subsection}{\numberline {3.2.4}Pre-processing of Brain-Machine Interface neural spike data}{77}{subsection.3.2.4}
-\contentsline {section}{\numberline {3.3}Discussion}{79}{section.3.3}
+\contentsline {chapter}{\numberline {1}Theory}{5}{chapter.1}
+\contentsline {section}{\numberline {1.1}Introduction}{5}{section.1.1}
+\contentsline {subsection}{\numberline {1.1.1}Incoherence of the low rank component $L_0$}{6}{subsection.1.1.1}
+\contentsline {subsection}{\numberline {1.1.2}Support of the sparse component $S_0$}{6}{subsection.1.1.2}
+\contentsline {section}{\numberline {1.2}Main Result}{7}{section.1.2}
+\contentsline {section}{\numberline {1.3}Proof of the main result}{7}{section.1.3}
+\contentsline {subsection}{\numberline {1.3.1}Preliminaries}{7}{subsection.1.3.1}
+\contentsline {subsection}{\numberline {1.3.2}Elimination Theorem}{9}{subsection.1.3.2}
+\contentsline {subsection}{\numberline {1.3.3}Derandomization}{10}{subsection.1.3.3}
+\contentsline {subsection}{\numberline {1.3.4}Dual certificate}{11}{subsection.1.3.4}
+\contentsline {subsubsection}{Bounding $\delimiter "026B30D P_\Omega P_T\delimiter "026B30D $}{13}{section*.3}
+\contentsline {subsection}{\numberline {1.3.5}Probabilistic Guarantee via Dual Certification}{13}{subsection.1.3.5}
+\contentsline {subsection}{\numberline {1.3.6}Proof of the Lemma about golfing scheme and dual certificate }{15}{subsection.1.3.6}
+\contentsline {subsection}{\numberline {1.3.7}Proof of the Lemma about least square construction and dual certificate }{18}{subsection.1.3.7}
+\contentsline {subsection}{\numberline {1.3.8}Proof of the equivalence of the Bernoulli sampling and uniform sampling model }{21}{subsection.1.3.8}
+\contentsline {subsection}{\numberline {1.3.9}Proof of the form of sub-differential of nuclear norm }{22}{subsection.1.3.9}
+\contentsline {section}{\numberline {1.4}Related Problems and Extensions}{23}{section.1.4}
+\contentsline {subsection}{\numberline {1.4.1}Exact Matrix completion}{23}{subsection.1.4.1}
+\contentsline {subsubsection}{Incoherence}{23}{section*.4}
+\contentsline {subsubsection}{Main result}{24}{section*.5}
+\contentsline {subsubsection}{Relation to Robust PCA}{24}{section*.6}
+\contentsline {subsection}{\numberline {1.4.2}Stable Principal Component Pursuit}{25}{subsection.1.4.2}
+\contentsline {subsubsection}{Main result}{25}{section*.7}
+\contentsline {subsubsection}{Relations to existing work}{26}{section*.8}
+\contentsline {subsubsection}{Algorithm}{26}{section*.9}
+\contentsline {subsubsection}{Conclusion}{27}{section*.10}
+\contentsline {subsection}{\numberline {1.4.3}Robust Alignment by Sparse and Low-rank Decomposition}{27}{subsection.1.4.3}
+\contentsline {subsection}{\numberline {1.4.4}Robust Matrix Decomposition With Sparse Corruptions}{30}{subsection.1.4.4}
+\contentsline {subsubsection}{Introduction}{30}{section*.13}
+\contentsline {subsubsection}{Main ideas and contributions}{30}{section*.14}
+\contentsline {subsubsection}{Discussion and applications}{30}{section*.15}
+\contentsline {subsection}{\numberline {1.4.5}Structured Sparsity}{31}{subsection.1.4.5}
+\contentsline {subsubsection}{Structured-sparsity-inducing norms}{31}{section*.16}
+\contentsline {paragraph}{Disjoint groups of variables an group Lasso}{31}{section*.17}
+\contentsline {paragraph}{Overlapping groups of variables}{31}{section*.18}
+\contentsline {paragraph}{Proximal method}{31}{section*.19}
+\contentsline {section}{\numberline {1.5}Robust PCA with known rank: a block coordinate descent approach}{33}{section.1.5}
+\contentsline {subsection}{\numberline {1.5.1}Motivation}{33}{subsection.1.5.1}
+\contentsline {subsection}{\numberline {1.5.2}Equivalent formulation of Robust PCA with rank information}{33}{subsection.1.5.2}
+\contentsline {subsection}{\numberline {1.5.3}Simplification using $\ell _{1}$ heuristic}{34}{subsection.1.5.3}
+\contentsline {subsubsection}{Introduction}{34}{section*.20}
+\contentsline {subsubsection}{Performance guarantee for the $\ell _1$ heuristic}{34}{section*.21}
+\contentsline {subsection}{\numberline {1.5.4}A block coordinate descent algorithm}{36}{subsection.1.5.4}
+\contentsline {subsubsection}{$q$-step}{36}{section*.22}
+\contentsline {subsubsection}{Median problem}{37}{section*.23}
+\contentsline {subsubsection}{Weighted median problem}{37}{section*.24}
+\contentsline {subsubsection}{$p$-step}{38}{section*.26}
+\contentsline {subsubsection}{Algorithm for the constrained problem}{39}{section*.28}
+\contentsline {subsubsection}{Algorithm for the unconstrained projected problem}{40}{section*.31}
+\contentsline {subsubsection}{convergence in the rank one case}{41}{section*.33}
+\contentsline {subsection}{\numberline {1.5.5}Sensitivity of the Robust PCA solution to $\lambda $}{41}{subsection.1.5.5}
+\contentsline {subsection}{\numberline {1.5.6}Recovery performance}{42}{subsection.1.5.6}
+\contentsline {subsubsection}{Comparison between Robust PCA and $\ell _{1}$ PCA heuristics}{42}{section*.34}
+\contentsline {subsection}{\numberline {1.5.7}$\ell _{1}$ PCA heuristics for higher ranks}{44}{subsection.1.5.7}
+\contentsline {subsubsection}{Analysis $\ell _1$ PCA}{44}{section*.37}
+\contentsline {subsubsection}{Synthesis $\ell _1$ PCA}{45}{section*.38}
+\contentsline {subsubsection}{Numerical results}{46}{section*.39}
+\contentsline {chapter}{\numberline {2}Algorithms}{49}{chapter.2}
+\contentsline {section}{\numberline {2.1}Overview}{49}{section.2.1}
+\contentsline {section}{\numberline {2.2}Main algorithms for Robust PCA}{49}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}Interior Point Methods}{49}{subsection.2.2.1}
+\contentsline {subsubsection}{Formulation of the Dual problem of Robust PCA as an SDP}{50}{section*.43}
+\contentsline {subsubsection}{Using Interior Point Methods to Solve the Dual}{52}{section*.44}
+\contentsline {subsection}{\numberline {2.2.2}Iterative Thresholding Method}{53}{subsection.2.2.2}
+\contentsline {subsection}{\numberline {2.2.3}Accelerated Proximal Gradient Method}{55}{subsection.2.2.3}
+\contentsline {subsubsection}{A General Form of the Accelerated Proximal Gradient Method}{56}{section*.47}
+\contentsline {subsubsection}{Accelerated Proximal Gradient Algorithm Applied to Robust PCA}{57}{section*.49}
+\contentsline {subsection}{\numberline {2.2.4}Gradient Ascent on the Dual}{59}{subsection.2.2.4}
+\contentsline {subsection}{\numberline {2.2.5}Augmented Lagrangian Method}{61}{subsection.2.2.5}
+\contentsline {subsubsection}{The General Case}{61}{section*.52}
+\contentsline {subsubsection}{Alternating Directions ALM for Robust PCA}{61}{section*.54}
+\contentsline {subsubsection}{Inexact ALM for Robust PCA}{63}{section*.56}
+\contentsline {section}{\numberline {2.3}Discussion of the Algorithms}{64}{section.2.3}
+\contentsline {subsection}{\numberline {2.3.1}The Importance of the SVD}{64}{subsection.2.3.1}
+\contentsline {subsubsection}{Comparison of different SVD algorithms}{64}{section*.58}
+\contentsline {subsubsection}{Partial SVD methods}{65}{section*.60}
+\contentsline {subsubsection}{Warm-start methods for SVD}{66}{section*.62}
+\contentsline {subsection}{\numberline {2.3.2}Numerical Comparison of Robust PCA algorithms}{66}{subsection.2.3.2}
+\contentsline {subsubsection}{Numerical Comparison of ALM-based algorithms}{67}{section*.65}
+\contentsline {subsection}{\numberline {2.3.3}Possible Directions for Parallelization}{69}{subsection.2.3.3}
+\contentsline {section}{\numberline {2.4}Outlook: Algorithms for Stable Principal Component Pursuit}{70}{section.2.4}
+\contentsline {chapter}{\numberline {3}Applications}{73}{chapter.3}
+\contentsline {section}{\numberline {3.1}Overview}{73}{section.3.1}
+\contentsline {section}{\numberline {3.2}Robust PCA Applications}{73}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Background modeling from surveillance video}{73}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}Using Robust PCA in speech recognition}{76}{subsection.3.2.2}
+\contentsline {subsection}{\numberline {3.2.3}Senate voting data analysis}{77}{subsection.3.2.3}
+\contentsline {subsection}{\numberline {3.2.4}Pre-processing of Brain-Machine Interface neural spike data}{78}{subsection.3.2.4}
+\contentsline {section}{\numberline {3.3}Discussion}{80}{section.3.3}
