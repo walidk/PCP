@@ -16,35 +16,35 @@ Robust Principal Component Analysis \cite{Candes:2011fk} is the problem of recov
 \end{aligned}
 \end{equation}
 
-Principal component pursuit minimizes a linear combination of the nuclear norm of a matrix $L$ and the $\ell_1$ norm of $M-L$. Minimizing the $\ell_1$ norm is known to favor sparsity, while minimizing the nuclear norm $\|L\|_* = \sum_{\sigma \in \sigma(L)} \sigma$ is known to favour low-rank matrices (intuitively, favors sparsity of the vector of singular values).
+Principal component pursuit minimizes a linear combination of the nuclear norm of a matrix $L$ and the $\ell_1$ norm of $M-L$. Minimizing the $\ell_1$ norm is known to favor sparsity, while minimizing the nuclear norm $\|L\|_* = \sum_{\sigma \in \sigma(L)} \sigma$ is known to favor low-rank matrices (intuitively, favors sparsity of the vector of singular values).
 
 The low-rank component $S_0$ is viewed as a noise matrix, that can represent measurement noise, failure in some sensors that will result in completely corrupting a fraction of the observed entries, or missing data (which translates to having a fraction of the entries equal to zero). In this setting, one would like to be able to recover the original data $L_0$, without making assumptions on the magnitude $\|S_0\|_\infty$ of the sparse component, where $\|S\|_\infty = \max_{i,j} |S_{ij}|$. PCP achieves recovery with high probability in this setting, under alternate assumptions on the structure of $L_0$ and sparsity pattern of $S_0$.
 
-One cannot expect to recover the components exactly in the most general case. Assume for example that $L_0$ is such that $(L_0)_{ij} = \delta_i^1\delta_j^1$, and $S_0 = -L_0$. Both matrices are sparse and low-rank, and clearly one cannot expect to recover the components in this case, since the observed matrix is $M = 0$. Therefore assumptions need to be made on the incoherence of $L_0$ and the support of $S_0$.
+One cannot expect to recover the components exactly in the most general case. Assume for example that $L_0$ is such that $(L_0)_{ij} = \delta_i^1\delta_j^1$, and $S_0 = -L_0$. Both matrices are sparse and low-rank, and clearly one cannot expect to recover the components in this case, since the observed matrix is $M = 0$. Therefore assumptions need to be made on the incoherence of $L_0$ and the support of~$S_0$.
 
 
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Incoherence of the low rank component $L_0$}
 The Incoherence conditions describe how much the singular vectors of a given matrix are aligned with the vectors of the canonical basis.
 
-Let the SVD of $L_0$ be given by
-
+Let the (slim) SVD of $L_0$ be given by
+%
 \begin{align}
 L_0 = U\Sigma V^* = \sum_{i=1}^r \sigma_i u_i v_i^*
 \label{eq:svd}
 \end{align}
 
 where $U \in \Rbb^{n_1 \times r}$ and $V \in \Rbb^{n_2 \times r}$ are the matrices of left and right singular vectors respectivley, $U = [u_1, \dots, u_r]$, $V = [v_1, \dots, v_r]$. Then the incoherence conditions are given by
-
+%
 \begin{equation}
 \begin{aligned}
 \max_i \|U^*e_i\|_2^2 \leq \frac{\mu r}{n_1}, && \max_i \|V^*e_i\|_2^2 \leq \frac{\mu r}{n_2}
 \label{eq:incoherence1}
 \end{aligned}
 \end{equation}
-
+%
 and
-
+%
 \begin{equation}
 \| U V^* \|_\infty \leq \sqrt{\frac{\mu r}{n_1 n_2}}
 \label{eq:incoherence2}
@@ -62,20 +62,20 @@ u_r^* \\
 \]
 and the condition is equivalent to $\|P_U e_i \|_2^2 \leq \frac{\mu r}{n_1}$ since $\|U^* e_i \|_2^2 = e_i^*(UU^*)e_i = e_i^* P_U e_i = (e_i - P_Ue_i + P_U e_i )^*P_U e_i = \|P_U e_i\|_2^2$ ($P_U e_i$ and $e_i - P_U e_i$ are orthogonal). Or simply $\|P_U e_i\|_2^2 = e_i^* UU^*UU^*e_i = e_i^* UU^*e_i = \|U^*e_i\|_2^2$ since $U^*U = I_r$.
 
-These conditions require the singular vectors to be ``spread'' enough with respect to the canonical basis. Intuitively, if the singular vectors of the low-rank matrix $L_0$ are aligned with a few canonical basis vectors, then $L_0$ will be sparse and hard to distinguish from the sparse corruption matrix $S_0$.
+These conditions require the singular vectors to be ``spread'' enough with respect to the canonical basis. Intuitively, if the singular vectors of the low-rank matrix $L_0$ are aligned with a few canonical basis vectors, then $L_0$ will be sparse and hard to distinguish from the sparse corruption matrix~$S_0$.
 
 
 
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Support of the sparse component $S_0$}
-The cardinality of the support of $S_0$ is denoted $m$. Guaranteeing exact recovery requires $m$ to be small enough, in a sense that will be defined in the next section. Proving exact recovery will rely on a probabilistic argument which assumes the sparse matrix $S_0$ is drawn from a uniform distribution on the set of matrices with support of a fixed cardinality $m$, i.e. $\{ S \in \Rbb^{n_1 \times n_2} | \mathbf{card}(\mathbf{supp}(S)) = m \}$. Here $\mathbf{card}$ denotes the cardinality, and $\mathbf{supp}$ denotes the set of non zero elements, or support. The proof of the main result will use a different sampling model, and prove equivalence with the uniform model.
+The cardinality of the support of $S_0$ is denoted $m$. Guaranteeing exact recovery requires $m$ to be small enough, in a sense that will be defined in the next section. Proving exact recovery will rely on a probabilistic argument which assumes the sparse matrix $S_0$ is drawn from a uniform distribution on the set of matrices with support of a fixed cardinality $m$, i.e. $\{ S \in \Rbb^{n_1 \times n_2} \mid \mathbf{card}(\mathbf{supp}(S)) = m \}$. Here $\mathbf{card}$ denotes the cardinality, and $\mathbf{supp}$ denotes the set of non zero elements, or support. The proof of the main result will use a different sampling model, and prove equivalence with the uniform model.
 
 
 %============================================================================================
 \section{Main Result}
 \begin{theorem}
 \label{thm:pcp}
-Suppose $L_0 \in \mathbb{R}^{n \times n}$ satisfies incoherence conditions~(\ref{eq:incoherence1}) and (\ref{eq:incoherence2}) and that the support of $S_0$ is uniformly distributed among all sets of cardinality $m$. Then $\exists c$ such that with high probability over the choice of support of $S_0$ (at least $1-cn^{-10}$), Principal Component Pursuit with $\lambda = 1/\sqrt{n}$ is exact, i.e. $\hat{L} = L_0$ and $\hat{S} = S_0$ provided that
+Suppose $L_0 \in \mathbb{R}^{n \times n}$ satisfies incoherence conditions~(\ref{eq:incoherence1}) and (\ref{eq:incoherence2}) and that the support of $S_0$ is uniformly distributed among all sets of cardinality $m$. Then $\exists \,c$ such that with high probability over the choice of support of $S_0$ (at least $1-cn^{-10}$), Principal Component Pursuit with $\lambda = 1/\sqrt{n}$ is exact, i.e. $\hat{L} = L_0$ and $\hat{S} = S_0$ provided that
 
 \begin{equation}
 \begin{aligned}
@@ -89,16 +89,16 @@ Above, $\rho_r$ and $\rho_s$ are positive numerical constants. Note in particula
 
 The first condition in the theorem bounds the rank of $L_0$, but also how spread the singular vectors have to be, since we need to have $\forall i$ (from the incoherence condition)
 \[
-\|U^*e_i\|_2^2 \leq \frac{\mu \text{rank}(L_0)}{n} \leq \frac{\rho_r}{(\log n)^2}
+\|U^*e_i\|_2^2 \leq \frac{\mu \;\text{rank}(L_0)}{n} \leq \frac{\rho_r}{(\log n)^2}
 \]
 
 The second condition bounds the size $m$ of the support of $S_0$.
 %============================================================================================
-\section{Proof}
+\section{Proof of the main result}
 
 The main arguments of the proof are the following:
 
-First, change the model of the sparse matrix $S_0$ from the uniform sampling model, to the Bernoulli sampling model with fixed signs, then to the Bernoulli sampling model with random signs. To show equivalence of the results under the different sampling models, an elimination theorem is used.
+First, change the model of the sparse matrix $S_0$ from the uniform sampling model, to the Bernoulli sampling model with fixed signs, then to the Bernoulli sampling model with random signs. To show equivalence of the results under the different sampling models, use an elimination theorem.
 
 Then using the random sign Bernoulli sampling model, it is shown that a dual certificate can be constructed with high probability, proving that $(L_0, S_0)$ is the unique optimizer, by constructing a subgradient that shows that any non-zero perturbation $H$ will result in a strict increase in the objective value $\|L_0 + H\|_* + \lambda \|S_0 - H\|_1$.
 
@@ -190,15 +190,15 @@ and since $UU^*$ is an orthogonal projection, we have
 &= \|e_i\|_2^2 - \|UU^*e_i\|_2^2 \\
 &\geq 1 - \mu r / n
 \end{align*}
-
+%
 where the last inequality results form the incoherence condition~(\ref{eq:incoherence2}), $\|U^*e_i\|_2^2 \leq \frac{\mu r}{n}$. Therefore
-
+%
 \begin{equation}
 \|P_{T^\perp} e_ie_j^*\|_F^2 \geq (1 - \mu r / n)^2   \label{property: p3}
 \end{equation}
 
-equivalently, using the fact that $\|P_{T^\perp} e_ie_j^*\|_F^2 + \|P_{T} e_ie_j^*\|_F^2 = \|e_ie_j^*\|_F^2 = 1$, we have
-
+Equivalently, using the fact that $\|P_{T^\perp} e_ie_j^*\|_F^2 + \|P_{T} e_ie_j^*\|_F^2 = \|e_ie_j^*\|_F^2 = 1$, we have
+%
 \begin{align*}
 \|P_{T} e_ie_j^*\|_F^2
 &\leq 1 - \left(1 - \frac{\mu r}{n} \right)^2 \\
@@ -212,7 +212,7 @@ Thus
 \end{equation}
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Elimination Theorem}
-The following elimination theorem states the intuitive fact that if PCP exactly recovers the components of $M = L+S$, then it also exactly recovers the components of $M = L+S'$ where $S'$ is a trimmed version of $S$ ($\text{supp}(S')\subset \text{supp}(S)$ and $S$ and $S'$ coincide on $\text{supp}(S')$)
+The following elimination theorem states the intuitive fact that if PCP exactly recovers the components of $M = L+S$, then it also exactly recovers the components of $M = L+S'$ where $S'$ is a trimmed version of $S$ ($\text{supp}(S')\subset \text{supp}(S)$ and $S$ and $S'$ coincide on $\text{supp}(S')$).\\
 
 \begin{theorem}
 Suppose the solution to the PCP problem (\ref{eq:pcp}) with input data $M_0 = L_0 + S_0$ is unique and exact, and consider $M_0' = L_0 + S_0'$ where $S_0'$ is a trimmed version of $S_0$. Then the solution to (\ref{eq:pcp}) with input $M_0'$ is exact as well.
@@ -224,13 +224,13 @@ Let $S_0' = P_{\Omega_0} S_0$ and let $(\hat{L}, \hat{S})$ be the solution to (\
 \|\hat{L}\|_* + \lambda \|\hat{S}\|_1 \leq \|L_0\|_* + \lambda \|S_0'\|_1
 \]
 then decomposing $S_0$ into the orthogonal components $S_0 = P_{\Omega_0} S_0 + P_{\Omega_0^\perp} S_0 = S_0' + P_{\Omega_0^\perp} S_0$, we have $\|S_0'\|_1 = \|S_0\|_1 - \|P_{\Omega_0^\perp} S_0\|_1$, thus we have
-
+%
 \[
 \|\hat{L}\|_* + \lambda \|\hat{S}\|_1 + \lambda \|P_{\Omega_0^\perp} S_0\|_1 \leq \|L_0\|_* + \lambda \|S_0\|_1
 \]
 
-and using the triangular inequality
-
+and using the triangle inequality
+%
 \[
 \|\hat{L}\|_* + \lambda \|\hat{S} + P_{\Omega_0^\perp} S_0\|_1 \leq \|L_0\|_* + \lambda \|S_0\|_1
 \]
@@ -251,7 +251,7 @@ the second equality is equivalent to $\hat{S} = S_0 - P_{\Omega_0^\perp} S_0 = P
 \subsection{Derandomization}
 Derandomization is used to show equivalence between the problem where the signs of the entries of $S_0$ are random, and the problem where the entries of $S_0$ have fixed signs.
 
-In the setting of Theorem~\ref{thm:pcp}, the non-zero entries of the sparse component $S_0$ are fixed, but the proof will use a stronger assumption: the signs of the non-zero entries are independent Bernoulli variables. The following theorem shows equivalence of the two settings. We remark that we take $\rho_s = \frac{m}{n^2}$ in the robust PCA setting
+In the setting of Theorem~\ref{thm:pcp}, the non-zero entries of the sparse component $S_0$ are fixed, but the proof will use a stronger assumption: the signs of the non-zero entries are independent Bernoulli variables. The following theorem shows equivalence of the two settings. We remark that we take $\rho_s = \frac{m}{n^2}$ in the robust PCA setting.\\
 
 \begin{theorem}
 Suppose $L_0$ satisfies conditions of Theorem~\ref{thm:pcp}, and that the support of $S_0$ is sampled from a Bernoulli model with parameter $2\rho_s$, and the signs of $S_0$ are i.i.d. Bernoulli $\pm 1$ with parameter $\frac{1}{2}$, and independent from the support. Then:
@@ -296,7 +296,7 @@ Now consider the following variable
 S'_0 = \Delta \circ |S| \circ E
 \]
 where $\circ$ is the component wise product. Then $S_0$ and $S'_0$ have the same distribution. Indeed, it suffices by independence to check that they have the same marginals:
-
+%
 \begin{align*}
 P((S'_0)_{ij} = S_{ij})
 &= P(\Delta_{ij} = 1 \text{ and } E_{ij} = \sgn(S_{ij}) ) \\
@@ -315,7 +315,7 @@ Finally, since, by assumption, PCP recovers $|S| \circ E$ with high probability,
 We remark that the uniform sampling and the iid Bernoulli sampling model are indeed equivalent and the justification is given in Section~\ref{sub:bernoullisampling}.
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Dual certificate}
-The following lemma gives a simple sufficient condition for the pair $(L_0,S_0)$ to be the unique optimal solution to PCP.
+The following lemma gives a simple sufficient condition for the pair $(L_0,S_0)$ to be the unique optimal solution to PCP.\\
 
 \begin{lemma}
 Assume that $\|P_\Omega P_T \| < 1$. Then $(L_0,S_0)$ is the unique solution to PCP if $\exists (W, F)$ such that
@@ -358,13 +358,11 @@ Now we pick a particular pair $(W_0, F_0)$ such that
 \item $\langle F_0, H \rangle = -\|P_{\Omega^\perp} H\|_1$, for example $F_0 = -\sgn(P_{\Omega^\perp} H)$
 \end{itemize}
 then we have
-
 \[
 \|L_0 + H\|_* + \lambda \|S_0 - H\|_1 \geq \|L_0\|_* + \lambda \|S_0\|_1  + \|P_{T^\perp} H\|_* + \|P_{\Omega^\perp} H\|_1 + \langle UV^* - \lambda  \sgn(S_0), H\rangle
 \]
 
 we can bound the inner product using the definition of $W$ and $F$,
-
 \begin{align*}
 |\langle UV^* - \lambda  \sgn(S_0), H\rangle|
 & = |\langle \lambda F - W, H\rangle|  & \text{since } UV^* + W = \lambda(\sgn(S_0) + F) \\
@@ -385,11 +383,11 @@ Thus
 & > 0
 \end{align*}
 since $\|P_{T^\perp} H\|_* = \|P_{\Omega^\perp} H\|_1 = 0$ only if $P_{T^\perp} H = P_{\Omega^\perp} H = 0$, i.e. $H \in \Omega \cap T$, and, by assumption, $\Omega \cap T = {0}$ and $H \neq 0$. Therefore the objective strictly increases with a non-zero perturbation. This completes the proof.
-
 \end{proof}
 
 
-The proof of the main theorem will use a slightly different result, given by the following Lemma
+The proof of the main theorem will use a slightly different result, given by the following Lemma:\\
+
 \begin{lemma}
 \label{lem:dual_cert}
 Assume that $\|P_\Omega P_T \| \leq 1/2$. Then $(L_0,S_0)$ is the unique solution to PCP if $\exists (W, F)$ such that
@@ -409,7 +407,7 @@ Assume that $\|P_\Omega P_T \| \leq 1/2$. Then $(L_0,S_0)$ is the unique solutio
 \end{lemma}
 
 \begin{proof}
-Using $\beta = \max (\|W\|, \|F\|_\infty) \leq \frac{1}{2}$ in the previous proof, we have for a non-zero perturbation $H$
+Using $\beta = \max (\|W\|, \|F\|_\infty) \leq \frac{1}{2}$ in the previous proof, we have for a non-zero perturbation~$H$
 \begin{align*}
 \|L_0 + H\|_* + \lambda \|S_0 - H\|_1 - \|L_0\|_* - \lambda \|S_0 \|_1
 &\geq  \frac{1}{2} \left( \|P_{T^\perp} H\|_* + \lambda \|P_{\Omega^\perp} H\|_1 \right) - \lambda \langle P_{\Omega} D, H\rangle \\
@@ -425,7 +423,7 @@ the last term can be further bounded
 \end{align*}
 
 therefore
-
+%
 \[
 \|P_\Omega H\|_F \leq \|P_{\Omega^\perp} H\|_F + 2 \|P_{T^\perp} H\|_F
 \]
@@ -438,7 +436,6 @@ and we conclude by lower bounding the increase in the objective
 \end{align*}
 since $ \|P_{T^\perp} H\|_* =  \|P_{\Omega^\perp} H\|_1 = 0$ only if $P_{\Omega^\perp} H = P_{T^\perp} H = 0$, i.e. $H \in \Omega \cap T$, and, by assumption, $\Omega \cap T = \{ 0 \}$ ($\|P_\Omega P_T\| \leq \frac{1}{2} < 1$).
 This completes the proof.
-
 \end{proof}
 
 \iffalse
@@ -466,7 +463,8 @@ and the first condition of Lemma~\ref{lem:dual_cert} is satisfied. The remaining
 
 %-----------------------------------------------------------------------------
 \subsubsection{Bounding $\|P_\Omega P_T\|$}
- Under suitable conditions on the size of the support $\Omega_0$ of the sparse component, a bound can be derived on  $\|P_\Omega P_T\|$ \cite{Candes:2009uq}.
+ Under suitable conditions on the size of the support $\Omega_0$ of the sparse component, a bound can be derived on  $\|P_\Omega P_T\|$ \cite{Candes:2009uq}.\\
+ 
 \begin{theorem}
 Suppose $\Omega_0$ is sampled from the Bernoulli model with parameter $\rho_0$. Then with high probability,
 \[
@@ -482,7 +480,7 @@ As a consequence, $\|P_\Omega P_T\|$ can be bounded, and if $|\Omega|$ is not to
 We now present the proof that, under the assumptions of Robust PCA, then with high probability, we can find a dual certificate $(W,F,D)$ that satisfies the conditions~(\ref{eq:dual_cert_cond}) of Lemma~\ref{lem:dual_cert}. This will achieve the proof of the probabilistic guarantee of recovery of $(L_0, S_0)$.
 
 In order to construct a dual certificate $(W, F, D)$, we define $W = W^{L}+W^{S}$ where $W^{L}$ and $W^{S}$ are constructed to satisfy the following
-properties. First, $P_{\Omega}(W^{S}) = \lambda \sign(S_0)$. Then it also need to satisfies the following. With $\rho = \frac{m}{n^2}$,
+properties. First, $P_{\Omega}(W^{S}) = \lambda \sign(S_0)$. Then it also need to satisfies the following. With $\rho = \frac{m}{n^2}$,\\
 
 \begin{lemma} \label{wl} Let $S_0\sim Bern(\rho)$ iid for each entry with $\Omega$
 as its support set. Set $j_{0}=2\log n$. With the assumptions in
@@ -491,7 +489,7 @@ probability.
 \begin{enumerate}
 \item $||W^{L}||<\frac{1}{4}$
 \item $||P_{\Omega}(UV^{*}+W^{L})||_{F}<\frac{\lambda}{4}$
-\item $||P_{\Omega^{\bot}}(UV^{*}+W^{L})||_{\infty}<\frac{\lambda}{4}$
+\item $||P_{\Omega^{\bot}}(UV^{*}+W^{L})||_{\infty}<\frac{\lambda}{4}$\\
 \end{enumerate}
 \end{lemma}
 
@@ -504,7 +502,7 @@ $W^{S}$ satisfies the following with high probability.
 \end{enumerate}
 \end{lemma}
 
-After having these two lemmas, we are ready to show that they help to justify the probabilistic guarantee. We note that
+With these two lemmas, we are ready to show that they help to justify the probabilistic guarantee. We note that
 \begin{eqnarray*}
 UV^{*}+W & = & W^{L}+W^{S}+UV^{*}\\
  & = & \lambda \left[ P_{\Omega} \left( \frac{UV^{*}+W^{L}}{\lambda} \right) + sign(S_{0}) + P_{\Omega^{\bot}} \left( \frac{W^{L}+W^{S}+UV^{*}}{\lambda} \right) \right]
