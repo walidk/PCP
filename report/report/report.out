@@ -22,27 +22,28 @@
 \BOOKMARK [2][-]{subsection.1.5.1}{Motivation}{section.1.5}% 22
 \BOOKMARK [2][-]{subsection.1.5.2}{Equivalent formulation of Robust PCA with rank information}{section.1.5}% 23
 \BOOKMARK [2][-]{subsection.1.5.3}{Simplification using 1 heuristic}{section.1.5}% 24
-\BOOKMARK [2][-]{subsection.1.5.4}{Algorithms derivation}{section.1.5}% 25
-\BOOKMARK [2][-]{subsection.1.5.5}{Sensitivity to }{section.1.5}% 26
-\BOOKMARK [2][-]{subsection.1.5.6}{Simulation }{section.1.5}% 27
-\BOOKMARK [0][-]{chapter.2}{Algorithms}{}% 28
-\BOOKMARK [1][-]{section.2.1}{Overview}{chapter.2}% 29
-\BOOKMARK [1][-]{section.2.2}{Main algorithms for Robust PCA}{chapter.2}% 30
-\BOOKMARK [2][-]{subsection.2.2.1}{Interior Point Methods}{section.2.2}% 31
-\BOOKMARK [2][-]{subsection.2.2.2}{Iterative Thresholding Method}{section.2.2}% 32
-\BOOKMARK [2][-]{subsection.2.2.3}{Accelerated Proximal Gradient Method}{section.2.2}% 33
-\BOOKMARK [2][-]{subsection.2.2.4}{Gradient Ascent on the Dual}{section.2.2}% 34
-\BOOKMARK [2][-]{subsection.2.2.5}{Augmented Lagrangian Method}{section.2.2}% 35
-\BOOKMARK [1][-]{section.2.3}{Discussion of the Algorithms}{chapter.2}% 36
-\BOOKMARK [2][-]{subsection.2.3.1}{The Importance of the SVD}{section.2.3}% 37
-\BOOKMARK [2][-]{subsection.2.3.2}{Numerical Comparison of Robust PCA algorithms}{section.2.3}% 38
-\BOOKMARK [2][-]{subsection.2.3.3}{Possible Directions for Parallelization}{section.2.3}% 39
-\BOOKMARK [1][-]{section.2.4}{Outlook: Algorithms for Stable Principal Component Pursuit}{chapter.2}% 40
-\BOOKMARK [0][-]{chapter.3}{Applications}{}% 41
-\BOOKMARK [1][-]{section.3.1}{Overview}{chapter.3}% 42
-\BOOKMARK [1][-]{section.3.2}{Robust PCA Applications}{chapter.3}% 43
-\BOOKMARK [2][-]{subsection.3.2.1}{Background modeling from surveillance video}{section.3.2}% 44
-\BOOKMARK [2][-]{subsection.3.2.2}{Using Robust PCA in speech recognition}{section.3.2}% 45
-\BOOKMARK [2][-]{subsection.3.2.3}{Senate voting data analysis}{section.3.2}% 46
-\BOOKMARK [2][-]{subsection.3.2.4}{Pre-processing of Brain-Machine Interface neural spike data}{section.3.2}% 47
-\BOOKMARK [1][-]{section.3.3}{Discussion}{chapter.3}% 48
+\BOOKMARK [2][-]{subsection.1.5.4}{A block coordinate descent algorithm}{section.1.5}% 25
+\BOOKMARK [2][-]{subsection.1.5.5}{Sensitivity of the Robust PCA solution to }{section.1.5}% 26
+\BOOKMARK [2][-]{subsection.1.5.6}{Recovery performance}{section.1.5}% 27
+\BOOKMARK [2][-]{subsection.1.5.7}{1 PCA heuristics for higher ranks}{section.1.5}% 28
+\BOOKMARK [0][-]{chapter.2}{Algorithms}{}% 29
+\BOOKMARK [1][-]{section.2.1}{Overview}{chapter.2}% 30
+\BOOKMARK [1][-]{section.2.2}{Main algorithms for Robust PCA}{chapter.2}% 31
+\BOOKMARK [2][-]{subsection.2.2.1}{Interior Point Methods}{section.2.2}% 32
+\BOOKMARK [2][-]{subsection.2.2.2}{Iterative Thresholding Method}{section.2.2}% 33
+\BOOKMARK [2][-]{subsection.2.2.3}{Accelerated Proximal Gradient Method}{section.2.2}% 34
+\BOOKMARK [2][-]{subsection.2.2.4}{Gradient Ascent on the Dual}{section.2.2}% 35
+\BOOKMARK [2][-]{subsection.2.2.5}{Augmented Lagrangian Method}{section.2.2}% 36
+\BOOKMARK [1][-]{section.2.3}{Discussion of the Algorithms}{chapter.2}% 37
+\BOOKMARK [2][-]{subsection.2.3.1}{The Importance of the SVD}{section.2.3}% 38
+\BOOKMARK [2][-]{subsection.2.3.2}{Numerical Comparison of Robust PCA algorithms}{section.2.3}% 39
+\BOOKMARK [2][-]{subsection.2.3.3}{Possible Directions for Parallelization}{section.2.3}% 40
+\BOOKMARK [1][-]{section.2.4}{Outlook: Algorithms for Stable Principal Component Pursuit}{chapter.2}% 41
+\BOOKMARK [0][-]{chapter.3}{Applications}{}% 42
+\BOOKMARK [1][-]{section.3.1}{Overview}{chapter.3}% 43
+\BOOKMARK [1][-]{section.3.2}{Robust PCA Applications}{chapter.3}% 44
+\BOOKMARK [2][-]{subsection.3.2.1}{Background modeling from surveillance video}{section.3.2}% 45
+\BOOKMARK [2][-]{subsection.3.2.2}{Using Robust PCA in speech recognition}{section.3.2}% 46
+\BOOKMARK [2][-]{subsection.3.2.3}{Senate voting data analysis}{section.3.2}% 47
+\BOOKMARK [2][-]{subsection.3.2.4}{Pre-processing of Brain-Machine Interface neural spike data}{section.3.2}% 48
+\BOOKMARK [1][-]{section.3.3}{Discussion}{chapter.3}% 49

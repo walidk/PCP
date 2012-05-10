@@ -10,21 +10,20 @@
 % - RPCA with lambda = 1/sqrt(N)
 
 %% Constants ==============================================================
-N1 = 20;       % number of rows
-N2 = 10;        % number of columns
-K = 100;        % support of the sparse component
-rk = 3;         % rank of the low rank component
+N1 = 15;        % number of rows
+N2 = 15;        % number of columns
 sigma_max = 10; % largest sigular value
-S_max = 0.1;     % magnitude of the sparse component
-T = 1;         % number of test cases in each plot point
-toCompare = [true, false, true, true];
+S_max = 10;     % magnitude of the sparse component
+T = 20;         % number of test cases in each plot point
+toCompare = [true, true, true, true];
 %[M, L, slim_U, slim_V, sigma] = generate_noisy_low_rank(N, K, rk, sigma_max, S_max);
 %S = M - L;
 
 
 
 %% As a function of rank ==================================================
-rk_max = 5;
+K = 10; % support size of the sparse component
+rk_max = 10;
 rk_min = 1;
 MM = zeros(rk_max - rk_min + 1, T, N1, N2);
 LL = zeros(rk_max - rk_min + 1, T, N1, N2);
@@ -41,15 +40,17 @@ l1_pca_compare(MM, LL, rk_min:rk_max, 'rank(L)', toCompare)
 
 
 %% As a function of noise =================================================
-K_max = 5;
+rk = 1;
+K_max = 30;
 K_min = 0;
-MM = zeros(K_max - K_min + 1, T, N1, N2);
-LL = zeros(K_max - K_min + 1, T, N1, N2);
+K_step = 1;
+MM = zeros((K_max - K_min)/K_step + 1, T, N1, N2);
+LL = zeros((K_max - K_min)/K_step + 1, T, N1, N2);
 
-for K=K_min:K_max
+for K=K_min:K_step:K_max
     for t=1:T
-        [MM(K, t, :, :) LL(K, t, :, :)] = generate_noisy_low_rank(N1, N2, K, rk, sigma_max, S_max);
+        [MM((K-K_min)/K_step+1, t, :, :) LL((K-K_min)/K_step+1, t, :, :)] = generate_noisy_low_rank(N1, N2, K, rk, sigma_max, S_max);
     end
 end
 
-l1_pca_compare(MM, LL, K_min:K_max, 'supp(S)')
+l1_pca_compare(MM, LL, K_min:K_step:K_max, '|supp(S)|', toCompare)

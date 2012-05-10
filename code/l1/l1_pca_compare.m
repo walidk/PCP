@@ -21,13 +21,13 @@ N1 = size(MM, 3);               % size of the matrices
 N2 = size(MM, 4);               % size of the matrices
 lambda = 1/sqrt(max(N1, N2));   % regularization parameter in the RPCA problem
 
-
 %% Init ===================================================================
 if(nargin < 5)
     toCompare = [true, false, true, true];
 end
 nbToCompare = sum(toCompare);
 error = zeros(plotPoints, nbToCompare);
+perc_recovery = zeros(plotPoints, nbToCompare);
 rank_Lhat = zeros(plotPoints, nbToCompare);
 supp_Shat = zeros(plotPoints, nbToCompare);
 
@@ -47,12 +47,12 @@ for p=1:plotPoints
         if(toCompare(1))
             % l1 pca iter
             disp('l1 PCA iter ========================')
-            leg{m} = 'l_1 PCA iter';
             Lhat = l1_pca_higher_rank(M, 1, rk);
             Shat = M - Lhat;
             
             error(p, m) = error(p, m) + sum(sum(abs(L - Lhat)));
-            rank_Lhat(p, m) = rank_Lhat(p, m) + rank(Lhat);
+            perc_recovery(p, m) = perc_recovery(p, m) + (sum(sum(abs(L - Lhat)))/max(N1,N2) < z_thresh);
+            rank_Lhat(p, m) = rank_Lhat(p, m) + rank(Lhat, z_thresh);
             supp_Shat(p, m) = supp_Shat(p, m) + supp(Shat, z_thresh);
             m = m + 1;
         end
@@ -60,12 +60,12 @@ for p=1:plotPoints
         if(toCompare(2))
             % l1 pca iter constrained
             disp('l1 PCA iter const ===================')
-            leg{m} = 'l_1 PCA iter const';
             Lhat = l1_pca_higher_rank(M, 0, rk);
             Shat = M - Lhat;
             
             error(p, m) = error(p, m) + sum(sum(abs(L - Lhat)));
-            rank_Lhat(p, m) = rank_Lhat(p, m) + rank(Lhat);
+            perc_recovery(p, m) = perc_recovery(p, m) + (sum(sum(abs(L - Lhat)))/max(N1,N2) < z_thresh);
+            rank_Lhat(p, m) = rank_Lhat(p, m) + rank(Lhat, z_thresh);
             supp_Shat(p, m) = supp_Shat(p, m) + supp(Shat, z_thresh);
             m = m + 1;
         end
@@ -73,12 +73,12 @@ for p=1:plotPoints
         if(toCompare(3))
             % l1 pca block
             disp('l1 PCA block =======================')
-            leg{m} = 'l_1 PCA block';
             Lhat = l1_pca_higher_rank_block(M, rk);
             Shat = M - Lhat;
 
             error(p, m) = error(p, m) + sum(sum(abs(L - Lhat)));
-            rank_Lhat(p, m) = rank_Lhat(p, m) + rank(Lhat);
+            perc_recovery(p, m) = perc_recovery(p, m) + (sum(sum(abs(L - Lhat)))/max(N1,N2) < z_thresh);
+            rank_Lhat(p, m) = rank_Lhat(p, m) + rank(Lhat, z_thresh);
             supp_Shat(p, m) = supp_Shat(p, m) + supp(Shat, z_thresh);
             m = m + 1;
         end
@@ -86,7 +86,6 @@ for p=1:plotPoints
         if(toCompare(4))
             % RPCA
             disp('RPCA ===============================')
-            leg{m} = 'RPCA';
             cvx_begin
                 variable Lhat(N1, N2)
                 minimize( norm_nuc(Lhat) + lambda * sum(sum(abs(M - Lhat))) )
@@ -94,7 +93,8 @@ for p=1:plotPoints
             Shat = M - Lhat;
 
             error(p, m) = error(p, m) + sum(sum(abs(L - Lhat)));
-            rank_Lhat(p, m) = rank_Lhat(p, m) + rank(Lhat);
+            perc_recovery(p, m) = perc_recovery(p, m) + (sum(sum(abs(L - Lhat)))/max(N1,N2) < z_thresh);
+            rank_Lhat(p, m) = rank_Lhat(p, m) + rank(Lhat, z_thresh);
             supp_Shat(p, m) = supp_Shat(p, m) + supp(Shat, z_thresh);
         end
     end
@@ -102,6 +102,7 @@ end
 
 % normalize
 error = error/T;
+perc_recovery = perc_recovery/T;
 rank_Lhat = rank_Lhat/T;
 supp_Shat = supp_Shat/T;
 
@@ -112,16 +113,15 @@ figure(1)
 leg = {};
 m = 1;
 if(toCompare(1))
-    leg{m} = 'l_1 PCA iter';
+    leg{m} = 'l_1 PCA';
     m = m + 1;
 end
-
 if(toCompare(2))
-    leg{m} = 'l_1 PCA iter const';
+    leg{m} = 'l_1 PCA an constr';
     m = m + 1;
 end
 if(toCompare(3))
-    leg{m} = 'l_1 PCA block';
+    leg{m} = 'l_1 PCA synth';
     m = m + 1;
 end
 if(toCompare(4))
@@ -129,19 +129,25 @@ if(toCompare(4))
 end
 
 
-subplot(1,3,1)
+subplot(2,2,1)
 plot(x, error)
 legend(leg)
 xlabel(x_label)
 ylabel('||L - Lhat||')
 
-subplot(1,3,2)
+subplot(2,2,2)
+plot(x, perc_recovery)
+legend(leg)
+xlabel(x_label)
+ylabel('exact recovery %')
+
+subplot(2,2,3)
 plot(x, rank_Lhat)
 legend(leg)
 xlabel(x_label)
 ylabel('rank(Lhat)')
 
-subplot(1,3,3)
+subplot(2,2,4)
 plot(x, supp_Shat)
 legend(leg)
 xlabel(x_label)
@@ -150,5 +156,5 @@ ylabel('supp(Shat)')
 
 % save figure
 filename = ['out/', num2str(N1), 'x', num2str(N2), '_', x_label];
-%savefig(filename, 'pdf');
+savefig(filename, 'pdf');
 end

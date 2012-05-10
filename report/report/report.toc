@@ -29,46 +29,57 @@
 \contentsline {subsubsection}{Introduction}{29}{section*.13}
 \contentsline {subsubsection}{Main ideas and contributions}{29}{section*.14}
 \contentsline {subsubsection}{Discussion and applications}{29}{section*.15}
+\contentsline {subsubsection}{Application to image processing}{29}{section*.16}
 \contentsline {section}{\numberline {1.5}Robust PCA with known rank: a block coordinate descent approach}{30}{section.1.5}
 \contentsline {subsection}{\numberline {1.5.1}Motivation}{30}{subsection.1.5.1}
 \contentsline {subsection}{\numberline {1.5.2}Equivalent formulation of Robust PCA with rank information}{30}{subsection.1.5.2}
 \contentsline {subsection}{\numberline {1.5.3}Simplification using $\ell _{1}$ heuristic}{31}{subsection.1.5.3}
-\contentsline {subsubsection}{Introduction}{31}{section*.16}
-\contentsline {subsubsection}{Performance guarantee for the $\ell _1$ heuristic}{31}{section*.17}
-\contentsline {subsection}{\numberline {1.5.4}Algorithms derivation}{33}{subsection.1.5.4}
-\contentsline {subsection}{\numberline {1.5.5}Sensitivity to $\lambda $}{34}{subsection.1.5.5}
-\contentsline {subsection}{\numberline {1.5.6}Simulation }{35}{subsection.1.5.6}
-\contentsline {subsubsection}{Comparison between Robust PCA and $L_{1}$ heuristics}{35}{section*.20}
-\contentsline {subsubsection}{$\ell _{1}$ heuristic in higher dimension}{36}{section*.22}
-\contentsline {chapter}{\numberline {2}Algorithms}{38}{chapter.2}
-\contentsline {section}{\numberline {2.1}Overview}{38}{section.2.1}
-\contentsline {section}{\numberline {2.2}Main algorithms for Robust PCA}{38}{section.2.2}
-\contentsline {subsection}{\numberline {2.2.1}Interior Point Methods}{38}{subsection.2.2.1}
-\contentsline {subsubsection}{Formulation of the Dual problem of Robust PCA as an SDP}{39}{section*.25}
-\contentsline {subsubsection}{Using Interior Point Methods to Solve the Dual}{41}{section*.26}
-\contentsline {subsection}{\numberline {2.2.2}Iterative Thresholding Method}{42}{subsection.2.2.2}
-\contentsline {subsection}{\numberline {2.2.3}Accelerated Proximal Gradient Method}{44}{subsection.2.2.3}
-\contentsline {subsubsection}{A General Form of the Accelerated Proximal Gradient Method}{45}{section*.29}
-\contentsline {subsubsection}{Accelerated Proximal Gradient Algorithm Applied to Robust PCA}{46}{section*.31}
-\contentsline {subsection}{\numberline {2.2.4}Gradient Ascent on the Dual}{48}{subsection.2.2.4}
-\contentsline {subsection}{\numberline {2.2.5}Augmented Lagrangian Method}{50}{subsection.2.2.5}
-\contentsline {subsubsection}{The General Case}{50}{section*.34}
-\contentsline {subsubsection}{Alternating Directions ALM for Robust PCA}{50}{section*.36}
-\contentsline {subsubsection}{Inexact ALM for Robust PCA}{52}{section*.38}
-\contentsline {section}{\numberline {2.3}Discussion of the Algorithms}{53}{section.2.3}
-\contentsline {subsection}{\numberline {2.3.1}The Importance of the SVD}{53}{subsection.2.3.1}
-\contentsline {subsubsection}{Comparison of different SVD algorithms}{53}{section*.40}
-\contentsline {subsubsection}{Partial SVD methods}{54}{section*.42}
-\contentsline {subsubsection}{Warm-start methods for SVD}{55}{section*.44}
-\contentsline {subsection}{\numberline {2.3.2}Numerical Comparison of Robust PCA algorithms}{55}{subsection.2.3.2}
-\contentsline {subsubsection}{Numerical Comparison of ALM-based algorithms}{56}{section*.47}
-\contentsline {subsection}{\numberline {2.3.3}Possible Directions for Parallelization}{58}{subsection.2.3.3}
-\contentsline {section}{\numberline {2.4}Outlook: Algorithms for Stable Principal Component Pursuit}{59}{section.2.4}
-\contentsline {chapter}{\numberline {3}Applications}{62}{chapter.3}
-\contentsline {section}{\numberline {3.1}Overview}{62}{section.3.1}
-\contentsline {section}{\numberline {3.2}Robust PCA Applications}{62}{section.3.2}
-\contentsline {subsection}{\numberline {3.2.1}Background modeling from surveillance video}{62}{subsection.3.2.1}
-\contentsline {subsection}{\numberline {3.2.2}Using Robust PCA in speech recognition}{65}{subsection.3.2.2}
-\contentsline {subsection}{\numberline {3.2.3}Senate voting data analysis}{66}{subsection.3.2.3}
-\contentsline {subsection}{\numberline {3.2.4}Pre-processing of Brain-Machine Interface neural spike data}{67}{subsection.3.2.4}
-\contentsline {section}{\numberline {3.3}Discussion}{69}{section.3.3}
+\contentsline {subsubsection}{Introduction}{31}{section*.17}
+\contentsline {subsubsection}{Performance guarantee for the $\ell _1$ heuristic}{31}{section*.18}
+\contentsline {subsection}{\numberline {1.5.4}A block coordinate descent algorithm}{33}{subsection.1.5.4}
+\contentsline {subsubsection}{$q$-step}{33}{section*.19}
+\contentsline {subsubsection}{Median problem}{34}{section*.20}
+\contentsline {subsubsection}{Weighted median problem}{34}{section*.21}
+\contentsline {subsubsection}{$p$-step}{35}{section*.23}
+\contentsline {subsubsection}{Algorithm for the constrained problem}{36}{section*.25}
+\contentsline {subsubsection}{Algorithm for the unconstrained projected problem}{37}{section*.28}
+\contentsline {subsubsection}{convergence in the rank one case}{38}{section*.30}
+\contentsline {subsection}{\numberline {1.5.5}Sensitivity of the Robust PCA solution to $\lambda $}{38}{subsection.1.5.5}
+\contentsline {subsection}{\numberline {1.5.6}Recovery performance}{39}{subsection.1.5.6}
+\contentsline {subsubsection}{Comparison between Robust PCA and $\ell _{1}$ PCA heuristics}{39}{section*.31}
+\contentsline {subsection}{\numberline {1.5.7}$\ell _{1}$ PCA heuristics for higher ranks}{41}{subsection.1.5.7}
+\contentsline {subsubsection}{Analysis $\ell _1$ PCA}{41}{section*.34}
+\contentsline {subsubsection}{Synthesis $\ell _1$ PCA}{42}{section*.35}
+\contentsline {subsubsection}{Numerical results}{43}{section*.36}
+\contentsline {chapter}{\numberline {2}Algorithms}{46}{chapter.2}
+\contentsline {section}{\numberline {2.1}Overview}{46}{section.2.1}
+\contentsline {section}{\numberline {2.2}Main algorithms for Robust PCA}{46}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}Interior Point Methods}{46}{subsection.2.2.1}
+\contentsline {subsubsection}{Formulation of the Dual problem of Robust PCA as an SDP}{47}{section*.40}
+\contentsline {subsubsection}{Using Interior Point Methods to Solve the Dual}{49}{section*.41}
+\contentsline {subsection}{\numberline {2.2.2}Iterative Thresholding Method}{50}{subsection.2.2.2}
+\contentsline {subsection}{\numberline {2.2.3}Accelerated Proximal Gradient Method}{52}{subsection.2.2.3}
+\contentsline {subsubsection}{A General Form of the Accelerated Proximal Gradient Method}{53}{section*.44}
+\contentsline {subsubsection}{Accelerated Proximal Gradient Algorithm Applied to Robust PCA}{54}{section*.46}
+\contentsline {subsection}{\numberline {2.2.4}Gradient Ascent on the Dual}{56}{subsection.2.2.4}
+\contentsline {subsection}{\numberline {2.2.5}Augmented Lagrangian Method}{58}{subsection.2.2.5}
+\contentsline {subsubsection}{The General Case}{58}{section*.49}
+\contentsline {subsubsection}{Alternating Directions ALM for Robust PCA}{58}{section*.51}
+\contentsline {subsubsection}{Inexact ALM for Robust PCA}{60}{section*.53}
+\contentsline {section}{\numberline {2.3}Discussion of the Algorithms}{61}{section.2.3}
+\contentsline {subsection}{\numberline {2.3.1}The Importance of the SVD}{61}{subsection.2.3.1}
+\contentsline {subsubsection}{Comparison of different SVD algorithms}{61}{section*.55}
+\contentsline {subsubsection}{Partial SVD methods}{62}{section*.57}
+\contentsline {subsubsection}{Warm-start methods for SVD}{63}{section*.59}
+\contentsline {subsection}{\numberline {2.3.2}Numerical Comparison of Robust PCA algorithms}{63}{subsection.2.3.2}
+\contentsline {subsubsection}{Numerical Comparison of ALM-based algorithms}{64}{section*.62}
+\contentsline {subsection}{\numberline {2.3.3}Possible Directions for Parallelization}{66}{subsection.2.3.3}
+\contentsline {section}{\numberline {2.4}Outlook: Algorithms for Stable Principal Component Pursuit}{67}{section.2.4}
+\contentsline {chapter}{\numberline {3}Applications}{70}{chapter.3}
+\contentsline {section}{\numberline {3.1}Overview}{70}{section.3.1}
+\contentsline {section}{\numberline {3.2}Robust PCA Applications}{70}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Background modeling from surveillance video}{70}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}Using Robust PCA in speech recognition}{73}{subsection.3.2.2}
+\contentsline {subsection}{\numberline {3.2.3}Senate voting data analysis}{74}{subsection.3.2.3}
+\contentsline {subsection}{\numberline {3.2.4}Pre-processing of Brain-Machine Interface neural spike data}{75}{subsection.3.2.4}
+\contentsline {section}{\numberline {3.3}Discussion}{77}{section.3.3}
