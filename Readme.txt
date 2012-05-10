@@ -80,6 +80,9 @@ Description: codes for generating the simulations, results and figures in our pr
 |   |---File name : Movie2012-04-19at16.49.mov
 |   |   Description : movie we used for running video_test.m
 |   |   
+|   |---File name : campus_combined_chop.avi
+|   |   Description : result video with background and foreground separation
+|   |   
 |   |---Files name : FAK_18A_*.ascii
 |   |   Description : speech feature data for running speech_test.m
 |
