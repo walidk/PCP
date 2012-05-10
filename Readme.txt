@@ -1,4 +1,4 @@
-Name: Maximilian Balandat(218627240) Walid Krichene(23265217) Chi Pang Lam(21421819) Ka Kit Lam(23264500)
+Name: Maximilian Balandat(21867240) Walid Krichene(23265217) Chi Pang Lam(21421819) Ka Kit Lam(23264500)
 
 Topic: Robust Principal Component Analysis
 
