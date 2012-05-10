@@ -252,18 +252,18 @@ Similar to the prior study of Robust PCA, the authors of~\cite{Hsu:2011ys} study
 of a weighted combination of $\ell_{1}$ and nuclear norm . However, they also introduce some tolerance on the perturbation in the constraints. In particular, given the observed matrix~$M$ (a perturbed observation of the original $(L_{0},S_{0})$ pairs), they analyze the following two optimization problems: % With arguments as $(L,S)$,
 %
 \begin{eqnarray}
-\min_{(L,S)} & ||L||_{*}+\lambda||S||_{1}\nonumber \\
-s.t. & ||L+S-M||_{1}\le\epsilon_{1}\\
- & ||L+S-M||_{*}\le\epsilon_{*}\nonumber
+\min_{(L,S)} & \|L\|_{*}+\lambda\|S\|_{1}\nonumber \\
+s.t. & \|L+S-M\|_{1}\le\epsilon_{1}\\
+ & \|L+S-M\|_{*}\le\epsilon_{*}\nonumber
 \end{eqnarray}
 %
 and the regularized version
 \begin{eqnarray}
-\min_{(L,S)} & ||L||_{*}+\lambda||S||_{1}+\frac{1}{2\mu}||L+S-M||_{F}
+\min_{(L,S)} & \|L\|_{*}+\lambda\|S\|_{1}+\frac{1}{2\mu}\|L+S-M\|_{F}
 \end{eqnarray}
 
 
-The authors provide sufficient conditions on the pair $(L_{0},S_{0})$ that allow accurate recovery in the sense that $||L_{0}-\hat{L}||_{\infty},||S_{0}-\hat{S}||_{\infty}$ is small. Moreover, they show that if the observed matrix~$M$ is perturbed from $L_{0}+S_{0}$ by a small amount (i.e. $\epsilon$), the optimizer $(\hat{L},\hat{S})$ will still be $\epsilon$-close to the original $(L_{0},S_{0})$ pair. As in Robust PCA, the key ideas of the analysis of the performance guarantee is based on the properties of the constructed dual certificate.
+The authors provide sufficient conditions on the pair $(L_{0},S_{0})$ that allow accurate recovery in the sense that $\|L_{0}-\hat{L}\|_{\infty},\|S_{0}-\hat{S}\|_{\infty}$ is small. Moreover, they show that if the observed matrix~$M$ is perturbed from $L_{0}+S_{0}$ by a small amount (i.e. $\epsilon$), the optimizer $(\hat{L},\hat{S})$ will still be $\epsilon$-close to the original $(L_{0},S_{0})$ pair. As in Robust PCA, the key ideas of the analysis of the performance guarantee is based on the properties of the constructed dual certificate.
 
 \subsubsection{Discussion and applications}
 The work~\cite{Hsu:2011ys} parallels the work of~\cite{Candes:2011fk} but gives a weaker guarantee in a deterministic setting. %Although not pointed out by the authors, 
@@ -274,7 +274,44 @@ For example, in many analyses of large data sets (say for example consumer ranki
 
 
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-\subsubsection{Application to image processing}
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\subsection{Structured Sparsity}
+In~\cite{Bach:2011kx}, the authors present an overview of techniques that extend the idea of $\ell_1$ regularization, to induce structured sparsity. The idea is to use structured-sparsity-inducing norms to encourage some sparsity patterns over others, given some a priori information on the expected or desired sparsity pattern of the solution. For instance, in feature selection problems, one may have groups of features that are highly correlated, and would like features that belong to the same group to be either all in the support, or all outside of the support. Another example is shadow elimination from images, where one expects shadows to be connected and to have spacial structure.
 
 
+\subsubsection{Structured-sparsity-inducing norms}
+Consider in particular the regularized learning problem
+\begin{equation}
+\label{eq:struct_spars}
+\min_{w \in \Rbb^p} f(w) = \min_{w \in \Rbb^p} \frac{1}{n} \sum_{i = 1}^n L(y^{(i)} + w^Tx^{(i)}) + \lambda \Omega(w)
+\end{equation}
+where $\ell$ is a differentiable loss function, $(x^{(i)}, y^{(i)})$ is the training data, $w$ is the regression vector, and $\Omega$ is a norm. We are interested in norms that not only induce sparsity, but also have a structure in their support, for example by having groups of variables that are selected or ignored simultaneously. A natural idea is to partition the variables into such groups, which leads to sparsity with disjoint groups of variables
+
+\paragraph{Disjoint groups of variables an group Lasso}
+Assume the feature set is partitioned into a collection $\mathcal{G}$. Then the structure sparsity norm $\Omega$ is defined as
+\[
+\Omega(w)  = \sum_{g \in \mathcal{G}} \|w_g\|_q
+\]
+
+where $q \in (1, \infty]$, i.e. $\|.\|_q$ is any norm (usually $\|.\|_2$ or $\|.\|_\infty$). In the context of least square regression, this regularization is known as the group Lasso. As expected, experimental results reported in~\cite{Bach:2011kx} show that variables in the same group are either all set to zero (all outside the support), or all selected (all in the support).
+
+\paragraph{Overlapping groups of variables}
+Using overlapping groups (when elements of $\mathcal{G}$ are not necessarily disjoint) allows for more flexibility and more complex structures. For example, in image processing (shadow removal, background extraction) where pixels are arranged on a grid, using groups formed by one pixel and his neighbors yields good results in background extraction~\cite{Cevher_sparsesignal}.
+
+
+\paragraph{Proximal method}
+Proximal methods take advantage of the form~\ref{eq:struct_spars} as a sum of two convex terms, a smooth term and a term for which computing the proximal gradient is cheap. Proximal methods are iterative procedure, where at each iteration, the function $f$ is linearized around the current estimate $w$, and update the estimate by the unique solution of the optimization problem
+\[
+w_+ = \arg \min_{w \in \Rbb^p} f(\hat{w}) + (w - \hat{w})^T\nabla f(\hat{w}) + \lambda \Omega(w) + \frac{L}{2}\|w - \hat{w}\|_2^2
+\]
+
+where the parameter $L$ is an upper bound on the Lipschitz constant of $\nabla f$. This can be rewritten as
+\[
+w_+ = \arg \min_{w \in \Rbb^p} \frac{1}{2} \left\|w - \left( \hat{w} - \frac{1}{L} \nabla f(\hat{w}) \right) \right\|_2^2 + \frac{\lambda}{L} \Omega(w)
+\]
+which is an instance of the proximal operator
+\[
+\text{Prox}_{\lambda \Omega} : u \mapsto \underset{v \in \Rbb^p }{\arg \min} \frac{1}{2}\|u - v\|_2^2 + \lambda \Omega(v)
+\]
+and it turns out that the proximal operator can be computed exactly for many structured-sparsity-inducing norms. Note in particular that when $\Omega$ is the $\ell_1$ norm, the proximal operator is the soft thresholding operator.
 
