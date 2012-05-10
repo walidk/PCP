@@ -1,4 +1,4 @@
-Name: Maximilian Balandat()	Walid Krichene() Chi Pang Lam()	Ka Kit Lam()
+Name: Maximilian Balandat(218627240) Walid Krichene() Chi Pang Lam(21421819) Ka Kit Lam()
 
 Topic: Robust Principal Component Analysis
 
@@ -114,6 +114,73 @@ Description: codes for generating the simulations, results and figures in our pr
 |   |---File name: compareinhigherdimension.m
 |   |   Description:  Compare the Robust PCA and $L_1$ Heuristic in recovering rank 2 matrix from sparse noise
 |   |   Use: roduce Figure 1.4 in Sec.  1.5.6
+|
+|
+|---Folder name: l1
+|   Description : Quick overview of the problem. For details see section 1.5.3 (l1 heurstic) in the report.
+|   |             The l1 heuristic is to solve the problem
+|   |
+|   |             minimize \| M - L\|_1
+|   |             subject to rank(L) \leq r
+|   |
+|   |             where M = L_0 + S_0 is a superposition of a low rank matrix L_0 (known to have rank rank(L_0) \leq r) and S_0 is a sparse noise matrix
+|   |
+|   |---File name: test_l1_pca.m
+|   |   Description: Main file for testing
+|   |                Running test_l1_pca.m will compare:
+|   |                - sequencial l_1 PCA, referred to as Analysis view of PCA (finds one direction at a time, then projects on the complement and solves for the next component). Two flavors are tested:
+|   |                - constrained: at each iteration, solve a constrained problem (norm(p, inf) = 1)
+|   |                - projected: at each iteration, solve an unconstrained problem then project the solutions (p,q)
+|   |                - Batch l_1 PCA, referred to as Synthesis view of PCA (solves for all components simultaneously, using a block coordinate descent algorithm)
+|   |                - RPCA with lambda = 1/sqrt(N) (no information on rank is used in this case)
+|   |                
+|   |                executing the file will run 
+|   |                - a comparison using 100 x 10 matrices, with increasing rank (and fixed size of the support, K = 20)
+|   |                - a comparison using 100 x 10 matrices, with increasing size of the support of the noise matrix (and fixed rank, rk = 1)
+|   |                The fixed parameters can be changed
+|   |                
+|   |                each comparison solves the problem using the different methods, and plots:
+|   |                - the recovery error: sum(sum(abs(L - L_hat, 1)))
+|   |                - the rank of the recovered low rank component: rank(L_hat)
+|   |                - the support size of the recovered sparse component: supp(M - L_hat)
+|   |                
+|   |                each plot point represents an average of T simulations, where T is specified in the test_l1_pca.m file.
+|   |
+|   |---File name: l1_pca.m
+|   |   Description: Computes a rank one approximation of Z, using block-coordinate descent
+|   |                [p, q] = l1_pca(Z, projection_method, [q0])
+|   |                Input:
+|   |                q0: optional argument: initial guess for q
+|   |                projection_method:
+|   |                  0: at each iteration, solves the constrained problem, with ||p|| = 1
+|   |                  1: at each iteration, solves an unconstrained problem then normalizes p and q (infinity norm)
+|   |                Output:
+|   |                If Z is N x M
+|   |                L = p*q' is N x M
+|   |                p is N x 1 and normalized (infinity norm)
+|   |                q is M x 1
+|   |                
+|   |---File name: l1_pca_higher_rank.m
+|   |   Description: Computes a rank rk approximation of Z, using the sequential approach (analysis view of PCA). The approximate solution is computed sequentially as a sum of rank-1 approximations
+|   |                [L, P, Q] = l1_pca_higher_rank(Z, projection_method, rk, [q0])
+|   |                input:
+|   |                -optional argument q0 specifies the initial guess for the singular vector q
+|   |                -projection_method:
+|   |                  0: at each iteration, solves the constrained problem, with ||p|| = 1
+|   |                  1: at each iteration, solves an unconstrained problem then normalizes p and q (infinity norm)
+|   |                output:
+|   |                -L is the approximation, L = P*Q'
+|   |
+|   |---File name: l1_pca_higher_rank_block.m
+|   |   Description: Computes a rank rk approximation of Z, using the batch approach (synthesis view of PCA). This will solve for vectors p and q simultaneously, using block coordinate descent. Slower convergence for higher rank.
+|   |                [L, P, Q] = higher_rank_l1_pca_block(Z, rk, [q0])
+|   |                -optional argument q0 specifies the initial guess for the singular vector q
+|   |                -projection_method:
+|   |                  0: at each iteration, solves the constrained problem, with ||p|| = 1
+|   |                  1: at each iteration, solves an unconstrained problem then normalizes p and q (infinity norm)
+|   |                -output:
+|   |                  L_hat is the approximation, L_hat = P*Q'
+
 
 
 Folder name: common
