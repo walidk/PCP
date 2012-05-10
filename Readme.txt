@@ -91,36 +91,35 @@ Description: codes for generating the simulations, results and figures in our pr
 |   Description : Contains matlab codes for applications
 |   |
 |   |---File name: comparediff.m
-|   |   Description: Compare the Robust PCA and $L_1$ Heuristic in recovering rank 1 matrix from sparse noise
-|   |   Use: Produce Figure 1.2 in Sec.  1.5.6
+|   |   Description: Compare the Robust PCA and $L_1$ PCA Heuristic in recovering rank 1 matrix from sparse noise
+|   |   Use: Produce Figure 1.3 in Sec. 1.5.6
 |   |   
 |   |---File name: robustpcarankone.m
-|   |   Description: Recover rank 1 matrix using power iteration approach by Robust PCA 
-|   |   Use: As a subroutine to produce Figure 1.2 in Sec.  1.5.6
+|   |   Description: Recover rank 1 matrix using block coordinate descent approach for Robust PCA (using rank information)
+|   |   Use: As a subroutine to produce Figure 1.3 in Sec. 1.5.6
 |   |   
 |   |---File name: robustpcarankonev2.m
-|   |   Description: Recover rank 1 matrix using power iteration approach by $L_1$ heuristic 
-|   |   Use: As a subroutine to produce Figure 1.2 in Sec.  1.5.6
+|   |   Description: Recover rank 1 matrix using $L_1$ PCA heuristic 
+|   |   Use: As a subroutine to produce Figure 1.3 in Sec. 1.5.6
 |   |   
 |   |---File name: wmh.m
 |   |   Description: Compute the weighted median
-|   |   Use: As a subroutine to produce Figure 1.2 in Sec.  1.5.6
+|   |   Use: As a subroutine to produce Figure 1.3 in Sec. 1.5.6
 |   |   
 |   |---File name: higherdimension.m
-|   |   Description: Study the performance of $L_1$ heuristic 
-|   |   Use: Produce Figure 1.3 in Sec.  1.5.6
+|   |   Description: Study the performance of $L_1$ PCA heuristic 
+|   |   Use: Produce Figure 1.5 in Sec. 1.5.7
 |   |   
 |   |---File name: robustpcarankonev3.m
-|   |   Description: Recover rank - r matrix using power iteration method by $L_1$ heuristic
-|   |   Use: As a subroutine to produce Figure 1.3 and 1.4 in Sec. 1.5.6 
+|   |   Description: Recover rank - r matrix using $L_1$ PCA heuristic
 |   |   
 |   |---File name: compareinhigherdimension.m
 |   |   Description:  Compare the Robust PCA and $L_1$ Heuristic in recovering rank 2 matrix from sparse noise
-|   |   Use: roduce Figure 1.4 in Sec.  1.5.6
 |
 |
 |---Folder name: l1
-|   Description : Quick overview of the problem. For details see section 1.5.3 (l1 heurstic) in the report.
+|   Description : Additional code for l_1 PCA heuristic
+|   |             Quick overview of the problem. For details see section 1.5.3 (l1 PCA heurstic) in the report.
 |   |             The l1 heuristic is to solve the problem
 |   |
 |   |             minimize \| M - L\|_1
@@ -129,7 +128,7 @@ Description: codes for generating the simulations, results and figures in our pr
 |   |             where M = L_0 + S_0 is a superposition of a low rank matrix L_0 (known to have rank rank(L_0) \leq r) and S_0 is a sparse noise matrix
 |   |
 |   |---File name: test_l1_pca.m
-|   |   Description: Main file for testing
+|   |   Description: Main file for testing (used to generate Figure 1.2, 1.4, 1.6 and 1.7)
 |   |                Running test_l1_pca.m will compare:
 |   |                - sequencial l_1 PCA, referred to as Analysis view of PCA (finds one direction at a time, then projects on the complement and solves for the next component). Two flavors are tested:
 |   |                - constrained: at each iteration, solve a constrained problem (norm(p, inf) = 1)

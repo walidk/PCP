@@ -93,7 +93,7 @@ Suppose not, then
 \end{eqnarray*}
 which contradicts the assumption that
 \begin{eqnarray*}
-\frac{2}{\epsilon}\|S\|_{1} & > & \|\sum_{i=1}^{r}p_{i}q_{i}^{T}\|
+\frac{2}{\epsilon}\|S\|_{1} & > & \|\sum_{i=1}^{r}p_{i}q_{i}^{T}\|_1
 \end{eqnarray*}
 \end{proof}
 %This gives a contraditcion, which is,
@@ -302,14 +302,15 @@ The Constrained rank one $\ell_1$ heuristic is given in Algorithm~\ref{alg:l1_he
 \end{algorithm}
 
 The complexity of each iteration is $O(nm\log (nm))$ if the weighted median is computed by sorting the vectors, or $O(nm)$ if the quick select algorithm is used instead. 
-It is important to point out that while the~$\ell_1$ heuristic enjoys recovery guarantees, we have no guarantee that this iterative algorithm will converge to an optimizer of the problem. However, we observe that this heuristic performs well in practice when the low rank component $L$ is rank one. We also observe that solving an unconstrained version of the problem, where vectors $p$ and $q$ are normalized at each iteration, works better in practice. An example simulation is shown in Figure~\ref{fig:l1pca_const_vs_proj}, where a simulation was run using randomly generated rank-one $10 \times 10$ matrices, corrupted with random noise matrices with increasing support. For each support size, $20$ simulations are run. The plots show the average results.
+It is important to point out that while the~$\ell_1$ heuristic enjoys recovery guarantees, we have no guarantee that this iterative algorithm will converge to an optimizer of the problem. However, we observe that this heuristic performs well in practice when the low rank component $L$ is rank one. We also observe that solving an unconstrained version of the problem, where vectors $p$ and $q$ are normalized at each iteration, works better in practice. An example simulation is shown in Figure~\ref{fig:pca_const_vs_proj}, where a simulation was run using randomly generated rank-one $10 \times 10$ matrices, corrupted with random noise matrices with increasing support. For each support size, $20$ simulations are run. The plots show the average results.
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=\textwidth]{../figures/l1pca_proj_vs_const.pdf}
-\label{fig:l1pca_const_vs_proj}
 \caption{Performance of the constrained $\ell_1$ PCA heuristic (green) Vs. the projected $\ell_1$ PCA heuristic (blue), for increasing size of the support of the corruption matrix $S$. The projected method performs considerably better (higher exact recovery rate, lower average $\ell_1$ error, support size of the recovered $\hat{S}$ closer to the original support).}
+\label{fig:pca_const_vs_proj}
 \end{figure}
+
 
 \newpage
 The unconstrained version is detailed next.
@@ -423,7 +424,7 @@ J_{3}
 &= &&\min_{L, S}  && \|L\|_{*} + \lambda \|S\|_{1} \notag \\
 &&&\text{s.t.} && M=L+S, \ \text{rank}(L) = 1 \notag \\
 & = && \min_{\mu, p, q} && |\mu| + \lambda \|M - \mu p q^T\|_{1} \label{eq:rank_form_rk1} \\
-&&& \text{s.t.} && \|p\|_2 = 1, \ \|q\| = 1, \ \mu \ge 0 \notag
+&&& \text{s.t.} && \|p\|_2 = 1, \ \|q\|_2 = 1, \ \mu \ge 0 \notag
 \end{alignat}
 
 Therefore the rank one Robust PCA problem can be solved using a modified weighted median problem.
@@ -431,22 +432,22 @@ Therefore the rank one Robust PCA problem can be solved using a modified weighte
 
 
 
-In the simulation, we randomly generated the entries of $p$ and $q$ as $N(0,1)$ iid. We randomly generate sparse matrix with a uniformly distributed sparse support. Each sparse entry is randomly distributed $N(0,1)$. We then plot the graph of different degree of sparsity and the corresponding effectiveness of the optimization heuristic in extracting the original $pq^{T}$. We run the experiment 20 times and show the average. A recovery is considered to be correct if the relative error of the low rank matrix and the recovered low rank matrix is less than $10^{-3}$. We remark that we only use 20 number of iteration in the power iteration method where one iteration means updating all the entries of p and q once (i.e. outer iteration). The results is shown in FIgure~\ref{fig:l1pca_vs_rankone_rpca}.
+In the simulation, we randomly generated the entries of $p$ and $q$ as $N(0,1)$ iid. We randomly generate sparse matrix with a uniformly distributed sparse support. Each sparse entry is randomly distributed $N(0,1)$. We then plot the graph of different degree of sparsity and the corresponding effectiveness of the optimization heuristic in extracting the original $pq^{T}$. We run the experiment 20 times and show the average. A recovery is considered to be correct if the relative error of the low rank matrix and the recovered low rank matrix is less than $10^{-3}$. We remark that we only use 20 number of iteration in the power iteration method where one iteration means updating all the entries of p and q once (i.e. outer iteration). The results is shown in Figure~\ref{fig:l1pca_vs_rankone_rpca}.
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=\textwidth]{../figures/compare.pdf}
-\label{fig:l1pca_vs_rankone_rpca}
 \caption{Comparison of rank one Robust PCA and the $\ell_1$ PCA heuristic in solving rank-one matrix recovery. Both algorithms have similar performance, but $\ell_1$ PCA shows slightly better recovery rate, and its estimated corruption matrix has size of support closer to reality for large supports.}
+\label{fig:l1pca_vs_rankone_rpca}
 \end{figure}
 
 If we do not use the rank information in the Robust PCA formulation, the exact recovery performance degrades compared to $\ell_1$ PCA. This is shown in Figure~\ref{fig:l1pca_vs_pure_rpca}
 
 \begin{figure}[h!]
-\label{fig:l1pca_vs_pure_rpca}
 \centering
 \includegraphics[width=\textwidth]{../figures/l1pca_rk1_rpca_vs_l1pca.pdf}
 \caption{Comparison of pure Robust PCA (no rank information) and $\ell_1$ PCA for solving rank one recovery, for increasing sizes of the corruption matrix. $\ell_1$ PCA shows higher exact recovery rates, and lower average error. Observe that the rank of the estimated matrix is increasing in the case of RPCA, but is constant (by construction) in the case of $\ell_1$ PCA.}
+\label{fig:l1pca_vs_pure_rpca}
 \end{figure}
 
 
