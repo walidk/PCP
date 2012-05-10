@@ -16,7 +16,7 @@ function t = cwmed(Z, u)
 
 t = zeros(N2, 1);
 
-% first solve M projected weighted median problems ========================
+%% first solve M projected weighted median problems =======================
 normed = false;
 for m=1:N2
     t(m) = wmed(Z(:,m), u);
@@ -27,7 +27,7 @@ for m=1:N2
 end
 
 
-% Project obtained solution if needed =====================================
+%% Project obtained solution if needed ====================================
 if(~normed) % have to normalize one of the components
     m0 = 1;
     eps0 = 1;

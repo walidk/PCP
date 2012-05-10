@@ -1,11 +1,14 @@
 function [L_hat, P, Q] = l1_pca_higher_rank_block(Z, rk, varargin)
-% [L, P, Q] = higher_rank_l1_pca_block(Z, rk, varargin)
+% [L, P, Q] = higher_rank_l1_pca_block(Z, rk, [q0])
 % Computes a rank rk approximation of Z, by solving the optimizaion problem
 % minimize ||Z - L_hat||
 % subject to norm(p_r, 1) = 1
 %            L_hat = \sum_{r = 1}^rk p_r q'_r
-% This will solve for 
-% projection_method:
+% This will simultaneously for vectors p and q, using a block coordinate 
+% descent (Synthesis view of PCA)
+% Input:
+% -optional argument q0 specifies the initial guess for the singular vector q
+% -projection_method:
 %   0: at each iteration, solves the constrained problem, with ||p|| = 1
 %   1: at each iteration, solves an unconstrained problem then normalizes p
 %      and q (infinity norm)
@@ -13,11 +16,11 @@ function [L_hat, P, Q] = l1_pca_higher_rank_block(Z, rk, varargin)
 %   L_hat is the approximation, L_hat = P*Q'
 
 
-% Constants ===============================================================
+%% Constants ==============================================================
 max_iter = 400;
 thresh = 1e-04;
 
-% Init ====================================================================
+%% Init ===================================================================
 [N1 N2] = size(Z);
 L_hat = zeros(N1,N2);
 P = zeros(N1,rk);
@@ -29,7 +32,7 @@ else
     Q = rand(N2, rk);
 end
 
-% Define a function that normalizes a vector ==============================
+%% Define a function that normalizes a vector =============================
 function normalized_x = normalize(x)
     norm_x = norm(x, inf);
     if(norm_x > 0)
@@ -39,7 +42,7 @@ function normalized_x = normalize(x)
     end
 end
 
-% Iterate =================================================================
+%% Iterate ================================================================
 dist = 1;
 i = 1;
 
@@ -65,7 +68,7 @@ while(dist > thresh && i < max_iter)
     fprintf('.')
 end
 
-% Display message =========================================================
+%% Display message ========================================================
 if(dist <= thresh)
     disp(['converged after ', num2str(i), ' iterations'])
 else

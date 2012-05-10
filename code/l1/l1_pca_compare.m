@@ -13,7 +13,7 @@ function  l1_pca_compare(MM, LL, x, x_label, toCompare)
 % example, if toCompare is [false, true, true], will only compare l1 PCA
 % block and RPCA
 
-% Constants ===============================================================
+%% Constants ==============================================================
 z_thresh = 1e-3;                % threshold for considering an entry is zero
 plotPoints = size(MM, 1);       % number of plot points
 T = size(MM, 2);                % number of tests for each plot point
@@ -22,7 +22,7 @@ N2 = size(MM, 4);               % size of the matrices
 lambda = 1/sqrt(max(N1, N2));   % regularization parameter in the RPCA problem
 
 
-% Init ====================================================================
+%% Init ===================================================================
 if(nargin < 5)
     toCompare = [true, false, true, true];
 end
@@ -33,7 +33,7 @@ supp_Shat = zeros(plotPoints, nbToCompare);
 
 
 
-% Solve optimization problems =============================================
+%% Solve optimization problems ============================================
 for p=1:plotPoints
     disp(['Plot point ', num2str(p), ' ==========================================================='])
     for t=1:T
@@ -105,7 +105,7 @@ error = error/T;
 rank_Lhat = rank_Lhat/T;
 supp_Shat = supp_Shat/T;
 
-% Plot ====================================================================
+%% Plot ===================================================================
 figure(1)
 
 % create the legend

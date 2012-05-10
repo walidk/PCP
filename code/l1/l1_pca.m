@@ -35,7 +35,7 @@ dist = 1;
 i = 1;
 p_old = rand(N, 1);
 
-% define a function that normalizes a vector ==============================
+%% define a function that normalizes a vector =============================
 function normalized_x = normalize(x)
     norm_x = norm(x, inf);
     if(norm_x > 0)
@@ -45,7 +45,7 @@ function normalized_x = normalize(x)
     end
 end
 
-% Iterate =================================================================
+%% Iterate ================================================================
 while(dist > thresh && i < max_iter)
     if(projection_method == 0) % solve the constrained problem
         p = cwmed(Z', q);
@@ -63,7 +63,7 @@ end
 
 L = p*q';
 
-% Display =================================================================
+%% Display ================================================================
 if(dist <= thresh)
     disp(['converged after ', num2str(i), ' iterations'])
 else
