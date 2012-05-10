@@ -8,16 +8,14 @@ The golfing scheme involves creating a $W^{L}$ according to the following method
 \begin{enumerate}
 \item Fix $j_{0}\ge1$, define $\Omega_{j}\sim Bern(q)$ iid with $1\le j\le j_{0}$ and $\rho=(1-q)^{j_{0}}$. Define the complement of support of $\Omega$ by $\Omega=\cup_{1\le j\le j_{0}}\Omega_{j}^{C}$.
 \item Define a sequence of matrix which finally ends at $W^{L}$
-
 \begin{enumerate}
 \item $Y_{0}=0$
 \item $Y_{j}=Y_{j-1}+\frac{1}{q}P_{\Omega_{j}}P_{T}(UV^{*}-Y_{j-1})$ for $1\le j\le j_{0}$
 \item $W^{L}=P_{\ensuremath{T^{\bot}}}(Y_{j_{0}})$
 \end{enumerate}
-
 \end{enumerate}
 
-We first list a number of facts that will be used in the proof of Lemma~(\ref{wl}).
+We first list a number of facts that will be used in the proof of Lemma~(\ref{wl}).\\
 
 \begin{fact}[\cite{Candes:2011fk}]
 \label{fact2}
@@ -55,7 +53,7 @@ If $\Omega \sim Bern(\rho)$ and $1-\rho\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{
 Now we present the proof of Lemma (\ref{wl})
 
 \begin{proof}
-We define another sequence of matrix $Z_{j}=UV^{*}-P_{T}(Y_{j})$. There are some properties about $Z_{j}$ which allows us to establish the proof. We survey them here and provides the proof of them.
+We define another sequence of matrix $Z_{j}=UV^{*}-P_{T}(Y_{j})$. There are some properties about~$Z_{j}$ which allows us to establish the proof. We survey them here and provides the proof of them.
 
 i) Note that
 \begin{equation}
@@ -80,26 +78,28 @@ Z_{j}
 \]
 
 ii) If $q\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{n}$, then  with high probability,
-
+%
 \begin{equation}
 \| Z_{j}\|_{\infty}\le\epsilon^{j}\|UV^{*}\|_{\infty} \label{wlp2}
 \end{equation}
-The reason is as follows. By Fact (\ref{fact2}), we have,
 
+The reason is as follows. By Fact (\ref{fact2}), we have,
+%
 \begin{eqnarray*}
 \|Z_{j-1}-q^{-1}P_{T}P_{\Omega_{j}}Z_{j-1}\|_{\infty} & \le & \epsilon\|Z_{j-1}\|_{\infty} \\
 \|Z_{j}\|_{\infty} & \le & \epsilon\|Z_{j-1}\|_{\infty} \text{by (\ref{wlp1})}
 \end{eqnarray*}
 
 
-Inductively, we get desired.
-
+Inductively, we get the desired.
+%
 iii) If $q\ge C_{0}\epsilon^{-2}\frac{\mu r\log n}{n}$, then
 \begin{equation}
 \|Z_{j}\|_{F}\le\epsilon^{j}\sqrt{r}  \label{wlp3}
 \end{equation}
-The reason is as follows. By Fact~(\ref{fact4}), we have,
 
+The reason is as follows. By Fact~(\ref{fact4}), we have,
+%
 \begin{align*}
 \left\|(P_{T}-q^{-1}P_{T}P_{\Omega_{0}}P_{T}) \left( \frac{Z_{j-1}}{\|Z_{j-1}\|_{F}} \right) \right\|_{F} & \le \epsilon\\
 \|(P_{T}-q^{-1}P_{T}P_{\Omega_{0}}P_{T})Z_{j-1}\|_{F} & \le \epsilon\|Z_{j-1}\|_{F} && \text{by rearranging terms}\\
@@ -186,7 +186,6 @@ Moreover, we have
 &&\text{if } \epsilon \text{ is sufficiently small}
 \end{aligned}
 \]
-
 \end{proof}
 
 
@@ -194,12 +193,12 @@ Moreover, we have
 \subsection{Proof of the Lemma about least square construction and dual certificate }
 
 Construction of $W^{S}$:
-
+%
 \[
 W^{S}=\lambda P_{T^{\bot}}((P_{\Omega}-P_{\Omega}P_{T}P_{\Omega})^{-1}sign(S_{0}))
 \]
 
-Now we present the proof of Lemma(\ref{ws}).
+Now we present the proof of Lemma (\ref{ws}).
 \begin{proof}
 We consider the sign of $S_{0}$ to be distrbuted as follows
 \[
@@ -214,7 +213,7 @@ sign(S_{0})_{i,j}=\begin{cases}
 1) Proof of condition (1) :
 
 I) We note the we can separate $W^{S}$into two parts and then bound them separately.
-
+%
 \begin{eqnarray*}
 W^{S} & = & \lambda P_{T^{\bot}}(sign(S_{0}))+\lambda P_{T^{\bot}}(\sum_{k\ge1}(P_{\Omega}P_{T}P_{\Omega})^{k}(sign(S_{0})))
 \end{eqnarray*}
@@ -301,7 +300,7 @@ P_{\Omega^{\bot}}(W^{S})
 
 
 For $(i,j)\in\Omega^{C}$, we have
-
+%
 \[
 \begin{aligned}
 e_{i}^{*}W^{S}e_{j}
@@ -426,9 +425,10 @@ This gives, $P_{B(\rho)}(E)-P_{U(m)}\ge-P_{B(\rho)}(|\Omega|>m)$. With $\rho=\fr
 
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection{Proof of the form of sub-differential of nuclear norm } \label{sub:nuclearnorm}
-To complete the story on the structure of subdifferential of nuclear norm, we present the following justifications.
+To complete the story on the structure of subdifferential of nuclear norm, we present the following justifications.\\
+
 \begin{definition}
-For matrix norms $\|\cdot\|$ which satisfy $\|UAV\|=\|A\|$ $\forall U,V$ being orthonormal, then they are called orthogonally invariant norm.
+For matrix norms $\|\cdot\|$ which satisfy $\|UAV\|=\|A\|$ $\forall U,V$ being orthonormal, then they are called orthogonally invariant norm.\\
 
 \begin{definition}
 For orthogonally invariant norm $\|\cdot\|$ which is defined by its singular values $\|A\|=\phi(\vec{\sigma})$ where $\vec{\sigma}$ are the singular values of $A$, we call the function $\phi$ as a symmetric gauge function if it is a norm and it satisfies $\phi(\vec{\sigma})=\phi(\epsilon_{1}\sigma_{i_{1}},...,\epsilon_{n}\sigma_{i_{n}})$ for any permulation of $(i_{1},...,i_{n})$ of $(1,...,n)$ and $\epsilon_{i}=\pm1$.

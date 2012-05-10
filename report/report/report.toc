@@ -23,10 +23,10 @@
 \contentsline {subsubsection}{Main result}{24}{section*.7}
 \contentsline {subsubsection}{Relations to existing work}{25}{section*.8}
 \contentsline {subsubsection}{Algorithm}{25}{section*.9}
-\contentsline {subsubsection}{Conclusion}{25}{section*.10}
+\contentsline {subsubsection}{Conclusion}{26}{section*.10}
 \contentsline {subsection}{\numberline {1.4.3}Robust Alignment by Sparse and Low-rank Decomposition}{26}{subsection.1.4.3}
-\contentsline {subsection}{\numberline {1.4.4}Robust Matrix Decomposition With Sparse Corruptions}{28}{subsection.1.4.4}
-\contentsline {subsubsection}{Introduction}{28}{section*.13}
+\contentsline {subsection}{\numberline {1.4.4}Robust Matrix Decomposition With Sparse Corruptions}{29}{subsection.1.4.4}
+\contentsline {subsubsection}{Introduction}{29}{section*.13}
 \contentsline {subsubsection}{Main ideas and contributions}{29}{section*.14}
 \contentsline {subsubsection}{Discussion and applications}{29}{section*.15}
 \contentsline {section}{\numberline {1.5}Robust PCA with known rank: a block coordinate descent approach}{30}{section.1.5}
@@ -69,6 +69,6 @@
 \contentsline {section}{\numberline {3.2}Robust PCA Applications}{62}{section.3.2}
 \contentsline {subsection}{\numberline {3.2.1}Background modeling from surveillance video}{62}{subsection.3.2.1}
 \contentsline {subsection}{\numberline {3.2.2}Using Robust PCA in speech recognition}{65}{subsection.3.2.2}
-\contentsline {subsection}{\numberline {3.2.3}Senators voting data analysis}{66}{subsection.3.2.3}
+\contentsline {subsection}{\numberline {3.2.3}Senate voting data analysis}{66}{subsection.3.2.3}
 \contentsline {subsection}{\numberline {3.2.4}Pre-processing of Brain-Machine Interface neural spike data}{67}{subsection.3.2.4}
 \contentsline {section}{\numberline {3.3}Discussion}{69}{section.3.3}
