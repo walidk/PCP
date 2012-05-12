@@ -283,11 +283,11 @@ In~\cite{Bach:2011kx}, the authors present an overview of techniques that extend
 Consider in particular the regularized learning problem
 \begin{equation}
 \label{eq:struct_spars}
-\min_{w \in \Rbb^p} f(w) = \min_{w \in \Rbb^p} \frac{1}{n} \sum_{i = 1}^n L(y^{(i)} + w^Tx^{(i)}) + \lambda \Omega(w)
+\min_{w \in \Rbb^p} f(w) = \min_{w \in \Rbb^p} \frac{1}{n} \sum_{i = 1}^n \ell(y^{(i)} + w^Tx^{(i)}) + \lambda \Omega(w)
 \end{equation}
 where $\ell$ is a differentiable loss function, $(x^{(i)}, y^{(i)})$ is the training data, $w$ is the regression vector, and $\Omega$ is a norm. We are interested in norms that not only induce sparsity, but also have a structure in their support, for example by having groups of variables that are selected or ignored simultaneously. A natural idea is to partition the variables into such groups, which leads to sparsity with disjoint groups of variables
 
-\paragraph{Disjoint groups of variables an group Lasso}
+\paragraph{Disjoint groups of variables and group Lasso}
 Assume the feature set is partitioned into a collection $\mathcal{G}$. Then the structure sparsity norm $\Omega$ is defined as
 \[
 \Omega(w)  = \sum_{g \in \mathcal{G}} \|w_g\|_q
@@ -296,7 +296,7 @@ Assume the feature set is partitioned into a collection $\mathcal{G}$. Then the 
 where $q \in (1, \infty]$, i.e. $\|.\|_q$ is any norm (usually $\|.\|_2$ or $\|.\|_\infty$). In the context of least square regression, this regularization is known as the group Lasso. As expected, experimental results reported in~\cite{Bach:2011kx} show that variables in the same group are either all set to zero (all outside the support), or all selected (all in the support).
 
 \paragraph{Overlapping groups of variables}
-Using overlapping groups (when elements of $\mathcal{G}$ are not necessarily disjoint) allows for more flexibility and more complex structures. For example, in image processing (shadow removal, background extraction) where pixels are arranged on a grid, using groups formed by one pixel and his neighbors yields good results in background extraction~\cite{Cevher_sparsesignal}.
+Using overlapping groups (when elements of $\mathcal{G}$ are not necessarily disjoint) allows for more flexibility and more complex structures. For example, in image processing (shadow removal, background extraction) where pixels are arranged on a grid, using groups formed by one pixel and its neighbors yields good results in background extraction~\cite{Cevher_sparsesignal}.
 
 
 \paragraph{Proximal method}

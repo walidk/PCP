@@ -209,7 +209,7 @@ where $M_j$ is the $j$-th column of $M$, then the $q$-step is simply given by
 \[
 q \leftarrow \mathbf{wmed}(M, p) 
 \]
-and the complexity of the $q$-step is $O(mn\log n)$. The $\mathbf{wmed}$ algorithm is summarized in Algorithm~\cite{wmhalgo}.
+and the complexity of the $q$-step is $O(mn\log n)$. The $\mathbf{wmed}$ algorithm is summarized in Algorithm~\ref{wmhalgo}.
 %
 \begin{algorithm}[h]
 \KwIn{Data matrix~$M$, vector~$p$}
@@ -446,7 +446,7 @@ If we do not use the rank information in the Robust PCA formulation, the exact r
 \begin{figure}[h!]
 \centering
 \includegraphics[width=\textwidth]{../figures/l1pca_rk1_rpca_vs_l1pca.pdf}
-\caption{Comparison of pure Robust PCA (no rank information) and $\ell_1$ PCA for solving rank one recovery, for increasing sizes of the corruption matrix. $\ell_1$ PCA shows higher exact recovery rates, and lower average error. Observe that the rank of the estimated matrix is increasing in the case of RPCA, but is constant (by construction) in the case of $\ell_1$ PCA.}
+\caption{Comparison of pure Robust PCA (no rank information) and $\ell_1$ PCA for solving rank-one recovery, for increasing sizes of the corruption matrix. $\ell_1$ PCA shows higher exact recovery rates, and lower average error. Observe that the rank of the estimated matrix is increasing in the case of RPCA, but is constant (by construction) in the case of $\ell_1$ PCA.}
 \label{fig:l1pca_vs_pure_rpca}
 \end{figure}
 
@@ -459,7 +459,7 @@ One can generalize the $\ell_1$ PCA block coordinate descent algorithms to cases
 \subsubsection{Analysis $\ell_1$ PCA}
 In the analysis view of PCA, one seeks to \emph{sequentially} find directions that best explain the data. In the $\ell_2$ case, at each step, we look for a direction $p$ that maximizes the variance along $p$, i.e. $\max_{\|p\|_2 =1} p^TMM^Tp = \max_{\|p\|_2 =1} \|M^Tp\|_2^2$. Equivalently, we look for $p$ that minimizes the distances of the data points $M_i$ to $\mathbf{span}(p)$ ($M_i$ is the $i$-th column of $M$). Indeed, assuming $\|p\|_2 =1$, the projection of data point $M_i$ on $p$ is given by $(M_i^Tp) p$, and the distance of $M_i$ to $\mathbf{span}(p)$ is simply $\|M_i - (M_i^Tp) p\|_2^2 = \|M_i\|_2^2 - (M_i^Tp)^2$. Thus minimizing the sum of the squared distances is equivalent to
 \[
-\min_{\|p\|_2 = 1} - \sum_i (M_i^Tp)^2 = \max_{\|p\|_2 = 1} \|M^Tp\|_2^2
+\min_{\|p\|_2 = 1} - \sum_i (M_i^Tp)^2 = - \max_{\|p\|_2 = 1} \|M^Tp\|_2^2
 \]
 
 For a general norm $\|.\|$, minimizing the distance to $\mathbf{span}(p)$ can be written
@@ -484,24 +484,26 @@ In the synthesis view of PCA, one seeks to find, \emph{simultaneously}, a small 
 \min_{\|p_k\|_\infty = 1, q_k} \| M - \sum_{k=1}^{r} p_k q_k^T \|_1
 \]
 
-that can be solved using block coordinate descent for all vectors $p_k, q_k$
-Note that in the case of $\ell_2$ PCA, both views are equivalent and lead to the same solution ($p_k$ is the left singular vector corresponding to the $k$-th largest singular value $\sigma_k$, and $q_k / sigma_k$ is the corresponding right singular vector). However in the general case, these formulations are not equivalent. The synthesis view has slower convergence, since the optimization is done simultaneously on all vectors. The analysis view has faster convergence, but performs poorly compared to the analysis view if the criterion is the reconstruction error $\| M - \sum_{k=1}^{r} p_k q_k^T \|_1$. This is illustrated in the following section.
+that can be solved using block coordinate descent for all vectors $p_k, q_k$.
+\\
+
+Note that in the case of $\ell_2$ PCA, both views are equivalent and lead to the same solution ($p_k$ is the left singular vector corresponding to the $k$-th largest singular value $\sigma_k$, and $q_k / \sigma_k$ is the corresponding right singular vector). However in the general case, these formulations are not equivalent. The synthesis view has slower convergence, since the optimization is done simultaneously on all vectors. The analysis view has faster convergence, but performs poorly compared to the analysis view if the criterion is the reconstruction error $\| M - \sum_{k=1}^{r} p_k q_k^T \|_1$. This is illustrated in the following section.
 
 \newpage
 \subsubsection{Numerical results}
-We first test the performance of the synthesis $\ell_1$ PCA, for recovering rank-2 $10\times 10$ matrices. The results show that we do have a good performance when the noise is sparse enough.
+We first test the performance of the synthesis $\ell_1$ PCA, for recovering rank-two $10\times 10$ matrices. The results show that we do have a good performance when the noise is sparse enough.
 %
 \begin{figure}[h!]
 \centering
 \includegraphics[width=\textwidth]{../figures/rank2case.pdf}
-\caption{Performance of synthesis $\ell_1$ PCA in recovering a rank 2 matrix using (batch) block coordinate descent.}
+\caption{Performance of synthesis $\ell_1$ PCA in recovering a rank-two matrix using (batch) block coordinate descent.}
 \label{fig:rank2}
 \end{figure}
 
 We next compare the performance of the synthesis $\ell_1$ PCA (green), analysis $\ell_1$ PCA (blue), and Robust PCA with no rank information (red). We generate random rank-$r$ $10\times 10$ matrices, and add random uniformly distributed noise. In a first simulation (Figure~\ref{fig:l1pca_by_support}), we fix the rank to be $r = 2$, and vary the size of the support of the corruption matrix $S$. In a second simulation (Figure~\ref{fig:l1pca_by_rank}), we fix the size of the support to be $20$, and vary the rank of $L$. The results show that
 \begin{itemize}
-\item Synthesis $\ell_1$ PCA performs better than analysis $\ell_1$ PCA, as expected: it achieves higher exact recovery rate, although has comparable average error. However, convergence is much slower. Synthesis $\ell_1$ PCA becomes impractical for large matrices (size of the order of thousand by thousand), but analysis $\ell_1$ PCA still converges fast and yields relatively good recovery rates.
-\item The exact recovery rates of RPCA and  $\ell_1$ PCA are comparable, although RPCA achieves lower average error (and slightly better exact recovery, for example, when the rank is $3$). The $\ell_1$ PCA heuristics have an advantage in terms of rank and support of the estimated components: for higher ranks, the $\mathbf{rank}(\hat{L})$ is closer to the original $\mathbf{rank}(L)$, and the size of the support $|\mathbf{supp}(\hat{S})|$ is closer to the original $|\mathbf{supp}(S)|$ (see bottom sub-figures in Figure~\ref{fig:l1pca_by_rank}, original noise support size is $|\mathbf{supp}(S)| = 8$.)
+\item Synthesis $\ell_1$ PCA performs better than analysis $\ell_1$ PCA, as expected: it achieves higher exact recovery rate, although it has comparable average error. However, convergence is much slower. Synthesis $\ell_1$ PCA becomes impractical for large matrices (size of the order of hundred by hundred), but analysis $\ell_1$ PCA still converges fast and yields relatively good recovery rates.
+\item The exact recovery rates of RPCA and  $\ell_1$ PCA are comparable, although RPCA achieves lower average error (and slightly better exact recovery, for example, when the rank is $3$). The $\ell_1$ PCA heuristics have an advantage in terms of rank and support of the estimated components: for higher ranks, $\mathbf{rank}(\hat{L})$ is closer to the original $\mathbf{rank}(L)$, and the size of the support $|\mathbf{supp}(\hat{S})|$ is closer to the original $|\mathbf{supp}(S)|$ (see bottom sub-figures in Figure~\ref{fig:l1pca_by_rank}, original noise support size is $|\mathbf{supp}(S)| = 8$.)
 \item The $\ell_1$ PCA heuristics therefore offer some advantages: they allow us to incorporate rank information (we do not see an easy way to add rank information to the RPCA formulation when the rank is strictly greater than one), and offer more robustness when the rank is high.
 \end{itemize}
 %
@@ -515,7 +517,7 @@ We next compare the performance of the synthesis $\ell_1$ PCA (green), analysis 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=\textwidth]{../figures/l1pca_10x10_support8_by_rank.pdf}
-\caption{Analysis $\ell_1$ PCA (blue), synthesis $\ell_1$ PCA (green), and Robust PCA (red) for fixed noise support ($20$), by increasing rank.}
+\caption{Analysis $\ell_1$ PCA (blue), synthesis $\ell_1$ PCA (green), and Robust PCA (red) for fixed noise support ($|\mathbf{supp}(S)| = 8$), by increasing rank.}
 \label{fig:l1pca_by_rank}
 \end{figure}
 
